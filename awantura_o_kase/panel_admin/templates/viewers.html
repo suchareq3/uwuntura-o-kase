@@ -1,0 +1,35 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automatyczne odświeżanie danych</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            function sprawdzZmiany() {
+                $.ajax({
+                    url: "{% url 'panel' %}",
+                    type: "GET",
+                    success: function(data) {
+                        // Tutaj należy zaktualizować odpowiednie elementy na stronie
+                        console.log("Otrzymano nowe dane:", data);
+                        // Przykład aktualizacji elementu o id="wartosc"
+                        $("#wartosc").text(data.nowa_wartosc);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Wystąpił błąd podczas żądania AJAX:", error);
+                    }
+                });
+            }
+            
+            // Sprawdzanie zmian co sekundę
+            setInterval(sprawdzZmiany, 1000);
+        });
+    </script>
+</head>
+<body>
+    <div>
+        <p>Aktualna wartość: <span id="wartosc">Brak danych</span></p>
+    </div>
+</body>
+</html>

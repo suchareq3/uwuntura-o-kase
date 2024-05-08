@@ -1,0 +1,71 @@
+<!--Base: https://freefrontend.com/css-login-forms/ -->
+
+<html lang="en"> 
+ <head> 
+  <meta charset="UTF-8"> 
+
+  <title>CodePen - Animated Login Form using Html &amp; CSS Only</title> 
+  {% load static %}
+  <link rel="stylesheet" type = 'text/css' href="{%static 'style_login.css' %}"> 
+  <script>
+   // dzieci nie robcie tego w domu
+   window.onload = function () {
+    for (var i = 0; i <= 260; i++) { 
+     let span = document.createElement('span'); 
+     var section = document.getElementsByTagName('section')[0]; 
+     section.appendChild(span);
+   }
+    console.log("hiii:3");
+   }
+  </script>
+ </head> 
+
+ <body> <!-- partial:index.partial.html --> 
+
+  <section> 
+
+   <div class="signin"> 
+
+    <div class="content"> 
+
+     <h2>Sign In</h2> 
+
+     <div class="form"> 
+
+      <form method="post">
+        <div class="display-none">{% csrf_token %}</div>
+
+        <div class="inputBox"> 
+            <label for="id_username">Username:</label>
+            <input type="text" name="username" id="id_username" required>
+        </div>
+    
+        <div class="inputBox"> 
+            <label for="id_password">Password:</label>
+            <input type="password" name="password" id="id_password" required>
+        </div>
+    
+        <div class="inputBox"> 
+            <input type="submit" value="Sign In" onclick="window.location.href='{% url 'panel' %}'">
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </div>
+            {% endif %} 
+        </div>
+        
+    </form>
+
+     </div> 
+
+    </div> 
+
+   </div> 
+
+  </section> <!-- partial --> 
+
+ </body>
+
+</html>
