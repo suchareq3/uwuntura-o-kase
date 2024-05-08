@@ -3682,21 +3682,6 @@ section .main-container
   align-items: center;
 }
 
-.main-container .team-container {
-  /*background-color: rgb(184, 0, 0);*/
-}
-
-.main-container .team-container * {
-  /*background-color: rgba(189, 189, 189, 0.4);*/
-}
-
-.main-container .team-container * * {
-  /*background-color: purple;*/
-  /*width: fit-content;
-  padding: 10px;*/
-  /*min-width: 0;*/
-}
-
 .srodki > span,
 .pula > span {
   background: none;
@@ -3817,12 +3802,6 @@ input[type="text"].kasa {
 
 .odp-podpowiedz {
   box-shadow: rgba(53, 52, 4, 0.3) 0 -25px 18px -14px inset;
-}
-
-.type-hardcoded {
-}
-
-.type-input {
 }
 
 .disabled {
