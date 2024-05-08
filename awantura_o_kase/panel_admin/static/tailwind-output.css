@@ -3795,7 +3795,7 @@ input[type="text"].kasa {
 
 .reset-gry::after {
   content: "";
-  background-image: url(../warning-sign.png);
+  background-image: url(warning-sign.png);
   background-repeat: repeat;
   background-size: 20%;
   position:absolute;
