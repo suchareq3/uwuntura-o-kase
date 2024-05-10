@@ -5,6 +5,58 @@ from django.contrib.auth.decorators import login_required
 from .forms import LoginForm
 from django.http import HttpResponseRedirect
 
+class druzyna:
+    pula = 5000
+
+    def __init__(self):
+        pass
+
+    def odejmij(self, kwota):
+        if self.pula > 0:
+            self.pula -= kwota
+        else:
+            print("Nie masz już kasy")
+
+    def dodaj(self, kwota):
+        self.pula += kwota
+
+    def wypisz(self):
+        return print(self.pula)
+
+class niebiescy(druzyna):
+    pass
+
+class zieloni(druzyna):
+    pass
+
+class zolci(druzyna):
+    pass
+
+class mistrzowie(druzyna):
+    pass
+
+niebiescy = niebiescy()
+zieloni = zieloni()
+zolci = zolci()
+mistrzowie = mistrzowie()
+
+class pula:
+    pula = 0
+
+    def __init__(self):
+        pass
+    
+    def dodaj(self, Kwota):
+        self.pula += Kwota
+    
+    def zeruj(self):
+        self.pula = 0
+    
+    def wypisz(self):
+        return print(self.pula)
+
+pula = pula()    
+
 def home(request):
     return render(request, "home.html")
 
@@ -18,7 +70,6 @@ def login(request):
             if user:
                 login_user(request, user)
                 return redirect('gra')
-                #return redirect('panel')
             else:
                 messages.error(request, "Incorrect username or password. Please try again.")
                 return HttpResponseRedirect(request.path_info)
@@ -32,7 +83,35 @@ def panel(request):
 
 @login_required
 def gra(request):
-    return render(request, "admin_panel.html")
+    if request.method == "POST":
+        action = request.POST.get("action")
+        action_map = {
+            "niebiescy": niebiescy,
+            "zieloni": zieloni,
+            "zolci": zolci,
+            "mistrzowie": mistrzowie
+        }
+
+        akcja = action.split("-")[1]
+
+        for team, points in action_map.items():
+            for amount in ["100", "200", "500", "vabank"]:
+                if f"add-{amount}-{team}" == action:
+                    if akcja == "vabank":
+                        punkty:int = points.pula
+                        points.odejmij(punkty)
+                        pula.dodaj(punkty)
+                        return render(request, "admin_panel.html", {'pula': pula.pula})
+                    else:
+                        punkty:int = int(amount)
+                        points.odejmij(punkty)
+                        pula.dodaj(punkty)
+                    points.wypisz()
+                    print(team)
+        return redirect("gra")
+    else:
+        print("tego nikt nie przewidział")
+        return render(request, "admin_panel.html", {'pula': pula.pula})
 
 @login_required
 def viewers(request):
