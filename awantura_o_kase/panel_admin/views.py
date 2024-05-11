@@ -101,17 +101,34 @@ def gra(request):
                         punkty:int = points.pula
                         points.odejmij(punkty)
                         pula.dodaj(punkty)
-                        return render(request, "admin_panel.html", {'pula': pula.pula})
+                        return render(
+                            request, 
+                            "admin_panel.html", 
+                            {
+                                'pula': pula.pula,
+                                'pula_niebiescy': niebiescy.pula,
+                                'pula_zieloni': zieloni.pula,
+                                'pula_zolci': zolci.pula,
+                                'pula_mistrzowie': mistrzowie.pula
+                            }
+                            )
                     else:
                         punkty:int = int(amount)
                         points.odejmij(punkty)
                         pula.dodaj(punkty)
-                    points.wypisz()
-                    print(team)
         return redirect("gra")
     else:
-        print("tego nikt nie przewidział")
-        return render(request, "admin_panel.html", {'pula': pula.pula})
+        return render(
+            request, 
+            "admin_panel.html", 
+            {
+                'pula': pula.pula,
+                'pula_niebiescy': niebiescy.pula,
+                'pula_zieloni': zieloni.pula,
+                'pula_zolci': zolci.pula,
+                'pula_mistrzowie': mistrzowie.pula
+             }
+            )
 
 @login_required
 def viewers(request):
