@@ -37,8 +37,8 @@
 			</div>
 			
 			<!-- Druzyny i ich pieniadze -->
-			<form method = "post" action = "{% url 'gra' %}">{% csrf_token %}
-				<div class="team-container flex justify-evenly w-full gap-1 lg:gap-5 min-h-[30%]">
+			<form method = "post" action = "{% url 'gra' %}" class="min-h-[30%]">{% csrf_token %}
+				<div class="team-container flex justify-evenly w-full gap-1 lg:gap-5 min-h-full">
 				<!-- Druzyna Niebiescy-->
 				
 					<div class="flex flex-col items-center border-8 rounded-b-2xl overflow-hidden text-2xl justify-evenly gap-2 bg-[rgb(8,26,77)] border-[rgb(8,26,77)]">
