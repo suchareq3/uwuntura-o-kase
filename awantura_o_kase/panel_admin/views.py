@@ -84,39 +84,59 @@ def panel(request):
 @login_required
 def gra(request):
     if request.method == "POST":
-        action = request.POST.get("action")
         action_map = {
             "niebiescy": niebiescy,
             "zieloni": zieloni,
             "zolci": zolci,
             "mistrzowie": mistrzowie
         }
-
-        akcja = action.split("-")[1]
-
-        for team, points in action_map.items():
+        if request.POST.get("action"):
+            action = request.POST.get("action")
+            
+            akcja = action.split("-")
+            print(akcja)
             for amount in ["100", "200", "500", "vabank"]:
-                if f"add-{amount}-{team}" == action:
-                    if akcja == "vabank":
-                        punkty:int = points.pula
-                        points.odejmij(punkty)
-                        pula.dodaj(punkty)
-                        return render(
-                            request, 
-                            "admin_panel.html", 
-                            {
-                                'pula': pula.pula,
-                                'pula_niebiescy': niebiescy.pula,
-                                'pula_zieloni': zieloni.pula,
-                                'pula_zolci': zolci.pula,
-                                'pula_mistrzowie': mistrzowie.pula
-                            }
-                            )
-                    else:
-                        punkty:int = int(amount)
-                        points.odejmij(punkty)
-                        pula.dodaj(punkty)
-        return redirect("gra")
+                for team, points in action_map.items():
+                    if f"add-{amount}-{team}" == action:
+                        if akcja[1] == "vabank":
+                            punkty:int = points.pula
+                            points.odejmij(punkty)
+                            pula.dodaj(punkty)
+                            return render(
+                                request, 
+                                "admin_panel.html", 
+                                {
+                                    'pula': pula.pula,
+                                    'pula_niebiescy': niebiescy.pula,
+                                    'pula_zieloni': zieloni.pula,
+                                    'pula_zolci': zolci.pula,
+                                    'pula_mistrzowie': mistrzowie.pula
+                                }
+                                )
+                        else:
+                            punkty:int = int(amount)
+                            points.odejmij(punkty)
+                            pula.dodaj(punkty)
+            return redirect("gra")
+        else:
+            #print(request.POST)
+            for team, points in action_map.items():
+                #print(f"add-X-{team}" == "add-X-niebiescy")
+                print(request.POST.get("add-X-niebiescy"))
+                action = request.POST.get(f"add-X-{team}")
+                if action:
+                    print(action)
+            return render(
+                    request, 
+                    "admin_panel.html",
+                    {
+                        'pula': pula.pula,
+                        'pula_niebiescy': niebiescy.pula,
+                        'pula_zieloni': zieloni.pula,
+                        'pula_zolci': zolci.pula,
+                        'pula_mistrzowie': mistrzowie.pula
+                    }
+                    )
     else:
         return render(
             request, 

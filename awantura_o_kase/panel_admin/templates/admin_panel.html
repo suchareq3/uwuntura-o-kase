@@ -42,10 +42,13 @@
 				<!-- Druzyna Niebiescy-->
 				
 					<div class="flex flex-col items-center border-8 rounded-b-2xl overflow-hidden text-2xl justify-evenly gap-2 bg-[rgb(8,26,77)] border-[rgb(8,26,77)]">
-						<div class="srodki w-full flex items-center justify-center h-[45%] bg-[rgb(8,35,112)] text-5xl"><span>{{pula_niebiescy}}</span></div>
+						<div class="srodki w-full flex items-center justify-center h-[45%] bg-[rgb(8,35,112)] text-5xl">
+							<span>{{pula_niebiescy}}</span>
+						</div>
 						<div class="w-full items-center h-[55%] box-content divide-y-2 divide-[rgb(8,26,77)]">
-							<input type = "hidden" name = "kasa_niebiescy" id = "kasa_niebiescy">
-							<input class="kasa text-center flex items-center justify-center w-full h-1/2 text-2xl border-none text-[rgb(8,26,77)] pt-3" type="text" name="kasa-niebiescy" id="kasa-niebiescy" value="12345" >
+							<input type = "hidden" name = "add-X-niebiescy" id = "add-X-niebiescy">
+							<input class="kasa text-center flex items-center justify-center w-full h-1/2 text-2xl border-none text-[rgb(8,26,77)] pt-3" type="text" name="add-X-niebiescy" id="add-X-niebiescy" value="{{ add_X_niebiescy }}" >
+							<input type = "submit" name = "add-X-niebiescy" value = "{{add_X_niebiescy}}" hidden/>
 							<div class="kasa-buttons flex flex-row w-full h-1/2 divide-x-2 divide-[rgb(8,26,77)]">
 								<button type = "submit" name = "action" value = "add-100-niebiescy" class="flex-[2] flex items-center justify-center min-w-0 h-full bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-[rgb(8,26,77)] text-base">+100</button>
 								<button type = "submit" name = "action" value = "add-200-niebiescy" class="flex-[2] flex items-center justify-center min-w-0 h-full bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-[rgb(8,26,77)] text-base">+200</button>
