@@ -80,7 +80,9 @@
 					<div class="flex flex-col items-center border-8 rounded-b-2xl overflow-hidden text-2xl justify-evenly gap-2 bg-yellow-800 border-yellow-800">
 						<div class="srodki w-full flex items-center justify-center h-[45%] bg-yellow-500 text-5xl"><span>{{pula_zolci}}</span></div>
 						<div class="w-full items-center h-[55%] box-content divide-y-2 divide-yellow-800">
-							<input class="kasa text-center flex items-center justify-center w-full h-1/2 text-2xl border-none text-[rgb(95,75,10)] pt-3" type="text" name="kasa-zolci" id="kasa-zolci" value="12345" >
+							<input type = "hidden" name = "add-X-zolci" id = "add-X-zolci">
+							<input class="kasa text-center flex items-center justify-center w-full h-1/2 text-2xl border-none text-[rgb(95,75,10)] pt-3" type="text" name="add-X-zolci" id="add-X-zolci" value="{{ add_X_zolci }}" >
+							<input type = "submit" name = "add-X-zieloni" value = "{{add_X_zieloni}}" hidden/>
 							<div class="kasa-buttons flex flex-row w-full h-1/2 divide-x-2 divide-yellow-800">
 								<button type = "submit" name = "action" value = "add-100-zolci" class="flex-[2] flex items-center justify-center min-w-0 h-full bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-yellow-800 text-base">+100</button>
 								<button type = "submit" name = "action" value = "add-200-zolci" class="flex-[2] flex items-center justify-center min-w-0 h-full bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-yellow-800 text-base">+200</button>
@@ -94,7 +96,9 @@
 					<div class="flex flex-col items-center border-8 rounded-b-2xl overflow-hidden text-2xl justify-evenly gap-2 bg-[rgb(38,13,39)] border-[rgb(38,13,39)]">
 						<div class="srodki w-full flex items-center justify-center h-[45%] bg-[rgb(54,41,66)] text-5xl"><span>{{pula_mistrzowie}}</span></div>
 						<div class="w-full items-center h-[55%] box-content divide-y-2 divide-[rgb(38,13,39)]">
-							<input class="kasa text-center flex items-center justify-center w-full h-1/2 text-2xl border-none text-[rgb(38,13,39)] pt-3" type="text" name="kasa-mistrzowie" id="kasa-mistrzowie" value="12345" >
+							<input type = "hidden" name = "add-X-mistrzowie" id = "add-X-mistrzowie">
+							<input class="kasa text-center flex items-center justify-center w-full h-1/2 text-2xl border-none text-[rgb(38,13,39)] pt-3" type="text" name="add-X-mistrzowie" id="add-X-mistrzowie" value="{{ add_X_mistrzowie }}" >
+							<input type = "submit" name = "add-X-mistrzowie" value = "{{add_X_mistrzowie}}" hidden/>
 							<div class="kasa-buttons flex flex-row w-full h-1/2 divide-x-2 divide-[rgb(38,13,39)]">
 								<button type = "submit" name = "action" value = "add-100-mistrzowie" class="flex-[2] flex items-center justify-center min-w-0 h-full bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-[rgb(38,13,39)] text-base">+100</button>
 								<button type = "submit" name = "action" value = "add-200-mistrzowie" class="flex-[2] flex items-center justify-center min-w-0 h-full bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-[rgb(38,13,39)] text-base">+200</button>

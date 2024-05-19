@@ -1,2 +1,3 @@
-__pycache__/
 *.sqlite3
+/awantura_o_kase/awantura_o_kase/__pycache__
+/awantura_o_kase/panel_admin/migrations/__pycache__
