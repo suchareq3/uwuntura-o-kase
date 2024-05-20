@@ -137,7 +137,10 @@ def gra(request):
                 action = request.POST.getlist(f"add-X-{team}")
                 print(action)
                 if action:
-                    punkty:int = int(action[1])
+                    try:
+                        punkty:int = int(action[1])
+                    except ValueError:
+                        break
                     if punkty % 100 != 0: #dodaj popup do tego 
                         return render(
                             request, 
