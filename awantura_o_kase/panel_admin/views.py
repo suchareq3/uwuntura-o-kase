@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect
 
 class druzyna:
     pula = 5000
+    tymczasowa_pula = 0
 
     def __init__(self):
         pass
@@ -17,8 +18,14 @@ class druzyna:
         else:
             print("Nie masz już kasy")
 
-    def dodaj(self, kwota):
+    def dodaj_pula(self, kwota):
         self.pula += kwota
+
+    def dodaj_tymczasowa_pula(self, Kwota):
+        self.tymczasowa_pula += Kwota
+
+    def zeruj_tymczasowa_pula(self):
+        self.tymczasowa_pula = 0
 
     def wypisz(self):
         return print(self.pula)
@@ -46,10 +53,10 @@ class pula:
     def __init__(self):
         pass
     
-    def dodaj(self, Kwota):
+    def dodaj_pula(self, Kwota):
         self.pula += Kwota
     
-    def zeruj(self):
+    def zeruj_pula(self):
         self.pula = 0
     
     def wypisz(self):
@@ -90,11 +97,15 @@ def gra(request):
             "zolci": zolci,
             "mistrzowie": mistrzowie
         }
+        tymczasowa_pula = 0
         if request.POST.get("action"):
             action = request.POST.get("action")   
             akcja = action.split("-")
             check = False
             for amount in ["100", "200", "500", "vabank"]:
+                for team, points in action_map.items():
+                    if tymczasowa_pula < points.tymczasowa_pula:
+                        tymczasowa_pula = points.tymczasowa_pula
                 if check == True:
                     break
                 for team, points in action_map.items():
@@ -102,7 +113,7 @@ def gra(request):
                         if akcja[1] == "vabank":
                             punkty:int = points.pula
                             points.odejmij(punkty)
-                            pula.dodaj(punkty)
+                            pula.dodaj_pula(punkty)
                             return render(
                                 request, 
                                 "admin_panel.html", 
@@ -117,7 +128,8 @@ def gra(request):
                         else:
                             punkty:int = int(amount)
                             points.odejmij(punkty)
-                            pula.dodaj(punkty)
+                            pula.dodaj_pula(punkty)
+                            points.dodaj_tymczasowa_pula(punkty)
                             check = True
                             break
             return render(
@@ -132,16 +144,14 @@ def gra(request):
                 }
                 )
         elif any(key.startswith("add-X-") for key in request.POST.keys()):
-            print(request.POST.keys())
             for team, points in action_map.items():
                 action = request.POST.getlist(f"add-X-{team}")
-                print(action)
                 if action:
                     try:
                         punkty:int = int(action[1])
                     except ValueError:
-                        break
-                    if punkty % 100 != 0: #dodaj popup do tego 
+                        continue
+                    if punkty % 100 != 0: #dodaj_pula popup do tego 
                         return render(
                             request, 
                             "admin_panel.html", 
@@ -154,7 +164,7 @@ def gra(request):
                             }
                             )
                     points.odejmij(punkty)
-                    pula.dodaj(punkty)
+                    pula.dodaj_pula(punkty)
                     break
             return render(
                     request, 
