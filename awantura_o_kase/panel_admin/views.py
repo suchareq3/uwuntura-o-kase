@@ -98,14 +98,14 @@ def gra(request):
             "mistrzowie": mistrzowie
         }
         tymczasowa_pula = 0
+        for team, points in action_map.items():
+            if tymczasowa_pula < points.tymczasowa_pula:
+                tymczasowa_pula = points.tymczasowa_pula
         if request.POST.get("action"):
             action = request.POST.get("action")   
             akcja = action.split("-")
             check = False
             for amount in ["100", "200", "500", "vabank"]:
-                for team, points in action_map.items():
-                    if tymczasowa_pula < points.tymczasowa_pula:
-                        tymczasowa_pula = points.tymczasowa_pula
                 if check == True:
                     break
                 for team, points in action_map.items():
@@ -126,7 +126,7 @@ def gra(request):
                                 }
                                 )
                         else:
-                            punkty:int = int(amount)
+                            punkty:int = int(amount) + tymczasowa_pula - points.tymczasowa_pula
                             points.odejmij(punkty)
                             pula.dodaj_pula(punkty)
                             points.dodaj_tymczasowa_pula(punkty)
@@ -148,7 +148,7 @@ def gra(request):
                 action = request.POST.getlist(f"add-X-{team}")
                 if action:
                     try:
-                        punkty:int = int(action[1])
+                        punkty:int = int(action[1]) + tymczasowa_pula - points.tymczasowa_pula
                     except ValueError:
                         continue
                     if punkty % 100 != 0: #dodaj_pula popup do tego 
@@ -165,6 +165,7 @@ def gra(request):
                             )
                     points.odejmij(punkty)
                     pula.dodaj_pula(punkty)
+                    points.dodaj_tymczasowa_pula(punkty)
                     break
             return render(
                     request, 
