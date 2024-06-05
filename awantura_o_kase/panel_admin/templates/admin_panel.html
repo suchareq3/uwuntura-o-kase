@@ -25,11 +25,10 @@
 							<span>{{runda}}</span>
 						</div>
 					</div>
-					<form method = "post" action = "{% url 'gra' %}">{% csrf_token %}
-						<div class="flex items-center justify-center"> 
-							<button type = "submit" name = "runda" value = "runda" class="text-sm h-3/4 mx-3 flex items-center justify-center px-2 rounded-full bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-black">Nastepna</button>
-						</div>
+					<form class="flex items-center justify-center" method = "post" action = "{% url 'gra' %}">{% csrf_token %}
+						<button type = "submit" name = "runda" value = "runda" class="text-sm h-3/4 mx-3 flex items-center justify-center px-2 rounded-full bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-black">Nastepna</button>
 					</form>
+					
 				</div>
 				<select class="flex-[1] ml-[12%] flex items-center justify-center text-3xl text-black pl-5 bg-neutral-300 border-0 rounded-full" name="kategoria" id="kategoria">
 					<option class="hover:bg-neutral-400" value="" disabled selected>Kategoria</option>
