@@ -21,12 +21,15 @@
 				<div class="w-[200px] lg:w-[250px] flex flex-row text-xl align-center">
 					<div class="flex flex-row items-center justify-center px-2 text-white border-4 border-neutral-900 bg-neutral-800/75">
 						<div class="text-lg lg:text-xl flex items-center justify-center">Runda:</div>
-						<div class="text-xl lg:text-2xl ml-2 flex items-center justify-center">123</div>
+						<div class="text-xl lg:text-2xl ml-2 flex items-center justify-center">
+							<span>{{runda}}</span>
+						</div>
 					</div>
-					
-					<div class="flex items-center justify-center"> 
-						<button class="text-sm h-3/4 mx-3 flex items-center justify-center px-2 rounded-full bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-black">Nastepna</button>
-					</div>
+					<form method = "post" action = "{% url 'gra' %}">{% csrf_token %}
+						<div class="flex items-center justify-center"> 
+							<button type = "submit" name = "runda" value = "runda" class="text-sm h-3/4 mx-3 flex items-center justify-center px-2 rounded-full bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-black">Nastepna</button>
+						</div>
+					</form>
 				</div>
 				<select class="flex-[1] ml-[12%] flex items-center justify-center text-3xl text-black pl-5 bg-neutral-300 border-0 rounded-full" name="kategoria" id="kategoria">
 					<option class="hover:bg-neutral-400" value="" disabled selected>Kategoria</option>

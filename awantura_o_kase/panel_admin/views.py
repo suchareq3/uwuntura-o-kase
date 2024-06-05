@@ -5,6 +5,29 @@ from django.contrib.auth.decorators import login_required
 from .forms import LoginForm
 from django.http import HttpResponseRedirect
 
+class runda:
+    runda = 0
+    licytacja = False
+
+    def __init__(self):
+        pass
+
+    def dodaj_runda(self):
+        if self.runda >= 12:
+            return False
+        self.runda += 1
+    
+    def wypisz(self):
+        return self.runda
+    
+    def reset(self):
+        self.runda = 1
+
+    def zmiana_licytacja(self):
+        self.licytacja = not self.licytacja
+
+runda = runda()
+
 class druzyna:
     pula = 5000
     tymczasowa_pula = 0
@@ -29,6 +52,7 @@ class druzyna:
 
     def wypisz(self):
         return print(self.pula)
+    
 
 class niebiescy(druzyna):
     pass
@@ -88,6 +112,20 @@ def login(request):
 def panel(request):
     return render(request, "panel.html")
 
+def rendering(request):
+    return render(
+        request, 
+        "admin_panel.html", 
+        {
+            'pula': pula.pula,
+            'pula_niebiescy': niebiescy.pula,
+            'pula_zieloni': zieloni.pula,
+            'pula_zolci': zolci.pula,
+            'pula_mistrzowie': mistrzowie.pula,
+            'runda': runda.runda
+        }
+        )
+
 @login_required
 def gra(request):
     if request.method == "POST":
@@ -101,30 +139,29 @@ def gra(request):
         for team, points in action_map.items():
             if tymczasowa_pula < points.tymczasowa_pula:
                 tymczasowa_pula = points.tymczasowa_pula
-        if request.POST.get("action"):
+        if request.POST.get("runda"):
+            if runda.dodaj_runda() == False: #dodać popup do tego
+                print("Za dużo rund")
+                return rendering(request)
+            pula.zeruj_pula()
+            return rendering(request)
+        elif request.POST.get("action"):
+            if runda.licytacja == True: #dodać popup do tego
+                return rendering(request)
             action = request.POST.get("action")   
             akcja = action.split("-")
             check = False
             for amount in ["100", "200", "500", "vabank"]:
                 if check == True:
-                    break
+                    return rendering(request)
                 for team, points in action_map.items():
                     if f"add-{amount}-{team}" == action:
                         if akcja[1] == "vabank":
                             punkty:int = points.pula
                             points.odejmij(punkty)
                             pula.dodaj_pula(punkty)
-                            return render(
-                                request, 
-                                "admin_panel.html", 
-                                {
-                                    'pula': pula.pula,
-                                    'pula_niebiescy': niebiescy.pula,
-                                    'pula_zieloni': zieloni.pula,
-                                    'pula_zolci': zolci.pula,
-                                    'pula_mistrzowie': mistrzowie.pula
-                                }
-                                )
+                            runda.zmiana_licytacja()
+                            return rendering(request)
                         else:
                             punkty:int = int(amount) + tymczasowa_pula - points.tymczasowa_pula
                             points.odejmij(punkty)
@@ -132,18 +169,10 @@ def gra(request):
                             points.dodaj_tymczasowa_pula(punkty)
                             check = True
                             break
-            return render(
-                request, 
-                "admin_panel.html", 
-                {
-                    'pula': pula.pula,
-                    'pula_niebiescy': niebiescy.pula,
-                    'pula_zieloni': zieloni.pula,
-                    'pula_zolci': zolci.pula,
-                    'pula_mistrzowie': mistrzowie.pula
-                }
-                )
+            return rendering(request)
         elif any(key.startswith("add-X-") for key in request.POST.keys()):
+            if runda.licytacja == True: #dodać popup do tego
+                return rendering(request)
             for team, points in action_map.items():
                 action = request.POST.getlist(f"add-X-{team}")
                 if action:
@@ -152,56 +181,16 @@ def gra(request):
                     except ValueError:
                         continue
                     if punkty % 100 != 0: #dodaj_pula popup do tego 
-                        return render(
-                            request, 
-                            "admin_panel.html", 
-                            {
-                                'pula': pula.pula,
-                                'pula_niebiescy': niebiescy.pula,
-                                'pula_zieloni': zieloni.pula,
-                                'pula_zolci': zolci.pula,
-                                'pula_mistrzowie': mistrzowie.pula
-                            }
-                            )
+                        return rendering(request)
                     points.odejmij(punkty)
                     pula.dodaj_pula(punkty)
                     points.dodaj_tymczasowa_pula(punkty)
                     break
-            return render(
-                    request, 
-                    "admin_panel.html",
-                    {
-                        'pula': pula.pula,
-                        'pula_niebiescy': niebiescy.pula,
-                        'pula_zieloni': zieloni.pula,
-                        'pula_zolci': zolci.pula,
-                        'pula_mistrzowie': mistrzowie.pula
-                    }
-                    )
+            return rendering(request)
         else:
-            return render(
-                request, 
-                "admin_panel.html",
-                {
-                    'pula': pula.pula,
-                    'pula_niebiescy': niebiescy.pula,
-                    'pula_zieloni': zieloni.pula,
-                    'pula_zolci': zolci.pula,
-                    'pula_mistrzowie': mistrzowie.pula
-                }
-                )
+            return rendering(request)
     else:
-        return render(
-            request, 
-            "admin_panel.html", 
-            {
-                'pula': pula.pula,
-                'pula_niebiescy': niebiescy.pula,
-                'pula_zieloni': zieloni.pula,
-                'pula_zolci': zolci.pula,
-                'pula_mistrzowie': mistrzowie.pula
-             }
-            )
+        return rendering(request)
 
 @login_required
 def viewers(request):
