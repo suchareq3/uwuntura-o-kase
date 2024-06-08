@@ -5,6 +5,20 @@ from django.contrib.auth.decorators import login_required
 from .forms import LoginForm
 from django.http import HttpResponseRedirect
 
+class kategoria:
+    kategoria = ""
+
+    def __init__(self):
+        pass
+
+    def dodaj_kategorie(self,kategoria):
+        self.kategoria = kategoria
+
+    def wyczysc_kategorie(self):
+        self.kategoria = ""
+
+kategoria = kategoria()
+
 class runda:
     runda = 0
     licytacja = False
@@ -42,6 +56,9 @@ class druzyna:
             print("Nie masz już kasy")
 
     def dodaj_pula(self, kwota):
+        if kwota > self.pula:
+            print("Nie masz tyle kasy")
+            return False
         self.pula += kwota
 
     def dodaj_tymczasowa_pula(self, Kwota):
@@ -122,7 +139,8 @@ def rendering(request):
             'pula_zieloni': zieloni.pula,
             'pula_zolci': zolci.pula,
             'pula_mistrzowie': mistrzowie.pula,
-            'runda': runda.runda
+            'runda': runda.runda,
+            'kategoria': kategoria.kategoria
         }
         )
 
@@ -139,7 +157,10 @@ def gra(request):
         for team, points in action_map.items():
             if tymczasowa_pula < points.tymczasowa_pula:
                 tymczasowa_pula = points.tymczasowa_pula
-        if request.POST.get("runda"):
+        if request.POST.get("kategoria"):
+            kategoria.dodaj_kategorie(request.POST.get("kategoria"))
+            return rendering(request)
+        elif request.POST.get("runda"):
             if runda.dodaj_runda() == False: #dodać popup do tego
                 print("Za dużo rund")
                 return rendering(request)
@@ -148,7 +169,10 @@ def gra(request):
         elif request.POST.get("action"):
             if runda.licytacja == True: #dodać popup do tego
                 return rendering(request)
-            action = request.POST.get("action")   
+            elif runda.runda == 0: #dodać popup do tego
+                print("Runda nie może być zerowa")
+                return rendering(request)
+            action = request.POST.get("action")
             akcja = action.split("-")
             check = False
             for amount in ["100", "200", "500", "vabank"]:
@@ -156,6 +180,9 @@ def gra(request):
                     return rendering(request)
                 for team, points in action_map.items():
                     if f"add-{amount}-{team}" == action:
+                        if runda.runda <= 6 and team == "mistrzowie":
+                            print("Mistrzowie nie mogą licytować przed 7 rundą")
+                            return rendering(request)
                         if akcja[1] == "vabank":
                             punkty:int = points.pula
                             points.odejmij(punkty)
@@ -175,6 +202,9 @@ def gra(request):
                 return rendering(request)
             for team, points in action_map.items():
                 action = request.POST.getlist(f"add-X-{team}")
+                if runda.runda <= 6 and team == "mistrzowie":
+                    print("Mistrzowie nie mogą licytować przed 7 rundą")
+                    return rendering(request)
                 if action:
                     try:
                         punkty:int = int(action[1]) + tymczasowa_pula - points.tymczasowa_pula
