@@ -159,12 +159,17 @@ def gra(request):
                 tymczasowa_pula = points.tymczasowa_pula
         if request.POST.get("kategoria"):
             kategoria.dodaj_kategorie(request.POST.get("kategoria"))
+            if runda.licytacja == True:
+                runda.zmiana_licytacja()
             return rendering(request)
         elif request.POST.get("runda"):
             if runda.dodaj_runda() == False: #dodać popup do tego
                 print("Za dużo rund")
                 return rendering(request)
             pula.zeruj_pula()
+            return rendering(request)
+        elif kategoria.kategoria == "":
+            print("Nie wybrano kategorii")
             return rendering(request)
         elif request.POST.get("action"):
             if runda.licytacja == True: #dodać popup do tego
@@ -216,6 +221,9 @@ def gra(request):
                     pula.dodaj_pula(punkty)
                     points.dodaj_tymczasowa_pula(punkty)
                     break
+            return rendering(request)
+        elif request.POST.get("koniec-licytacji"):
+            runda.zmiana_licytacja()
             return rendering(request)
         else:
             return rendering(request)
