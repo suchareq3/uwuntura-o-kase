@@ -123,20 +123,26 @@
 				<div class="pula w-full flex-[8] flex justify-center items-center text-4xl ">
 					<span>{{pula}}</span>
 				</div>
-				<form method = "post" action = "{% url 'gra'%}">{% csrf_token %}
+				<form method = "post" action = "{% url 'gra' %}">{% csrf_token %}
 					<button type = "submit" name = "koniec-licytacji" value = "koniec-licytacji" class="w-full flex-[3] bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-black text-lg font-medium border-l-0">Koniec<br>licytacji</button>
 				</form>
 			</div>
 
 			<!-- Pytanie i odpowiedz(i)-->
 			<div class="pytanie-odpowiedz w-full flex flex-row rounded-r-2xl h-[30%] overflow-hidden bg-neutral-800/75 border-4 border-neutral-900 divide-x-4 divide-neutral-900">
-				<div class="flex-[8] overflow-auto p-3 min-h-full text-lg">Tresc pytaniaaaaaaaaaaaa</div>
-				<div class="flex-[3] overflow-auto p-3 min-h-full text-lg">Poprawna odpowiedz(i)</div>
-				<div class="flex-[2] flex flex-col overflow-hidden divide-y-2 divide-neutral-900">
-					<button class="w-full h-1/2 bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-lime-600 font-bold odp-dobra">Dobra odp</button>
-					<button class="w-full h-1/2 bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-rose-600 font-bold odp-zla">Zla odp</button>
-					<button class="w-full h-1/2 bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-amber-600 font-bold odp-podpowiedz">Podpowiedź</button>
+				<div class="flex-[8] overflow-auto p-3 min-h-full text-lg">
+					<span>{{tresc_pytania}}</span>
 				</div>
+				<div class="flex-[3] overflow-auto p-3 min-h-full text-lg">
+					<span>{{odpowiedz}}</span>
+				</div>
+				<form method = "post" action = "{% url 'gra' %}">{% csrf_token %}
+					<div class="flex-[2] flex flex-col overflow-hidden divide-y-2 divide-neutral-900">
+						<button type = "submit" name = "dobra_odpowiedz" value = "dobra_odpowiedz" class = "w-full h-1/2 bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-lime-600 font-bold odp-dobra">Dobra odp</button>
+						<button type = "submit" name = "zla_odpowiedz" value = "zla_odpowiedz" class="w-full h-1/2 bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-rose-600 font-bold odp-zla">Zla odp</button>
+						<button class="w-full h-1/2 bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-amber-600 font-bold odp-podpowiedz">Podpowiedź</button>
+					</div>
+				</form>
 			</div>
 
 			<!-- Dodatkowe przyciski -->

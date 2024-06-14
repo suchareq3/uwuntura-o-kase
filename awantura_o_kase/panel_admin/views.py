@@ -4,18 +4,54 @@ from django.contrib.auth import login as login_user, authenticate
 from django.contrib.auth.decorators import login_required
 from .forms import LoginForm
 from django.http import HttpResponseRedirect
+import random
+
+pytania = {
+    "kategoria-1" : {
+        "xd",
+        "tak"
+    },
+    "kategoria-2" : {
+        "xddd",
+        "nie"
+    },
+    "kategoria-3" : {
+        "top kek",
+        "może być"
+    }
+}
+
+poprawne_odpowiedzi = {
+    "kategoria-1" : {
+        "yes"
+    },
+    "kategoria-2" : {
+        "yesn't"
+    },
+    "kategoria-3" : {
+        "a cokolwiek"
+    }
+}
 
 class kategoria:
     kategoria = ""
+    pytanie = ""
+    odpowiedz = ""
 
     def __init__(self):
         pass
 
     def dodaj_kategorie(self,kategoria):
         self.kategoria = kategoria
+        x = list(pytania[kategoria])
+        self.pytanie = x[random.randint(0, len(x) - 1)]
+        y = list(poprawne_odpowiedzi[kategoria])
+        self.odpowiedz = y[0]
 
     def wyczysc_kategorie(self):
         self.kategoria = ""
+        self.pytanie = ""
+        self.odpowiedz = ""
 
 kategoria = kategoria()
 
@@ -56,9 +92,6 @@ class druzyna:
             print("Nie masz już kasy")
 
     def dodaj_pula(self, kwota):
-        if kwota > self.pula:
-            print("Nie masz tyle kasy")
-            return False
         self.pula += kwota
 
     def dodaj_tymczasowa_pula(self, Kwota):
@@ -90,18 +123,23 @@ mistrzowie = mistrzowie()
 
 class pula:
     pula = 0
+    team = ""
 
     def __init__(self):
         pass
     
-    def dodaj_pula(self, Kwota):
+    def dodaj_pula(self, Kwota, team):
         self.pula += Kwota
-    
+        self.team = team
+
     def zeruj_pula(self):
         self.pula = 0
     
     def wypisz(self):
         return print(self.pula)
+    
+    def wypisz_team(self):
+        return self.team
 
 pula = pula()    
 
@@ -140,7 +178,9 @@ def rendering(request):
             'pula_zolci': zolci.pula,
             'pula_mistrzowie': mistrzowie.pula,
             'runda': runda.runda,
-            'kategoria': kategoria.kategoria
+            'kategoria': kategoria.kategoria,
+            'tresc_pytania': kategoria.pytanie,
+            'odpowiedz': kategoria.odpowiedz
         }
         )
 
@@ -171,6 +211,9 @@ def gra(request):
         elif kategoria.kategoria == "":
             print("Nie wybrano kategorii")
             return rendering(request)
+        elif request.POST.get("koniec-licytacji"):
+            runda.zmiana_licytacja()
+            return rendering(request)
         elif request.POST.get("action"):
             if runda.licytacja == True: #dodać popup do tego
                 return rendering(request)
@@ -191,13 +234,13 @@ def gra(request):
                         if akcja[1] == "vabank":
                             punkty:int = points.pula
                             points.odejmij(punkty)
-                            pula.dodaj_pula(punkty)
+                            pula.dodaj_pula(punkty, team)
                             runda.zmiana_licytacja()
                             return rendering(request)
                         else:
                             punkty:int = int(amount) + tymczasowa_pula - points.tymczasowa_pula
                             points.odejmij(punkty)
-                            pula.dodaj_pula(punkty)
+                            pula.dodaj_pula(punkty, team)
                             points.dodaj_tymczasowa_pula(punkty)
                             check = True
                             break
@@ -218,13 +261,18 @@ def gra(request):
                     if punkty % 100 != 0: #dodaj_pula popup do tego 
                         return rendering(request)
                     points.odejmij(punkty)
-                    pula.dodaj_pula(punkty)
+                    pula.dodaj_pula(punkty, team)
                     points.dodaj_tymczasowa_pula(punkty)
                     break
             return rendering(request)
-        elif request.POST.get("koniec-licytacji"):
-            runda.zmiana_licytacja()
-            return rendering(request)
+        elif request.POST.get("dobra_odpowiedz"):
+            team = list(action_map)[pula.wypisz_team()]
+            team.dodaj_pula(pula.pula)
+            pula.zeruj_pula()
+            kategoria.wyczysc_kategorie()
+        elif request.POST.get("zla_odpowiedz"):
+            
+            pass
         else:
             return rendering(request)
     else:
