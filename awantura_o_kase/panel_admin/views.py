@@ -206,7 +206,6 @@ def gra(request):
             if runda.dodaj_runda() == False: #dodać popup do tego
                 print("Za dużo rund")
                 return rendering(request)
-            pula.zeruj_pula()
             return rendering(request)
         elif kategoria.kategoria == "":
             print("Nie wybrano kategorii")
@@ -266,13 +265,27 @@ def gra(request):
                     break
             return rendering(request)
         elif request.POST.get("dobra_odpowiedz"):
-            team = list(action_map)[pula.wypisz_team()]
-            team.dodaj_pula(pula.pula)
+            if runda.licytacja == False:
+                print("nie możesz odpowiedzieć na pytanie zanim się nie zamknie licytacja")
+                return rendering(request)
+            druzyna_lista = list(action_map)
+            druzyna = action_map[pula.wypisz_team()]
+            druzyna.dodaj_pula(pula.pula)
             pula.zeruj_pula()
             kategoria.wyczysc_kategorie()
+            runda.zmiana_licytacja()
+            for _, team in action_map.items():
+                team.zeruj_tymczasowa_pula()
+            return rendering(request)
         elif request.POST.get("zla_odpowiedz"):
-            
-            pass
+            if runda.licytacja == False:
+                print("nie możesz odpowiedzieć na pytanie zanim się nie zamknie licytacja")
+                return rendering(request)
+            kategoria.wyczysc_kategorie()
+            runda.zmiana_licytacja()
+            for _, team in action_map.items():
+                team.zeruj_tymczasowa_pula()
+            return rendering(request)
         else:
             return rendering(request)
     else:
