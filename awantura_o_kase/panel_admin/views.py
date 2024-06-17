@@ -215,16 +215,14 @@ def gra(request):
             return rendering(request)
         elif request.POST.get("action"):
             if runda.licytacja == True: #dodać popup do tego
+                print("Koniec licytacji")
                 return rendering(request)
             elif runda.runda == 0: #dodać popup do tego
                 print("Runda nie może być zerowa")
                 return rendering(request)
             action = request.POST.get("action")
             akcja = action.split("-")
-            check = False
             for amount in ["100", "200", "500", "vabank"]:
-                if check == True:
-                    return rendering(request)
                 for team, points in action_map.items():
                     if f"add-{amount}-{team}" == action:
                         if runda.runda <= 6 and team == "mistrzowie":
@@ -241,8 +239,7 @@ def gra(request):
                             points.odejmij(punkty)
                             pula.dodaj_pula(punkty, team)
                             points.dodaj_tymczasowa_pula(punkty)
-                            check = True
-                            break
+                            return rendering(request)
             return rendering(request)
         elif any(key.startswith("add-X-") for key in request.POST.keys()):
             if runda.licytacja == True: #dodać popup do tego
@@ -262,13 +259,12 @@ def gra(request):
                     points.odejmij(punkty)
                     pula.dodaj_pula(punkty, team)
                     points.dodaj_tymczasowa_pula(punkty)
-                    break
+                    return rendering(request)
             return rendering(request)
         elif request.POST.get("dobra_odpowiedz"):
             if runda.licytacja == False:
                 print("nie możesz odpowiedzieć na pytanie zanim się nie zamknie licytacja")
                 return rendering(request)
-            druzyna_lista = list(action_map)
             druzyna = action_map[pula.wypisz_team()]
             druzyna.dodaj_pula(pula.pula)
             pula.zeruj_pula()
