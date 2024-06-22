@@ -56,7 +56,7 @@ class kategoria:
 kategoria = kategoria()
 
 class runda:
-    runda = 0
+    runda = 5
     licytacja = False
 
     def __init__(self):
@@ -81,6 +81,7 @@ runda = runda()
 class druzyna:
     pula = 5000
     tymczasowa_pula = 0
+    czy_gra = True
 
     def __init__(self):
         pass
@@ -99,6 +100,9 @@ class druzyna:
 
     def zeruj_tymczasowa_pula(self):
         self.tymczasowa_pula = 0
+
+    def zmiana_gry(self):
+        self.czy_gra = not self.czy_gra
 
     def wypisz(self):
         return print(self.pula)
@@ -228,6 +232,9 @@ def gra(request):
                         if runda.runda <= 6 and team == "mistrzowie":
                             print("Mistrzowie nie mogą licytować przed 7 rundą")
                             return rendering(request)
+                        elif runda.runda > 6 and points.czy_gra == False:
+                            print("Ta drużyna już nie gra")
+                            return rendering(request)
                         if akcja[1] == "vabank":
                             punkty:int = points.pula
                             points.odejmij(punkty)
@@ -250,6 +257,9 @@ def gra(request):
                     print("Mistrzowie nie mogą licytować przed 7 rundą")
                     return rendering(request)
                 if action:
+                    if runda.runda > 6 and points.czy_gra == False:
+                        print("Ta drużyna już nie gra")
+                        return rendering(request)
                     try:
                         punkty:int = int(action[1]) + tymczasowa_pula - points.tymczasowa_pula
                     except ValueError:
@@ -265,6 +275,9 @@ def gra(request):
             if runda.licytacja == False:
                 print("nie możesz odpowiedzieć na pytanie zanim się nie zamknie licytacja")
                 return rendering(request)
+            elif runda.runda == 0:
+                print("Runda nie może być zerowa")
+                return rendering(request)
             druzyna = action_map[pula.wypisz_team()]
             druzyna.dodaj_pula(pula.pula)
             pula.zeruj_pula()
@@ -272,15 +285,46 @@ def gra(request):
             runda.zmiana_licytacja()
             for _, team in action_map.items():
                 team.zeruj_tymczasowa_pula()
+            if runda.runda == 6:
+                najwieksza_pula = 0
+                najwiekszy_team = None
+                for name,team in action_map.items():
+                    if name == "mistrzowie":
+                        continue
+                    if team.pula > najwieksza_pula:
+                        najwieksza_pula = team.pula
+                        najwiekszy_team = team
+                for name, team in action_map.items():
+                    if name == "mistrzowie":
+                        continue
+                    if team != najwiekszy_team:
+                        team.zmiana_gry()
             return rendering(request)
         elif request.POST.get("zla_odpowiedz"):
             if runda.licytacja == False:
                 print("nie możesz odpowiedzieć na pytanie zanim się nie zamknie licytacja")
                 return rendering(request)
+            elif runda.runda == 0:
+                print("Runda nie może być zerowa")
+                return rendering(request)
             kategoria.wyczysc_kategorie()
             runda.zmiana_licytacja()
             for _, team in action_map.items():
                 team.zeruj_tymczasowa_pula()
+            if runda.runda == 6:
+                najwieksza_pula = 0
+                najwiekszy_team = None
+                for name,team in action_map.items():
+                    if name == "mistrzowie":
+                        continue
+                    if team.pula > najwieksza_pula: #konieczny popup do dodania
+                        najwieksza_pula = team.pula
+                        najwiekszy_team = team
+                for name,team in action_map.items():
+                    if name == "mistrzowie":
+                        continue
+                    if team != najwiekszy_team:
+                        team.zmiana_gry()
             return rendering(request)
         else:
             return rendering(request)
