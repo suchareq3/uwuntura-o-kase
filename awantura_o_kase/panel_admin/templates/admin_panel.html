@@ -30,7 +30,7 @@
 					</form>
 					
 				</div>
-				<form method = "post" action = "{% url 'gra' %}">{% csrf_token %}
+				<form method = "post" action = "{% url 'gra' %}" class="flex-[1] flex">{% csrf_token %}
 					<select class="flex-[1] ml-[12%] flex items-center justify-center text-3xl text-black pl-5 bg-neutral-300 border-0 rounded-full" name="kategoria" id="kategoria" onchange = "this.form.submit()">
 						<option class="hover:bg-neutral-400" value="" disabled selected {%if not kategoria %} selected {% endif %}>Kategoria</option>
 						<option class="hover:bg-neutral-400" value="kategoria-1" {%if kategoria == 'kategoria-1' %} selected {% endif %}>Kategoria #1</option>
@@ -123,8 +123,8 @@
 				<div class="pula w-full flex-[8] flex justify-center items-center text-4xl ">
 					<span>{{pula}}</span>
 				</div>
-				<form method = "post" action = "{% url 'gra' %}">{% csrf_token %}
-					<button type = "submit" name = "koniec-licytacji" value = "koniec-licytacji" class="w-full flex-[3] bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-black text-lg font-medium border-l-0">Koniec<br>licytacji</button>
+				<form method = "post" action = "{% url 'gra' %}" class="w-full flex-[3] h-full">{% csrf_token %}
+					<button type = "submit" name = "koniec-licytacji" value = "koniec-licytacji" class="w-full h-full flex-[3] bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-black text-lg font-medium border-l-0">Koniec<br>licytacji</button>
 				</form>
 			</div>
 
@@ -136,12 +136,10 @@
 				<div class="flex-[3] overflow-auto p-3 min-h-full text-lg">
 					<span>{{odpowiedz}}</span>
 				</div>
-				<form method = "post" action = "{% url 'gra' %}">{% csrf_token %}
-					<div class="flex-[2] flex flex-col overflow-hidden divide-y-2 divide-neutral-900">
-						<button type = "submit" name = "dobra_odpowiedz" value = "dobra_odpowiedz" class = "w-full h-1/2 bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-lime-600 font-bold odp-dobra">Dobra odp</button>
-						<button type = "submit" name = "zla_odpowiedz" value = "zla_odpowiedz" class="w-full h-1/2 bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-rose-600 font-bold odp-zla">Zla odp</button>
-						<button class="w-full h-1/2 bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-amber-600 font-bold odp-podpowiedz">Podpowiedź</button>
-					</div>
+				<form method = "post" action = "{% url 'gra' %}" class="flex-[2] flex flex-col overflow-hidden divide-y-2 divide-neutral-900">{% csrf_token %}
+					<button type = "submit" name = "dobra_odpowiedz" value = "dobra_odpowiedz" class = "w-full h-1/2 bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-lime-600 font-bold odp-dobra">Dobra odp</button>
+					<button type = "submit" name = "zla_odpowiedz" value = "zla_odpowiedz" class="w-full h-1/2 bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-rose-600 font-bold odp-zla">Zla odp</button>
+					<button class="w-full h-1/2 bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-amber-600 font-bold odp-podpowiedz">Podpowiedź</button>
 				</form>
 			</div>
 
