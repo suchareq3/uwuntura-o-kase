@@ -56,8 +56,9 @@ class kategoria:
 kategoria = kategoria()
 
 class runda:
-    runda = 5
+    runda = 5 #KONIECZNIE DO ZMIANY NA 0
     licytacja = False
+    czy_nastepna_runda = True
 
     def __init__(self):
         pass
@@ -82,6 +83,7 @@ class druzyna:
     pula = 5000
     tymczasowa_pula = 0
     czy_gra = True
+    licytowal = False
 
     def __init__(self):
         pass
@@ -105,8 +107,7 @@ class druzyna:
         self.czy_gra = not self.czy_gra
 
     def wypisz(self):
-        return print(self.pula)
-    
+        return str(self.__class__.__qualname__)
 
 class niebiescy(druzyna):
     pass
@@ -201,15 +202,30 @@ def gra(request):
         for team, points in action_map.items():
             if tymczasowa_pula < points.tymczasowa_pula:
                 tymczasowa_pula = points.tymczasowa_pula
+        if request.POST.get("koniec-licytacji") and pula.pula == 0:
+            print("Nie możesz zakończyć licytacji bez podania kwoty")
+            return rendering(request)
         if request.POST.get("kategoria"):
             kategoria.dodaj_kategorie(request.POST.get("kategoria"))
             if runda.licytacja == True:
                 runda.zmiana_licytacja()
             return rendering(request)
         elif request.POST.get("runda"):
+            if runda.czy_nastepna_runda == False:
+                print("Nie zakończyła się poprzednia runda")
+                return rendering(request)
+            if kategoria.kategoria == "":
+                print("Wybierz kategorię najpierw")
+                return rendering(request)
             if runda.dodaj_runda() == False: #dodać popup do tego
                 print("Za dużo rund")
                 return rendering(request)
+            for _, team in action_map.items():
+                if team == mistrzowie and runda.runda <= 6:
+                    break
+                team.odejmij(200)
+                pula.dodaj_pula(200, team)
+            runda.czy_nastepna_runda = False
             return rendering(request)
         elif kategoria.kategoria == "":
             print("Nie wybrano kategorii")
@@ -240,13 +256,18 @@ def gra(request):
                             points.odejmij(punkty)
                             pula.dodaj_pula(punkty, team)
                             runda.zmiana_licytacja()
-                            return rendering(request)
                         else:
+                            if points.licytowal == True:
+                                print("Ta drużyna już licytowała") #dodać popup do tego
+                                return rendering(request)
                             punkty:int = int(amount) + tymczasowa_pula - points.tymczasowa_pula
                             points.odejmij(punkty)
                             pula.dodaj_pula(punkty, team)
                             points.dodaj_tymczasowa_pula(punkty)
-                            return rendering(request)
+                            for _, team in action_map.items():
+                                team.licytowal = False
+                            points.licytowal = True
+                        return rendering(request)
             return rendering(request)
         elif any(key.startswith("add-X-") for key in request.POST.keys()):
             if runda.licytacja == True: #dodać popup do tego
@@ -260,6 +281,9 @@ def gra(request):
                     if runda.runda > 6 and points.czy_gra == False:
                         print("Ta drużyna już nie gra")
                         return rendering(request)
+                    if points.licytowal == True:
+                        print("Ta drużyna już licytowała") #dodać popup do tego
+                        return rendering(request)
                     try:
                         punkty:int = int(action[1]) + tymczasowa_pula - points.tymczasowa_pula
                     except ValueError:
@@ -269,6 +293,9 @@ def gra(request):
                     points.odejmij(punkty)
                     pula.dodaj_pula(punkty, team)
                     points.dodaj_tymczasowa_pula(punkty)
+                    for _, team in action_map.items():
+                        team.licytowal = False
+                    points.licytowal = True
                     return rendering(request)
             return rendering(request)
         elif request.POST.get("dobra_odpowiedz"):
@@ -299,6 +326,7 @@ def gra(request):
                         continue
                     if team != najwiekszy_team:
                         team.zmiana_gry()
+            runda.czy_nastepna_runda = True
             return rendering(request)
         elif request.POST.get("zla_odpowiedz"):
             if runda.licytacja == False:
@@ -312,12 +340,13 @@ def gra(request):
             for _, team in action_map.items():
                 team.zeruj_tymczasowa_pula()
             if runda.runda == 6:
+                druzyna = action_map[pula.wypisz_team()]
                 najwieksza_pula = 0
                 najwiekszy_team = None
                 for name,team in action_map.items():
                     if name == "mistrzowie":
                         continue
-                    if team.pula > najwieksza_pula: #konieczny popup do dodania
+                    if team.pula > najwieksza_pula:
                         najwieksza_pula = team.pula
                         najwiekszy_team = team
                 for name,team in action_map.items():
@@ -325,6 +354,10 @@ def gra(request):
                         continue
                     if team != najwiekszy_team:
                         team.zmiana_gry()
+                if najwiekszy_team != druzyna: #konieczny popup do dodania, 6 runda przegrana
+                    
+                    pass
+            runda.czy_nastepna_runda = True
             return rendering(request)
         else:
             return rendering(request)
