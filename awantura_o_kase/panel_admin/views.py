@@ -72,7 +72,7 @@ class runda:
         return self.runda
     
     def reset(self):
-        self.runda = 1
+        self.runda = 0
 
     def zmiana_licytacja(self):
         self.licytacja = not self.licytacja
@@ -202,10 +202,19 @@ def gra(request):
         for team, points in action_map.items():
             if tymczasowa_pula < points.tymczasowa_pula:
                 tymczasowa_pula = points.tymczasowa_pula
-        if request.POST.get("koniec-licytacji") and pula.pula == 0:
+        if request.POST.get("reset"):
+            for _, team in action_map.items():
+                team.pula = 5000
+                team.czy_gra = True
+                team.licytowal = False
+            pula.pula = 0
+            runda.reset()
+            kategoria.wyczysc_kategorie()
+            return rendering(request)
+        elif request.POST.get("koniec-licytacji") and pula.pula == 0:
             print("Nie możesz zakończyć licytacji bez podania kwoty")
             return rendering(request)
-        if request.POST.get("kategoria"):
+        elif request.POST.get("kategoria"):
             kategoria.dodaj_kategorie(request.POST.get("kategoria"))
             if runda.licytacja == True:
                 runda.zmiana_licytacja()
