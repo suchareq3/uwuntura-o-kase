@@ -73,6 +73,8 @@ class runda:
     
     def reset(self):
         self.runda = 0
+        self.licytacja = False
+        self.czy_nastepna_runda = True
 
     def zmiana_licytacja(self):
         self.licytacja = not self.licytacja
@@ -213,7 +215,8 @@ def gra(request):
             return rendering(request)
         elif request.POST.get("koniec-licytacji") and pula.pula == 0:
             print("Nie możesz zakończyć licytacji bez podania kwoty")
-            return rendering(request)
+            messages.error(request, "Nie możesz zakończyć licytacji bez podania kwoty")
+            return HttpResponseRedirect(request.path_info)
         elif request.POST.get("kategoria"):
             kategoria.dodaj_kategorie(request.POST.get("kategoria"))
             if runda.licytacja == True:
@@ -223,10 +226,10 @@ def gra(request):
             if runda.czy_nastepna_runda == False:
                 print("Nie zakończyła się poprzednia runda")
                 return rendering(request)
-            if kategoria.kategoria == "":
+            elif kategoria.kategoria == "":
                 print("Wybierz kategorię najpierw")
                 return rendering(request)
-            if runda.dodaj_runda() == False: #dodać popup do tego
+            elif runda.dodaj_runda() == False: #dodać popup do tego
                 print("Za dużo rund")
                 return rendering(request)
             for _, team in action_map.items():
@@ -290,13 +293,13 @@ def gra(request):
                     if runda.runda > 6 and points.czy_gra == False:
                         print("Ta drużyna już nie gra")
                         return rendering(request)
-                    if points.licytowal == True:
-                        print("Ta drużyna już licytowała") #dodać popup do tego
-                        return rendering(request)
                     try:
                         punkty:int = int(action[1]) + tymczasowa_pula - points.tymczasowa_pula
                     except ValueError:
                         continue
+                    if points.licytowal == True:
+                        print("Ta drużyna już licytowała") #dodać popup do tego
+                        return rendering(request)
                     if punkty % 100 != 0: #dodaj_pula popup do tego 
                         return rendering(request)
                     points.odejmij(punkty)
