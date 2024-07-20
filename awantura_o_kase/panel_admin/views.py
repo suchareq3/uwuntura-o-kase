@@ -422,8 +422,9 @@ def gra(request):
                     if team != najwiekszy_team:
                         team.zmiana_gry()
                 if najwiekszy_team != druzyna: #konieczny popup do dodania, 6 runda przegrana
-                    
-                    pass
+                    messages.info(request, "6 runda - zla odp przez 1sza druzyne")
+                    return HttpResponseRedirect(request.path_info)
+                    #passs
             runda.czy_nastepna_runda = True
             return rendering(request)
         else:
