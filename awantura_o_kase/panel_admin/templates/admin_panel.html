@@ -201,10 +201,10 @@
 							</svg>
 							<h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Runda 6 - Czy 2ga najbardziej zamozna druzyna dobrze odpowiedziala to pytanie?</h3>
 							<form method = "post" action = "{% url 'gra' %}">{% csrf_token %}
-								<button type = "submit" name = "reset" value = "reset" data-modal-hide="popup-runda-6" type="button" class="text-white bg-lime-600 hover:bg-lime-800 focus:ring-4 focus:outline-none focus:ring-lime-300 dark:focus:ring-lime-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+								<button type = "submit" name = "dobra_odpowiedz_ostatni" value = "dobra_odpowiedz_ostatni" data-modal-hide="popup-runda-6" type="button" class="text-white bg-lime-600 hover:bg-lime-800 focus:ring-4 focus:outline-none focus:ring-lime-300 dark:focus:ring-lime-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
 									Tak, hihi :3
 								</button>
-								<button data-modal-hide="popup-runda-6" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-red-600 rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+								<button type = "submit" name = "zla_odpowiedz_ostatni" value = "zla_odpowiedz_ostatni" data-modal-hide="popup-runda-6" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-red-600 rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
 									Neiiii UnU
 								</button>
 							</form>

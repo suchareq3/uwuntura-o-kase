@@ -56,7 +56,7 @@ class kategoria:
 kategoria = kategoria()
 
 class runda:
-    runda = 5 #KONIECZNIE DO ZMIANY NA 0
+    runda = 4 #KONIECZNIE DO ZMIANY NA 0
     licytacja = False
     czy_nastepna_runda = True
     najwiekszy_bet = 0
@@ -222,8 +222,8 @@ def gra(request):
             return rendering(request)
         elif request.POST.get("koniec-licytacji") and pula.pula == 0:
             print("Nie możesz zakończyć licytacji bez podania kwoty")
-            messages.error(request, "Nie możesz zakończyć licytacji bez podania kwoty")
-            return HttpResponseRedirect(request.path_info)
+            #messages.error(request, "Nie możesz zakończyć licytacji bez podania kwoty")
+            return rendering(request)
         elif request.POST.get("kategoria"):
             kategoria.dodaj_kategorie(request.POST.get("kategoria"))
             if runda.licytacja == True:
@@ -239,12 +239,22 @@ def gra(request):
             elif runda.dodaj_runda() == False: #dodać popup do tego
                 print("Za dużo rund")
                 return rendering(request)
-            for _, team in action_map.items():
-                if team == mistrzowie and runda.runda <= 6:
-                    break
-                team.odejmij(200)
-                team.wyrownaj_tymczasowa_pule(200)
-                pula.dodaj_pula(200, team)
+            if runda.runda <= 6:
+                for _, team in action_map.items():
+                    if team == mistrzowie:
+                        break
+                    team.odejmij(200)
+                    team.wyrownaj_tymczasowa_pule(200)
+                    pula.dodaj_pula(200, team)
+            else:
+                najwiekszy_team = max((team for name, team in action_map.items() if name != "mistrzowie"), key=lambda t: t.pula, default=None)
+                najwiekszy_team.odejmij(200)
+                najwiekszy_team.wyrownaj_tymczasowa_pule(200)
+                pula.dodaj_pula(200, None)
+                mistrzowie.odejmij(200)
+                mistrzowie.wyrownaj_tymczasowa_pule(200)
+                pula.dodaj_pula(200, None)
+                return rendering(request)
             for team, points in action_map.items():
                 if tymczasowa_pula < points.tymczasowa_pula:
                     tymczasowa_pula = points.tymczasowa_pula
@@ -274,6 +284,9 @@ def gra(request):
                         elif runda.runda > 6 and points.czy_gra == False:
                             print("Ta drużyna już nie gra")
                             return rendering(request)
+                        elif points.czy_gra == False:
+                            print("Ta drużyna już nie gra")
+                            return rendering(request)
                         if akcja[1] == "vabank":
                             punkty:int = points.pula
                             points.odejmij(punkty)
@@ -284,7 +297,7 @@ def gra(request):
                                 print("Ta drużyna już licytowała") #dodać popup do tego
                                 return rendering(request)
                             punkty:int = int(amount) + tymczasowa_pula - points.tymczasowa_pula
-                            runda.dodaj_do_najwiekszego_betu(punkty)
+                            runda.dodaj_do_najwiekszego_betu(int(amount))
                             points.odejmij(punkty)
                             pula.dodaj_pula(punkty, team)
                             points.dodaj_tymczasowa_pula(punkty)
@@ -341,20 +354,13 @@ def gra(request):
             runda.zmiana_licytacja()
             for _, team in action_map.items():
                 team.zeruj_tymczasowa_pula()
+                team.licytowal = False
             if runda.runda == 6:
-                najwieksza_pula = 0
-                najwiekszy_team = None
-                for name,team in action_map.items():
-                    if name == "mistrzowie":
-                        continue
-                    if team.pula > najwieksza_pula:
-                        najwieksza_pula = team.pula
-                        najwiekszy_team = team
-                for name, team in action_map.items():
-                    if name == "mistrzowie":
-                        continue
-                    if team != najwiekszy_team:
-                        team.zmiana_gry()
+                najwiekszy_team = max((team for name, team in action_map.items() if name != "mistrzowie"), key=lambda t: t.pula, default=None)
+                if najwiekszy_team is not None:
+                    for name, team in action_map.items():
+                        if name != "mistrzowie" and team != najwiekszy_team:
+                            team.zmiana_gry()
             runda.czy_nastepna_runda = True
             return rendering(request)
         elif request.POST.get("zla_odpowiedz"):
@@ -364,29 +370,47 @@ def gra(request):
             elif runda.runda == 0:
                 print("Runda nie może być zerowa")
                 return rendering(request)
+            if runda.runda == 6:
+                druzyna = action_map[pula.wypisz_team()]
+                najwiekszy_team = max((team for name, team in action_map.items() if name != "mistrzowie"), key=lambda t: t.pula, default=None)
+                if najwiekszy_team != druzyna: #konieczny popup do dodania, 6 runda przegrana
+                    messages.info(request, "6 runda - zla odp przez 1sza druzyne")
+                    return rendering(request)
+                if najwiekszy_team is not None:
+                    for name, team in action_map.items():
+                        if name != "mistrzowie" and team != najwiekszy_team:
+                            team.zmiana_gry()
+                runda.zeruj_pula()
             kategoria.wyczysc_kategorie()
             runda.zmiana_licytacja()
             for _, team in action_map.items():
                 team.zeruj_tymczasowa_pula()
-            if runda.runda == 6:
-                druzyna = action_map[pula.wypisz_team()]
-                najwieksza_pula = 0
-                najwiekszy_team = None
-                for name,team in action_map.items():
-                    if name == "mistrzowie":
-                        continue
-                    if team.pula > najwieksza_pula:
-                        najwieksza_pula = team.pula
-                        najwiekszy_team = team
-                for name,team in action_map.items():
-                    if name == "mistrzowie":
-                        continue
-                    if team != najwiekszy_team:
-                        team.zmiana_gry()
-                if najwiekszy_team != druzyna: #konieczny popup do dodania, 6 runda przegrana
-                    messages.info(request, "6 runda - zla odp przez 1sza druzyne")
-                    return HttpResponseRedirect(request.path_info)
-                    #passs
+                team.liytowal = False
+            runda.czy_nastepna_runda = True
+            return rendering(request)
+        elif request.POST.get("dobra_odpowiedz_ostatni"):
+            najwiekszy_team = max((team for name, team in action_map.items() if name != "mistrzowie"), key=lambda t: t.pula, default=None)
+            for name, team in action_map.items():
+                if name != "mistrzowie" and team != najwiekszy_team:
+                    team.zmiana_gry()
+            najwiekszy_team.dodaj_pula(pula.pula)
+            pula.zeruj_pula()
+            kategoria.wyczysc_kategorie()
+            runda.zmiana_licytacja()
+            for _, team in action_map.items():
+                team.zeruj_tymczasowa_pula()
+            runda.czy_nastepna_runda = True
+            return rendering(request)
+        elif request.POST.get("zla_odpowiedz_ostatni"):
+            najwiekszy_team = max((team for name, team in action_map.items() if name != "mistrzowie"), key=lambda t: t.pula, default=None)
+            for name, team in action_map.items():
+                if name != "mistrzowie" and team != najwiekszy_team:
+                    team.zmiana_gry()
+            pula.zeruj_pula()
+            kategoria.wyczysc_kategorie()
+            runda.zmiana_licytacja()
+            for _, team in action_map.items():
+                team.zeruj_tymczasowa_pula()
             runda.czy_nastepna_runda = True
             return rendering(request)
         else:
