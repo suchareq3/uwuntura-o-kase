@@ -210,10 +210,7 @@ def gra(request):
             "zolci": zolci,
             "mistrzowie": mistrzowie
         }
-        tymczasowa_pula = 0
-        for team, points in action_map.items():
-            if tymczasowa_pula < points.tymczasowa_pula:
-                tymczasowa_pula = points.tymczasowa_pula
+        tymczasowa_pula = max(points.tymczasowa_pula for points in action_map.values())
         if request.POST.get("reset"):
             for _, team in action_map.items():
                 team.pula = 5000
