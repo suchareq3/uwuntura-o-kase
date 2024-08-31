@@ -13,3 +13,8 @@ W terminalu należy napisać
 cd .\awantura_o_kase\
 py manage.py runserver
 ```
+
+Przy zmianie CSS lub dodaniu nowych klas z Tailwind'a, w terminalu należy użyć
+```
+npx tailwindcss -i ./panel_admin/static/admin_panel_style.css -o ./panel_admin/static/tailwind-output.css --watch
+```
