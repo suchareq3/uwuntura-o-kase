@@ -63,7 +63,7 @@ section .main-container
   /*min-width: 0;*/
 }
 
-.srodki > span,
+.srodki span,
 .pula > span {
   background: none;
   background-color: transparent!important;
@@ -72,6 +72,12 @@ section .main-container
   top: 5px;
   left: 2px;
 }
+
+.pula-clip {
+  clip-path: polygon(0 0, 100% 0%, 90% 100%, 0 100%);
+  /*padding-right: 30px;*/
+}
+
 input[type="text"].kasa { /* Move text down by 2px; adjust as necessary */
   /*color: purple!important;*/
   /*padding-top: 5px;*/

@@ -46,8 +46,15 @@
 					<!-- Druzyna Niebiescy-->
 					
 					<form method = "post" action = "{% url 'gra' %}" class="min-h-full flex flex-col items-center border-8 rounded-b-2xl overflow-hidden text-2xl justify-evenly gap-2 bg-[rgb(8,26,77)] border-[rgb(8,26,77)]">{% csrf_token %}
-						<div class="srodki w-full flex items-center justify-center h-[45%] bg-[rgb(8,35,112)] text-5xl">
-							<span>{{pula_niebiescy}}</span>
+						<div class="srodki w-full flex items-center justify-center h-[45%] bg-[rgb(8,35,112)]">
+							<div class="relative h-full flex items-center justify-start text-4xl basis-0 grow-[5] pula-clip bg-[rgb(8,26,77)]">
+								<span class="!absolute !top-0 !left-0 !right-0 m-auto text-xs text-center text-gray-500 pt-1">Pula</span>
+								<span class="pt-5 m-auto">{{pula_niebiescy}}</span>
+							</div>
+							<div class="relative h-full flex items-center justify-end text-2xl basis-0 grow-[2] flex-end">
+								<span class="!absolute !top-0 !left-0 !right-0 m-auto text-xs text-center text-gray-500 pt-1">Bet (runda)</span>
+								<span class="pr-3 pt-5 text-gray-400 text-right">12345</span>
+							</div>
 						</div>
 						<div class="w-full items-center h-[55%] box-content divide-y-2 divide-[rgb(8,26,77)]">
 							<input type = "hidden" name = "add-X-niebiescy" id = "add-X-niebiescy">
@@ -66,9 +73,18 @@
 					<!-- Druzyna Zieloni-->
 					
 					<form method = "post" action = "{% url 'gra' %}" class="min-h-full flex flex-col items-center border-8 rounded-b-2xl overflow-hidden text-2xl justify-evenly gap-2 bg-[rgb(3,44,29)] border-[rgb(3,44,29)]">{% csrf_token %}
-						<div class="srodki w-full flex items-center justify-center h-[45%] bg-[rgb(2,65,43)] text-5xl">
-							<span>{{pula_zieloni}}</span>
+
+						<div class="srodki w-full flex items-center justify-center h-[45%] bg-[rgb(2,65,43)]">
+							<div class="relative h-full flex items-center justify-start text-4xl basis-0 grow-[5] pula-clip bg-[rgb(3,44,29)]">
+								<span class="!absolute !top-0 !left-0 !right-0 m-auto text-xs text-center text-gray-500 pt-1">Pula</span>
+								<span class="pt-5 m-auto">{{pula_zieloni}}</span>
+							</div>
+							<div class="relative h-full flex items-center justify-end text-2xl basis-0 grow-[2] flex-end">
+								<span class="!absolute !top-0 !left-0 !right-0 m-auto text-xs text-center text-gray-500 pt-1">Bet (runda)</span>
+								<span class="pr-3 pt-5 text-gray-400 text-right">12345</span>
+							</div>
 						</div>
+
 						<div class="w-full items-center h-[55%] box-content divide-y-2 divide-[rgb(3,44,29)]">
 							<input type = "hidden" name = "add-X-zieloni" id = "add-X-zieloni">
 							<input class="kasa text-center flex items-center justify-center w-full h-1/2 text-2xl border-none text-[rgb(3,44,29)] pt-3" type="text" name="add-X-zieloni" id="add-X-zieloni" >
@@ -84,9 +100,18 @@
 					
 					<!-- Druzyna Zolci-->
 					<form method = "post" action = "{% url 'gra' %}" class="min-h-full flex flex-col items-center border-8 rounded-b-2xl overflow-hidden text-2xl justify-evenly gap-2 bg-yellow-800 border-yellow-800">{% csrf_token %}
-						<div class="srodki w-full flex items-center justify-center h-[45%] bg-yellow-500 text-5xl">
-							<span>{{pula_zolci}}</span>
+
+						<div class="srodki w-full flex items-center justify-center h-[45%] bg-yellow-500">
+							<div class="relative h-full flex items-center justify-start text-4xl basis-0 grow-[5] pula-clip bg-yellow-800">
+								<span class="!absolute !top-0 !left-0 !right-0 m-auto text-xs text-center text-gray-500 pt-1">Pula</span>
+								<span class="pt-5 m-auto">{{pula_zolci}}</span>
+							</div>
+							<div class="relative h-full flex items-center justify-end text-2xl basis-0 grow-[2] flex-end">
+								<span class="!absolute !top-0 !left-0 !right-0 m-auto text-xs text-center text-gray-500 pt-1">Bet (runda)</span>
+								<span class="pr-3 pt-5 text-gray-400 text-right">12345</span>
+							</div>
 						</div>
+
 						<div class="w-full items-center h-[55%] box-content divide-y-2 divide-yellow-800">
 							<input type = "hidden" name = "add-X-zolci" id = "add-X-zolci">
 							<input class="kasa text-center flex items-center justify-center w-full h-1/2 text-2xl border-none text-[rgb(95,75,10)] pt-3" type="text" name="add-X-zolci" id="add-X-zolci" >
@@ -102,9 +127,18 @@
 					
 					<!-- Druzyna Mistrzowie-->
 					<form method = "post" action = "{% url 'gra' %}" class="min-h-full flex flex-col items-center border-8 rounded-b-2xl overflow-hidden text-2xl justify-evenly gap-2 bg-[rgb(38,13,39)] border-[rgb(38,13,39)]">{% csrf_token %}
-						<div class="srodki w-full flex items-center justify-center h-[45%] bg-[rgb(54,41,66)] text-5xl">
-							<span>{{pula_mistrzowie}}</span>
+
+						<div class="srodki w-full flex items-center justify-center h-[45%] bg-[rgb(54,41,66)]">
+							<div class="relative h-full flex items-center justify-start text-4xl basis-0 grow-[5] pula-clip bg-[rgb(38,13,39)]">
+								<span class="!absolute !top-0 !left-0 !right-0 m-auto text-xs text-center text-gray-500 pt-1">Pula</span>
+								<span class="pt-5 m-auto">{{pula_mistrzowie}}</span>
+							</div>
+							<div class="relative h-full flex items-center justify-end text-2xl basis-0 grow-[2] flex-end">
+								<span class="!absolute !top-0 !left-0 !right-0 m-auto text-xs text-center text-gray-500 pt-1">Bet (runda)</span>
+								<span class="pr-3 pt-5 text-gray-400 text-right">12345</span>
+							</div>
 						</div>
+
 						<div class="w-full items-center h-[55%] box-content divide-y-2 divide-[rgb(38,13,39)]">
 							<input type = "hidden" name = "add-X-mistrzowie" id = "add-X-mistrzowie">
 							<input class="kasa text-center flex items-center justify-center w-full h-1/2 text-2xl border-none text-[rgb(38,13,39)] pt-3" type="text" name="add-X-mistrzowie" id="add-X-mistrzowie" >
