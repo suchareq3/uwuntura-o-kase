@@ -97,7 +97,7 @@ class druzyna:
     def __init__(self):
         pass
 
-    def odejmij(self, kwota):
+    def odejmij(self, kwota, request):
         if self.pula > 0:
             self.pula -= kwota
         else:
@@ -198,13 +198,18 @@ def rendering(request):
             'runda': runda.runda,
             'kategoria': kategoria.kategoria,
             'tresc_pytania': kategoria.pytanie,
-            'odpowiedz': kategoria.odpowiedz
+            'odpowiedz': kategoria.odpowiedz,
+            'pula_niebiescy_runda': niebiescy.tymczasowa_pula,
+            'pula_zieloni_runda': zieloni.tymczasowa_pula,
+            'pula_zolci_runda': zolci.tymczasowa_pula,
+            'pula_mistrzowie_runda': mistrzowie.tymczasowa_pula
         }
         )
 
 @login_required
 def gra(request):
     if request.method == "POST":
+        print(request.POST)
         action_map = {
             "niebiescy": niebiescy,
             "zieloni": zieloni,
@@ -212,7 +217,7 @@ def gra(request):
             "mistrzowie": mistrzowie
         }
         tymczasowa_pula = max(points.tymczasowa_pula for points in action_map.values())
-        if request.POST.get("reset"):
+        if request.POST.get("reset-gry"):
             for _, team in action_map.items():
                 team.pula = 5000
                 team.czy_gra = True
@@ -247,15 +252,15 @@ def gra(request):
                 for _, team in action_map.items():
                     if team == mistrzowie:
                         break
-                    team.odejmij(200)
+                    team.odejmij(200, request)
                     team.wyrownaj_tymczasowa_pule(200)
                     pula.dodaj_pula(200, team)
             else:
                 najwiekszy_team = max((team for name, team in action_map.items() if name != "mistrzowie"), key=lambda t: t.pula, default=None)
-                najwiekszy_team.odejmij(200)
+                najwiekszy_team.odejmij(200, request)
                 najwiekszy_team.wyrownaj_tymczasowa_pule(200)
                 pula.dodaj_pula(200, None)
-                mistrzowie.odejmij(200)
+                mistrzowie.odejmij(200, request)
                 mistrzowie.wyrownaj_tymczasowa_pule(200)
                 pula.dodaj_pula(200, None)
                 return rendering(request)
@@ -299,7 +304,7 @@ def gra(request):
                             return rendering(request)
                         if akcja[1] == "vabank":
                             punkty:int = points.pula
-                            points.odejmij(punkty)
+                            points.odejmij(punkty, request)
                             pula.dodaj_pula(punkty, team)
                             runda.zmiana_licytacja()
                         else:
@@ -309,7 +314,7 @@ def gra(request):
                                 return rendering(request)
                             punkty:int = int(amount) + tymczasowa_pula - points.tymczasowa_pula
                             runda.dodaj_do_najwiekszego_betu(int(amount))
-                            points.odejmij(punkty)
+                            points.odejmij(punkty, request)
                             pula.dodaj_pula(punkty, team)
                             points.dodaj_tymczasowa_pula(punkty)
                             for _, team in action_map.items():
@@ -348,7 +353,7 @@ def gra(request):
                     if punkty % 100 != 0:
                         return rendering(request)
                     runda.przypisz_do_najwiekszego_betu(punkty)
-                    points.odejmij(punkty - points.tymczasowa_pula)
+                    points.odejmij(punkty - points.tymczasowa_pula, request)
                     pula.dodaj_pula(punkty - points.tymczasowa_pula, team)
                     points.wyrownaj_tymczasowa_pule(punkty)
                     for _, team in action_map.items():

@@ -53,7 +53,7 @@
 							</div>
 							<div class="relative h-full flex items-center justify-end text-2xl basis-0 grow-[2] flex-end">
 								<span class="!absolute !top-0 !left-0 !right-0 m-auto text-xs text-center text-gray-500 pt-1">Bet (runda)</span>
-								<span class="pr-3 pt-5 text-gray-400 text-right">12345</span>
+								<span class="pr-3 pt-5 text-gray-400 text-right">{{pula_niebiescy_runda}}</span>
 							</div>
 						</div>
 						<div class="w-full items-center h-[55%] box-content divide-y-2 divide-[rgb(8,26,77)]">
@@ -81,7 +81,7 @@
 							</div>
 							<div class="relative h-full flex items-center justify-end text-2xl basis-0 grow-[2] flex-end">
 								<span class="!absolute !top-0 !left-0 !right-0 m-auto text-xs text-center text-gray-500 pt-1">Bet (runda)</span>
-								<span class="pr-3 pt-5 text-gray-400 text-right">12345</span>
+								<span class="pr-3 pt-5 text-gray-400 text-right">{{pula_zieloni_runda}}</span>
 							</div>
 						</div>
 
@@ -108,7 +108,7 @@
 							</div>
 							<div class="relative h-full flex items-center justify-end text-2xl basis-0 grow-[2] flex-end">
 								<span class="!absolute !top-0 !left-0 !right-0 m-auto text-xs text-center text-gray-500 pt-1">Bet (runda)</span>
-								<span class="pr-3 pt-5 text-gray-400 text-right">12345</span>
+								<span class="pr-3 pt-5 text-gray-400 text-right">{{pula_zolci_runda}}</span>
 							</div>
 						</div>
 
@@ -135,7 +135,7 @@
 							</div>
 							<div class="relative h-full flex items-center justify-end text-2xl basis-0 grow-[2] flex-end">
 								<span class="!absolute !top-0 !left-0 !right-0 m-auto text-xs text-center text-gray-500 pt-1">Bet (runda)</span>
-								<span class="pr-3 pt-5 text-gray-400 text-right">12345</span>
+								<span class="pr-3 pt-5 text-gray-400 text-right">{{pula_mistrzowie_runda}}</span>
 							</div>
 						</div>
 
@@ -205,7 +205,7 @@
 					</svg>
 					<h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Popup do KARY! Jeszcze nie wiem co tu powinno byc, ale popup jest!</h3>
 					<form method = "post" action = "{% url 'gra' %}">{% csrf_token %}
-						<button type = "submit" name = "reset" value = "reset" data-modal-hide="popup-modal-kara" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+						<button type = "submit" name = "kara" value = "kara" data-modal-hide="popup-modal-kara" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
 							Aha, spoko
 						</button>
 						<button data-modal-hide="popup-modal-kara" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
@@ -232,7 +232,7 @@
 					</svg>
 					<h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Popup do 1 na 1! Jeszcze nie wiem co tu powinno byc, ale popup jest!</h3>
 					<form method = "post" action = "{% url 'gra' %}">{% csrf_token %}
-						<button type = "submit" name = "reset" value = "reset" data-modal-hide="popup-modal-1-na-1" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+						<button type = "submit" name = "1-na-1" value = "1-na-1" data-modal-hide="popup-modal-1-na-1" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
 							Aha, spoko
 						</button>
 						<button data-modal-hide="popup-modal-1-na-1" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
@@ -259,7 +259,7 @@
 					</svg>
 					<h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Czy NA PEWNO chcesz zresetować obecną rundę?</h3>
 					<form method = "post" action = "{% url 'gra' %}">{% csrf_token %}
-						<button type = "submit" name = "reset" value = "reset" data-modal-hide="popup-modal-reset-rundy" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+						<button type = "submit" name = "reset-rundy" value = "reset-rundy" data-modal-hide="popup-modal-reset-rundy" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
 							Tak, na pewno
 						</button>
 						<button data-modal-hide="popup-modal-reset-rundy" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
@@ -286,7 +286,7 @@
 					</svg>
 					<h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Czy NA PEWNO chcesz zresetować grę?</h3>
 					<form method = "post" action = "{% url 'gra' %}">{% csrf_token %}
-						<button type = "submit" name = "reset" value = "reset" data-modal-hide="popup-modal-reset-gry" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+						<button type = "submit" name = "reset-gry" value = "reset-gry" data-modal-hide="popup-modal-reset-gry" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
 							Tak, na pewno
 						</button>
 						<button data-modal-hide="popup-modal-reset-gry" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
