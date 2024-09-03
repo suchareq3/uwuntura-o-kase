@@ -102,6 +102,7 @@ class druzyna:
             self.pula -= kwota
         else:
             print("Nie masz już kasy")
+            messages.error(request, "Nie możesz zakończyć licytacji bez podania kwoty")
 
     def dodaj_pula(self, kwota):
         self.pula += kwota
@@ -222,7 +223,7 @@ def gra(request):
             return rendering(request)
         elif request.POST.get("koniec-licytacji") and pula.pula == 0:
             print("Nie możesz zakończyć licytacji bez podania kwoty")
-            #messages.error(request, "Nie możesz zakończyć licytacji bez podania kwoty")
+            messages.error(request, "Nie możesz zakończyć licytacji bez podania kwoty")
             return rendering(request)
         elif request.POST.get("kategoria"):
             kategoria.dodaj_kategorie(request.POST.get("kategoria"))
@@ -232,12 +233,15 @@ def gra(request):
         elif request.POST.get("runda"):
             if runda.czy_nastepna_runda == False:
                 print("Nie zakończyła się poprzednia runda")
+                messages.error(request, "Nie zakończyła się poprzednia runda")
                 return rendering(request)
             elif kategoria.kategoria == "":
-                print("Wybierz kategorię najpierw")
+                print("Wybierz najpierw kategorię")
+                messages.error(request, "Wybierz najpierw kategorię")
                 return rendering(request)
             elif runda.dodaj_runda() == False: #dodać popup do tego
                 print("Za dużo rund")
+                messages.error(request, "Za dużo rund")
                 return rendering(request)
             if runda.runda <= 6:
                 for _, team in action_map.items():
@@ -262,6 +266,7 @@ def gra(request):
             return rendering(request)
         elif kategoria.kategoria == "":
             print("Nie wybrano kategorii")
+            messages.error(request, "Nie wybrano kategorii")
             return rendering(request)
         elif request.POST.get("koniec-licytacji"):
             runda.zmiana_licytacja()
@@ -269,9 +274,11 @@ def gra(request):
         elif request.POST.get("action"):
             if runda.licytacja == True: #dodać popup do tego
                 print("Koniec licytacji")
+                messages.error(request, "Koniec licytacji")
                 return rendering(request)
             elif runda.runda == 0: #dodać popup do tego
                 print("Runda nie może być zerowa")
+                messages.error(request, "Runda nie może być zerowa")
                 return rendering(request)
             action = request.POST.get("action")
             akcja = action.split("-")
@@ -280,12 +287,15 @@ def gra(request):
                     if f"add-{amount}-{team}" == action:
                         if runda.runda <= 6 and team == "mistrzowie":
                             print("Mistrzowie nie mogą licytować przed 7 rundą")
+                            messages.error(request, "Mistrzowie nie mogą licytować przed 7 rundą")
                             return rendering(request)
                         elif runda.runda > 6 and points.czy_gra == False:
                             print("Ta drużyna już nie gra")
+                            messages.error(request, "Ta drużyna już nie gra")
                             return rendering(request)
                         elif points.czy_gra == False:
                             print("Ta drużyna już nie gra")
+                            messages.error(request, "Ta drużyna już nie gra")
                             return rendering(request)
                         if akcja[1] == "vabank":
                             punkty:int = points.pula
@@ -295,6 +305,7 @@ def gra(request):
                         else:
                             if points.licytowal == True:
                                 print("Ta drużyna już licytowała") #dodać popup do tego
+                                messages.error(request, "Ta drużyna już licytowała")
                                 return rendering(request)
                             punkty:int = int(amount) + tymczasowa_pula - points.tymczasowa_pula
                             runda.dodaj_do_najwiekszego_betu(int(amount))
@@ -312,6 +323,7 @@ def gra(request):
             for team, points in action_map.items():
                 if runda.runda <= 6 and team == "mistrzowie":
                     print("Mistrzowie nie mogą licytować przed 7 rundą")
+                    messages.error(request, "Mistrzowie nie mogą licytować przed 7 rundą")
                     return rendering(request)
                 action = request.POST.getlist(f"add-X-{team}")
                 if action:
@@ -319,15 +331,19 @@ def gra(request):
                         punkty:int = int(action[1])
                     except ValueError:
                         print("błąd")
+                        messages.error(request, "błąd")
                         continue
                     if punkty < runda.najwiekszy_bet:
                         print("Nie możesz licytować mniej niż poprzednia osoba")
+                        messages.error(request, "Nie możesz licytować mniej niż poprzednia osoba")
                         return rendering(request)
                     if runda.runda > 6 and points.czy_gra == False:
                         print("Ta drużyna już nie gra")
+                        messages.error(request, "Ta drużyna już nie gra")
                         return rendering(request)
                     if points.licytowal == True:
                         print("Ta drużyna już licytowała")
+                        messages.error(request, "Ta drużyna już licytowała")
                         return rendering(request)
                     if punkty % 100 != 0:
                         return rendering(request)
@@ -343,9 +359,11 @@ def gra(request):
         elif request.POST.get("dobra_odpowiedz"):
             if runda.licytacja == False:
                 print("nie możesz odpowiedzieć na pytanie zanim się nie zamknie licytacja")
+                messages.error(request, "nie możesz odpowiedzieć na pytanie zanim się nie zamknie licytacja")
                 return rendering(request)
             elif runda.runda == 0:
                 print("Runda nie może być zerowa")
+                messages.error(request, "Runda nie może być zerowa")
                 return rendering(request)
             druzyna = action_map[pula.wypisz_team()]
             druzyna.dodaj_pula(pula.pula)
@@ -366,9 +384,11 @@ def gra(request):
         elif request.POST.get("zla_odpowiedz"):
             if runda.licytacja == False:
                 print("nie możesz odpowiedzieć na pytanie zanim się nie zamknie licytacja")
+                messages.error(request, "nie możesz odpowiedzieć na pytanie zanim się nie zamknie licytacja")
                 return rendering(request)
             elif runda.runda == 0:
                 print("Runda nie może być zerowa")
+                messages.error(request, "Runda nie może być zerowa")
                 return rendering(request)
             if runda.runda == 6:
                 druzyna = action_map[pula.wypisz_team()]
