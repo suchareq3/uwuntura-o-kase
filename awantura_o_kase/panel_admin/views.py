@@ -173,7 +173,21 @@ def login(request):
             user = authenticate(request, username = username, password = password)
             if user:
                 login_user(request, user)
-                return redirect('gra')
+                return render(request, "admin_panel.html", {
+                    'pula': pula.pula,
+                    'pula_niebiescy': niebiescy.pula,
+                    'pula_zieloni': zieloni.pula,
+                    'pula_zolci': zolci.pula,
+                    'pula_mistrzowie': mistrzowie.pula,
+                    'runda': runda.runda,
+                    'kategoria': kategoria.kategoria,
+                    'tresc_pytania': kategoria.pytanie,
+                    'odpowiedz': kategoria.odpowiedz,
+                    'pula_niebiescy_runda': niebiescy.tymczasowa_pula,
+                    'pula_zieloni_runda': zieloni.tymczasowa_pula,
+                    'pula_zolci_runda': zolci.tymczasowa_pula,
+                    'pula_mistrzowie_runda': mistrzowie.tymczasowa_pula
+                })
             else:
                 messages.error(request, "Incorrect username or password. Please try again.")
                 return HttpResponseRedirect(request.path_info)
@@ -455,7 +469,7 @@ def gra(request):
             'pula_zieloni_runda': zieloni.tymczasowa_pula,
             'pula_zolci_runda': zolci.tymczasowa_pula,
             'pula_mistrzowie_runda': mistrzowie.tymczasowa_pula
-    })
+        })
 
 @login_required
 def viewers(request):
