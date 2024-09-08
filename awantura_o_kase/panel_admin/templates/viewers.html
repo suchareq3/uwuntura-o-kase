@@ -8,13 +8,19 @@
         $(document).ready(function(){
             function sprawdzZmiany() {
                 $.ajax({
-                    url: "{% url 'panel' %}",
+                    url: "{% url 'gra' %}",  // Upewnij się, że URL jest prawidłowy
                     type: "GET",
                     success: function(data) {
-                        // Tutaj należy zaktualizować odpowiednie elementy na stronie
                         console.log("Otrzymano nowe dane:", data);
-                        // Przykład aktualizacji elementu o id="wartosc"
-                        $("#wartosc").text(data.nowa_wartosc);
+                        $("#pula").text(data.pula);
+                        $("#pula_niebiescy").text(data.pula_niebiescy);
+                        $("#pula_zieloni").text(data.pula_zieloni);
+                        $("#pula_zolci").text(data.pula_zolci);
+                        $("#pula_mistrzowie").text(data.pula_mistrzowie);
+                        $("#runda").text(data.runda);
+                        $("#kategoria").text(data.kategoria);
+                        $("#tresc_pytania").text(data.tresc_pytania);
+                        $("#odpowiedz").text(data.odpowiedz);
                     },
                     error: function(xhr, status, error) {
                         console.error("Wystąpił błąd podczas żądania AJAX:", error);
@@ -22,14 +28,21 @@
                 });
             }
             
-            // Sprawdzanie zmian co sekundę
-            setInterval(sprawdzZmiany, 1000);
+            // Sprawdzanie zmian co 5 sekund
+            setInterval(sprawdzZmiany, 500);
         });
     </script>
 </head>
 <body>
-    <div>
-        <p>Aktualna wartość: <span id="wartosc">Brak danych</span></p>
-    </div>
+    <h1>Automatyczne odświeżanie danych</h1>
+    <p>Pula: <span id="pula"></span></p>
+    <p>Pula niebiescy: <span id="pula_niebiescy"></span></p>
+    <p>Pula zieloni: <span id="pula_zieloni"></span></p>
+    <p>Pula zolci: <span id="pula_zolci"></span></p>
+    <p>Pula mistrzowie: <span id="pula_mistrzowie"></span></p>
+    <p>Runda: <span id="runda"></span></p>
+    <p>Kategoria: <span id="kategoria"></span></p>
+    <p>Treść pytania: <span id="tresc_pytania"></span></p>
+    <p>Odpowiedź: <span id="odpowiedz"></span></p>
 </body>
 </html>
