@@ -1,0 +1,36 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automatyczne odświeżanie danych</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            function sprawdzZmiany() {
+                $.ajax({
+                    url: "{% url 'gra' %}",  // Upewnij się, że URL jest prawidłowy
+                    type: "GET",
+                    success: function(data) {
+                        console.log("Otrzymano nowe dane:", data);
+                        $("#pula_zieloni").text(data.pula_zieloni);
+                        $("#runda").text(data.runda);
+                        $("#tresc_pytania").text(data.tresc_pytania);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Wystąpił błąd podczas żądania AJAX:", error);
+                    }
+                });
+            }
+            
+            // Sprawdzanie zmian co 5 sekund
+            setInterval(sprawdzZmiany, 500);
+        });
+    </script>
+</head>
+<body>
+    <h1>Automatyczne odświeżanie danych dla zielonych</h1>
+    <p>Pula zieloni: <span id="pula_zieloni"></span></p>
+    <p>Runda: <span id="runda"></span></p>
+    <p>Treść pytania: <span id="tresc_pytania"></span></p>
+</body>
+</html>

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import login as login_user, authenticate
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import LoginForm
 from django.http import JsonResponse, HttpResponseRedirect
 import random
@@ -171,33 +171,18 @@ def login(request):
             username = form.cleaned_data["username"]
             password = form.cleaned_data["password"]
             user = authenticate(request, username = username, password = password)
-            if user:
+            if user and user.is_superuser:
                 login_user(request, user)
-                return render(request, "admin_panel.html", {
-                    'pula': pula.pula,
-                    'pula_niebiescy': niebiescy.pula,
-                    'pula_zieloni': zieloni.pula,
-                    'pula_zolci': zolci.pula,
-                    'pula_mistrzowie': mistrzowie.pula,
-                    'runda': runda.runda,
-                    'kategoria': kategoria.kategoria,
-                    'tresc_pytania': kategoria.pytanie,
-                    'odpowiedz': kategoria.odpowiedz,
-                    'pula_niebiescy_runda': niebiescy.tymczasowa_pula,
-                    'pula_zieloni_runda': zieloni.tymczasowa_pula,
-                    'pula_zolci_runda': zolci.tymczasowa_pula,
-                    'pula_mistrzowie_runda': mistrzowie.tymczasowa_pula
-                })
+                return rendering(request)
+            elif user:
+                login_user(request, user)
+                return render(request, "viewers.html")
             else:
                 messages.error(request, "Incorrect username or password. Please try again.")
                 return HttpResponseRedirect(request.path_info)
         else:
             return render(request, "login.html", {'form': form})
     return render(request, "login.html")
-
-@login_required
-def panel(request):
-    return render(request, "panel.html")
 
 def rendering(request):
     return render(
@@ -258,7 +243,7 @@ def gra(request):
                 print("Wybierz najpierw kategorię")
                 messages.error(request, "Wybierz najpierw kategorię")
                 return rendering(request)
-            elif runda.dodaj_runda() == False: #dodać popup do tego
+            elif runda.dodaj_runda() == False:
                 print("Za dużo rund")
                 messages.error(request, "Za dużo rund")
                 return rendering(request)
@@ -291,11 +276,11 @@ def gra(request):
             runda.zmiana_licytacja()
             return rendering(request)
         elif request.POST.get("action"):
-            if runda.licytacja == True: #dodać popup do tego
+            if runda.licytacja == True:
                 print("Koniec licytacji")
                 messages.error(request, "Koniec licytacji")
                 return rendering(request)
-            elif runda.runda == 0: #dodać popup do tego
+            elif runda.runda == 0:
                 print("Runda nie może być zerowa")
                 messages.error(request, "Runda nie może być zerowa")
                 return rendering(request)
@@ -323,7 +308,7 @@ def gra(request):
                             runda.zmiana_licytacja()
                         else:
                             if points.licytowal == True:
-                                print("Ta drużyna już licytowała") #dodać popup do tego
+                                print("Ta drużyna już licytowała")
                                 messages.error(request, "Ta drużyna już licytowała")
                                 return rendering(request)
                             punkty:int = int(amount) + tymczasowa_pula - points.tymczasowa_pula
@@ -412,7 +397,7 @@ def gra(request):
             if runda.runda == 6:
                 druzyna = action_map[pula.wypisz_team()]
                 najwiekszy_team = max((team for name, team in action_map.items() if name != "mistrzowie"), key=lambda t: t.pula, default=None)
-                if najwiekszy_team != druzyna: #konieczny popup do dodania, 6 runda przegrana
+                if najwiekszy_team != druzyna:
                     messages.info(request, "6 runda - zla odp przez 1sza druzyne")
                     return rendering(request)
                 if najwiekszy_team is not None:
@@ -474,3 +459,15 @@ def gra(request):
 @login_required
 def viewers(request):
     return render(request, "viewers.html")
+
+def niebiescy_viewers(request):
+    return render(request, "niebiescy.html")
+
+def zieloni_viewers(request):
+    return render(request, "zieloni.html")
+
+def zolci_viewers(request):
+    return render(request, "zolci.html")
+
+def mistrzowie_viewers(request):
+    return render(request, "mistrzowie.html")
