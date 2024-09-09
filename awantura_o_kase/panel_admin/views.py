@@ -205,6 +205,7 @@ def rendering(request):
         }
         )
 
+@login_required
 def panel(request):
     return render(request, "panel.html")
 
