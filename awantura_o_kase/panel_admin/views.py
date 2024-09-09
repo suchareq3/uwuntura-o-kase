@@ -205,6 +205,9 @@ def rendering(request):
         }
         )
 
+def panel(request):
+    return render(request, "panel.html")
+
 @login_required
 def gra(request):
     if request.method == "POST":
