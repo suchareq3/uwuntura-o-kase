@@ -176,7 +176,7 @@ def login(request):
                 return rendering(request)
             elif user:
                 login_user(request, user)
-                return render(request, "viewers.html")
+                return redirect("viewers")
             else:
                 messages.error(request, "Incorrect username or password. Please try again.")
                 return HttpResponseRedirect(request.path_info)
@@ -210,6 +210,7 @@ def panel(request):
     return render(request, "panel.html")
 
 @login_required
+@user_passes_test(lambda u: u.is_superuser)
 def gra(request):
     if request.method == "POST":
         print(request.POST)
