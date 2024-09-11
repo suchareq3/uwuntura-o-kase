@@ -103,7 +103,7 @@ class druzyna:
         else:
             print("Nie masz już kasy")
             messages.error(request, "Nie możesz zakończyć licytacji bez podania kwoty")
-
+    
     def dodaj_pula(self, kwota):
         self.pula += kwota
 
@@ -230,6 +230,16 @@ def gra(request):
             runda.reset()
             kategoria.wyczysc_kategorie()
             return rendering(request)
+        elif request.POST.get("reset-rundy"):
+            kategoria.wyczysc_kategorie()
+            for _, team in action_map.items():
+                team.dodaj_pula(team.tymczasowa_pula)
+                team.licytowal = False
+            runda.runda -= 1
+            runda.czy_nastepna_runda = True
+            pula.zeruj_pula()
+            kategoria.wyczysc_kategorie()
+            return rendering(request)
         elif request.POST.get("koniec-licytacji") and pula.pula == 0:
             print("Nie możesz zakończyć licytacji bez podania kwoty")
             messages.error(request, "Nie możesz zakończyć licytacji bez podania kwoty")
@@ -298,10 +308,10 @@ def gra(request):
                             print("Mistrzowie nie mogą licytować przed 7 rundą")
                             messages.error(request, "Mistrzowie nie mogą licytować przed 7 rundą")
                             return rendering(request)
-                        elif runda.runda > 6 and points.czy_gra == False:
-                            print("Ta drużyna już nie gra")
-                            messages.error(request, "Ta drużyna już nie gra")
-                            return rendering(request)
+                        #elif runda.runda > 6 and points.czy_gra == False:
+                        #    print("Ta drużyna już nie gra")
+                        #    messages.error(request, "Ta drużyna już nie gra")
+                        #    return rendering(request)
                         elif points.czy_gra == False:
                             print("Ta drużyna już nie gra")
                             messages.error(request, "Ta drużyna już nie gra")
@@ -409,7 +419,7 @@ def gra(request):
                     for name, team in action_map.items():
                         if name != "mistrzowie" and team != najwiekszy_team:
                             team.zmiana_gry()
-                runda.zeruj_pula()
+                pula.zeruj_pula()
             kategoria.wyczysc_kategorie()
             runda.zmiana_licytacja()
             for _, team in action_map.items():
