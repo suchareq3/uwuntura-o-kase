@@ -58,7 +58,7 @@
 						</div>
 						<div class="w-full items-center h-[55%] box-content divide-y-2 divide-[rgb(8,26,77)]">
 							<input type = "hidden" name = "add-X-niebiescy" id = "add-X-niebiescy">
-							<input class="kasa text-center flex items-center justify-center w-full h-1/2 text-2xl border-none text-[rgb(8,26,77)] pt-3" type="text" name="add-X-niebiescy" id="add-X-niebiescy" >
+							<input class="kasa text-center flex items-center justify-center w-full h-1/2 text-2xl border-none text-[rgb(8,26,77)] pt-3" type="number" name="add-X-niebiescy" id="add-X-niebiescy" >
 							<input type = "submit" name = "add-X-niebiescy" value = "{{add_X_niebiescy}}" hidden/>
 							<div class="kasa-buttons flex flex-row w-full h-1/2 divide-x-2 divide-[rgb(8,26,77)]">
 								<button type = "submit" name = "action" value = "add-100-niebiescy" class="flex-[2] flex items-center justify-center min-w-0 h-full bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-[rgb(8,26,77)] text-base">+100</button>
@@ -69,7 +69,6 @@
 						</div>
 					</form>
 					
-			
 					<!-- Druzyna Zieloni-->
 					
 					<form method = "post" action = "{% url 'gra' %}" class="min-h-full flex flex-col items-center border-8 rounded-b-2xl overflow-hidden text-2xl justify-evenly gap-2 bg-[rgb(3,44,29)] border-[rgb(3,44,29)]">{% csrf_token %}
@@ -87,7 +86,7 @@
 
 						<div class="w-full items-center h-[55%] box-content divide-y-2 divide-[rgb(3,44,29)]">
 							<input type = "hidden" name = "add-X-zieloni" id = "add-X-zieloni">
-							<input class="kasa text-center flex items-center justify-center w-full h-1/2 text-2xl border-none text-[rgb(3,44,29)] pt-3" type="text" name="add-X-zieloni" id="add-X-zieloni" >
+							<input class="kasa text-center flex items-center justify-center w-full h-1/2 text-2xl border-none text-[rgb(3,44,29)] pt-3" type="number" name="add-X-zieloni" id="add-X-zieloni" >
 							<input type = "submit" name = "add-X-zieloni" value = "{{ add_X_zieloni }}" hidden/>
 							<div class="kasa-buttons flex flex-row w-full h-1/2 divide-x-2 divide-[rgb(3,44,29)]">
 								<button type = "submit" name = "action" value = "add-100-zieloni" class="flex-[2] flex items-center justify-center min-w-0 h-full bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-[rgb(3,44,29)] text-base">+100</button>
@@ -114,7 +113,7 @@
 
 						<div class="w-full items-center h-[55%] box-content divide-y-2 divide-yellow-800">
 							<input type = "hidden" name = "add-X-zolci" id = "add-X-zolci">
-							<input class="kasa text-center flex items-center justify-center w-full h-1/2 text-2xl border-none text-[rgb(95,75,10)] pt-3" type="text" name="add-X-zolci" id="add-X-zolci" >
+							<input class="kasa text-center flex items-center justify-center w-full h-1/2 text-2xl border-none text-[rgb(95,75,10)] pt-3" type="number" name="add-X-zolci" id="add-X-zolci" >
 							<input type = "submit" name = "add-X-zolci" value = "{{add_X_zolci}}" hidden/>
 							<div class="kasa-buttons flex flex-row w-full h-1/2 divide-x-2 divide-yellow-800">
 								<button type = "submit" name = "action" value = "add-100-zolci" class="flex-[2] flex items-center justify-center min-w-0 h-full bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-yellow-800 text-base">+100</button>
@@ -141,7 +140,7 @@
 
 						<div class="w-full items-center h-[55%] box-content divide-y-2 divide-[rgb(38,13,39)]">
 							<input type = "hidden" name = "add-X-mistrzowie" id = "add-X-mistrzowie">
-							<input class="kasa text-center flex items-center justify-center w-full h-1/2 text-2xl border-none text-[rgb(38,13,39)] pt-3" type="text" name="add-X-mistrzowie" id="add-X-mistrzowie" >
+							<input class="kasa text-center flex items-center justify-center w-full h-1/2 text-2xl border-none text-[rgb(38,13,39)] pt-3" type="number" name="add-X-mistrzowie" id="add-X-mistrzowie" >
 							<input type = "submit" name = "add-X-mistrzowie" value = "{{add_X_mistrzowie}}" hidden/>
 							<div class="kasa-buttons flex flex-row w-full h-1/2 divide-x-2 divide-[rgb(38,13,39)]">
 								<button type = "submit" name = "action" value = "add-100-mistrzowie" class="flex-[2] flex items-center justify-center min-w-0 h-full bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-[rgb(38,13,39)] text-base">+100</button>
@@ -156,7 +155,7 @@
 
 			<!-- Pula -->
 			<div class="pula-koniec flex flex-row w-1/2 min-h-[12%] bg-neutral-800/75 border-4 border-neutral-900 rounded-r-2xl overflow-hidden divide-x-4 divide-neutral-900">
-				<div class="pula w-full flex-[8] flex justify-center items-center text-4xl ">
+				<div class="pula w-full flex-[8] flex justify-center items-center text-4xl">
 					<span>{{pula}}</span>
 				</div>
 				<form method = "post" action = "{% url 'gra' %}" class="w-full flex-[3] h-full">{% csrf_token %}
@@ -191,8 +190,8 @@
 	
 	<!-- Modale -->
 	<div id="popup-modal-kara" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-		<div class="relative p-4 w-full max-w-md max-h-full">
-			<div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+		<div class="relative p-4 w-full max-w-xl max-h-full">
+			<div class="relative rounded-lg shadow bg-gray-700">
 				<button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="popup-modal-kara">
 					<svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
 						<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
@@ -200,16 +199,41 @@
 					<span class="sr-only">Close modal</span>
 				</button>
 				<div class="p-4 md:p-5 text-center">
-					<svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-						<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-					</svg>
-					<h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Popup do KARY! Jeszcze nie wiem co tu powinno byc, ale popup jest!</h3>
+					<h3 class="mb-5 text-lg font-normal text-gray-300">KARA - wybierz drużynę i podaj kwotę</h3>
+					<div class="flex w-full gap-5">
+						<label class="inline-flex cursor-pointer basis-0 grow-[5]">
+							<input type="radio" name="inline-radio-group" id="kara-niebiescy" value="" class="sr-only peer">
+							<div class="peer peer-focus:outline-none peer-checked:ring-4 peer-checked:ring-gray-300 peer peer-checked:after:translate-x-full peer-checked:text-gray-500 peer-checked:bg-[rgb(8,26,77)]             rounded relative h-full flex items-center justify-start text-2xl basis-0 grow-[5] bg-[rgb(8,35,112)] button">
+								<span class="!absolute !top-0 !left-0 !right-0 m-auto text-xs text-center text-gray-500 pt-1">niebiescy</span>
+								<span class="pt-5 m-auto">{{pula_niebiescy}}</span>
+							</div>
+						</label>
+						<label class="inline-flex cursor-pointer basis-0 grow-[5] rounded">
+							<input type="radio" name="inline-radio-group" id="kara-zieloni" value="" class="sr-only peer">
+							<div class="peer peer-focus:outline-none peer-checked:ring-4 peer-checked:ring-gray-300 peer peer-checked:after:translate-x-full peer-checked:text-gray-500 peer-checked:bg-[rgb(3,44,29)] 			rounded relative h-full flex items-center justify-start text-2xl basis-0 grow-[5] bg-[rgb(2,65,43)]  button">
+								<span class="!absolute !top-0 !left-0 !right-0 m-auto text-xs text-center text-gray-500 pt-1">zieloni</span>
+								<span class="pt-5 m-auto">{{pula_zieloni}}</span>
+							</div>
+						</label>
+						<label class="inline-flex cursor-pointer basis-0 grow-[5]">
+							<input type="radio" name="inline-radio-group" id="kara-zolci" value="" class="sr-only peer">
+							<div class="peer peer-focus:outline-none peer-checked:ring-4 peer-checked:ring-gray-300 peer peer-checked:after:translate-x-full peer-checked:text-gray-500 peer-checked:bg-yellow-800               rounded relative h-full flex items-center justify-start text-2xl basis-0 grow-[5] bg-yellow-500 button">
+								<span class="!absolute !top-0 !left-0 !right-0 m-auto text-xs text-center text-gray-500 pt-1">zolci</span>
+								<span class="pt-5 m-auto">{{pula_zolci}}</span>
+							</div>
+						</label>
+						<label class="inline-flex cursor-pointer basis-0 grow-[5]">
+							<input type="radio" name="inline-radio-group" id="kara-mistrzowie" value="" class="sr-only peer">
+							<div class="peer peer-focus:outline-none peer-checked:ring-4 peer-checked:ring-gray-300 peer peer-checked:after:translate-x-full peer-checked:text-gray-500 peer-checked:bg-[rgb(38,13,39)]            rounded relative h-full flex items-center justify-start text-2xl basis-0 grow-[5] bg-[rgb(54,41,66)] button">
+								<span class="!absolute !top-0 !left-0 !right-0 m-auto text-xs text-center text-gray-500 pt-1">mistrzowie</span>
+								<span class="pt-5 m-auto">{{pula_mistrzowie}}</span>
+							</div>
+						</label>
+					</div>
+					<input type="number" name = "add-kara-amount" id = "add-kara-amount" class="text-gray-500">
 					<form method = "post" action = "{% url 'gra' %}">{% csrf_token %}
 						<button type = "submit" name = "kara" value = "kara" data-modal-hide="popup-modal-kara" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
 							Aha, spoko
-						</button>
-						<button data-modal-hide="popup-modal-kara" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-							No ok, luzik
 						</button>
 					</form>
 				</div>
@@ -331,12 +355,11 @@
 			{% else %}
 				
 				<div data-modal-target="bottom-right-modal" id="bottom-right-modal" data-modal-placement="bottom-right" tabindex="-1" class="fixed top-0 left-0 right-0 bottom-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full justify-center items-center flex" aria-modal="true" role="dialog">
-					<div modal-backdrop="" class="bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-100 backdrop-blur-sm"></div>
-					<button class="relative max-w-2xl max-h-full" data-modal-hide="bottom-right-modal">
+					<button class="relative w-1/2 h-1/2" data-modal-hide="bottom-right-modal">
 						<!-- Modal content -->
-						<div class="relative bg-red-400/[0.55] hover:bg-red-300/[0.55] text-red-200 rounded-lg shadow backdrop-blur-md border-5">
+						<div class="relative h-full bg-red-400/[0.55] hover:bg-red-300/[0.55] text-red-100 rounded-lg shadow backdrop-blur-md border-5">
 							<!-- Modal header -->
-							<div class="flex items-center justify-between p-7 rounded-t">
+							<div class="flex h-full items-center justify-center p-7 rounded-t">
 								<h3 class="text-4xl font-bold">
 									❗{{message.message}}❗
 								</h3>

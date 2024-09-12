@@ -64,7 +64,8 @@ section .main-container
 }
 
 .srodki span,
-.pula > span {
+.pula > span
+{
   background: none;
   background-color: transparent!important;
   font-family: 'LCDDot', 'Quicksand', 'sans-serif';
@@ -78,10 +79,12 @@ section .main-container
   /*padding-right: 30px;*/
 }
 
-input[type="text"].kasa { /* Move text down by 2px; adjust as necessary */
+input[type="text"].kasa,
+div#popup-modal-kara span
+{ /* Move text down by 2px; adjust as necessary */
   /*color: purple!important;*/
   /*padding-top: 5px;*/
-  font-family: 'LCDDot', 'Quicksand', 'sans-serif';
+  font-family: 'LCDDot', 'Quicksand', 'sans-serif'!important;
 }
 .kasa-buttons, .kasa-buttons span{
   font-family: 'LCDDot', 'Quicksand', 'sans-serif';
