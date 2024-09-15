@@ -1147,6 +1147,10 @@ input:checked + .toggle-bg {
   left: 0px;
 }
 
+.left-\[2px\] {
+  left: 2px;
+}
+
 .right-0 {
   right: 0px;
 }
@@ -1159,24 +1163,8 @@ input:checked + .toggle-bg {
   top: 0.75rem;
 }
 
-.top-5 {
-  top: 1.25rem;
-}
-
-.top-2 {
-  top: 0.5rem;
-}
-
-.top-1 {
-  top: 0.25rem;
-}
-
 .top-\[5px\] {
   top: 5px;
-}
-
-.left-\[2px\] {
-  left: 2px;
 }
 
 .z-10 {
@@ -1871,6 +1859,11 @@ input:checked + .toggle-bg {
   background-color: rgb(114 59 19 / var(--tw-bg-opacity));
 }
 
+.object-contain {
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+
 .p-1 {
   padding: 0.25rem;
 }
@@ -1976,6 +1969,11 @@ input:checked + .toggle-bg {
   line-height: 2.5rem;
 }
 
+.text-5xl {
+  font-size: 3rem;
+  line-height: 1;
+}
+
 .text-base {
   font-size: 1rem;
   line-height: 1.5rem;
@@ -1999,11 +1997,6 @@ input:checked + .toggle-bg {
 .text-xs {
   font-size: 0.75rem;
   line-height: 1rem;
-}
-
-.text-5xl {
-  font-size: 3rem;
-  line-height: 1;
 }
 
 .font-bold {
@@ -2121,6 +2114,11 @@ input:checked + .toggle-bg {
 .text-yellow-800 {
   --tw-text-opacity: 1;
   color: rgb(114 59 19 / var(--tw-text-opacity));
+}
+
+.text-red-600 {
+  --tw-text-opacity: 1;
+  color: rgb(224 36 36 / var(--tw-text-opacity));
 }
 
 .opacity-0 {
@@ -2380,6 +2378,10 @@ input[type="text"].kasa {
 
 .odp-podpowiedz {
   box-shadow: rgba(53, 52, 4, 0.3) 0 -25px 18px -14px inset;
+}
+
+.odp-czas {
+  box-shadow: rgba(13, 65, 99, 0.3) 0 -25px 18px -14px inset;
 }
 
 .type-hardcoded {
