@@ -4,7 +4,9 @@ from django.contrib.auth import login as login_user, authenticate
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import LoginForm
 from django.http import JsonResponse, HttpResponseRedirect
+from django.utils import timezone
 import random
+from datetime import timedelta
 
 pytania = {
     "kategoria-1" : {
@@ -60,6 +62,9 @@ class runda:
     licytacja = False
     czy_nastepna_runda = True
     najwiekszy_bet = 0
+    minuty = 0
+    sekundy = 0
+    start_odliczanie = False
 
     def __init__(self):
         pass
@@ -201,7 +206,10 @@ def rendering(request):
             'pula_niebiescy_runda': niebiescy.tymczasowa_pula,
             'pula_zieloni_runda': zieloni.tymczasowa_pula,
             'pula_zolci_runda': zolci.tymczasowa_pula,
-            'pula_mistrzowie_runda': mistrzowie.tymczasowa_pula
+            'pula_mistrzowie_runda': mistrzowie.tymczasowa_pula,
+            'minuty': runda.minuty,
+            'sekundy': runda.sekundy,
+            'start_odliczanie': runda.start_odliczanie
         }
         )
 
@@ -395,6 +403,12 @@ def gra(request):
                         team.licytowal = False
                     points.licytowal = True
                     return rendering(request)
+            return rendering(request)
+        elif request.POST.get("wlacz_czas"):
+            czas = timezone.now() + timedelta(minutes = 1) - timezone.now()
+            runda.minuty = czas.seconds // 60
+            runda.sekundy = 0
+            runda.start_odliczanie = True
             return rendering(request)
         elif request.POST.get("dobra_odpowiedz"):
             if runda.licytacja == False:

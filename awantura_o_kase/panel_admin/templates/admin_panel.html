@@ -168,7 +168,7 @@
 				<div id="popup-modal-czas" class="ml-auto min-h-[100%] justify-center items-center w-fit bg-neutral-800/75 border-4 border-neutral-900">
 					<div class="w-full max-w-xl h-full">
 						<div class="shadow h-full items-center px-2 flex text-5xl awantura-font">
-							<span class="awantura-font relative top-[5px] left-[2px]">00:59</span>
+							<span class="awantura-font relative top-[5px] left-[2px]">{{minuty|default:"00"}}:{{sekundy|default:"00"}}</span>
 						</div>
 					</div>
 				</div> 
@@ -458,37 +458,37 @@
 	{% endif %} 
 	<script>
         // Function to update the countdown timer
-        function updateTimer() {
-            var hours = parseInt(document.getElementById('countdown').textContent.split(':')[0]);
-            var minutes = parseInt(document.getElementById('countdown').textContent.split(':')[1]);
-            var seconds = parseInt(document.getElementById('countdown').textContent.split(':')[2]);
- 
-            if (seconds > 0) {
-                seconds--;
-            } else {
-                if (minutes > 0) {
-                    minutes--;
-                    seconds = 59;
-                } else {
-                    if (hours > 0) {
-                        hours--;
-                        minutes = 59;
-                        seconds = 59;
-                    } else {
-                        // Timer has reached zero, you can handle this case as needed
-                    }
-                }
-            }
- 
-            // Update the timer display
-            document.getElementById('countdown').textContent =
-                (hours < 10 ? '0' : '') + hours + ' : ' +
-                (minutes < 10 ? '0' : '') + minutes + ' : ' +
-                (seconds < 10 ? '0' : '') + seconds;
-        }
- 
-        // Update the timer every second
-        setInterval(updateTimer, 1000);
+        document.addEventListener("DOMContentLoaded", function() {
+			var timerElement = document.getElementById('popup-modal-czas');
+			var timerInterval = null;
+	
+			function updateTimer() {
+				var timeParts = timerElement.textContent.split(':');
+				var minutes = parseInt(timeParts[0]);
+				var seconds = parseInt(timeParts[1]);
+	
+				if (seconds > 0) {
+					seconds--;
+				} else {
+					if (minutes > 0) {
+						minutes--;
+						seconds = 59;
+					} else {
+					}
+				}
+	
+				timerElement.textContent =
+					(minutes < 10 ? '0' : '') + minutes + ':' +
+					(seconds < 10 ? '0' : '') + seconds;
+			}
+	
+			// Uruchomienie timera po naciśnięciu przycisku, na podstawie odpowiedzi z backendu
+			{% if start_odliczanie %}
+				if (timerInterval === null) {
+					timerInterval = setInterval(updateTimer, 1000);
+				}
+			{% endif %}
+		});
     </script>
 </body>
 
