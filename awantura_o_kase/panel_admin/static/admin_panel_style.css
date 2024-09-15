@@ -80,7 +80,8 @@ section .main-container
 }
 
 input[type="text"].kasa,
-div#popup-modal-kara span
+div#popup-modal-kara span,
+.awantura-font
 { /* Move text down by 2px; adjust as necessary */
   /*color: purple!important;*/
   /*padding-top: 5px;*/
