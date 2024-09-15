@@ -240,6 +240,27 @@ def gra(request):
             pula.zeruj_pula()
             kategoria.wyczysc_kategorie()
             return rendering(request)
+        elif request.POST.get("kara"):
+            druzyna = action_map[request.POST.get("kara-druzyna")]
+            kara:int = int(request.POST.get("add-kara-amount"))
+            if kara < 0:
+                print("Kara nie może być ujemna")
+                messages.error(request, "Kara nie może być ujemna")
+                return rendering(request)
+            elif kara % 100 != 0:
+                print("Kara musi być podzielna przez 100")
+                messages.error(request, "Kara musi być podzielna przez 100")
+                return rendering(request)
+            elif druzyna.czy_gra == False:
+                print("Ta drużyna już nie gra")
+                messages.error(request, "Ta drużyna już nie gra")
+                return rendering(request)
+            elif druzyna.pula < kara:
+                print("Drużyna nie posiada takiej kasy")
+                messages.error(request, "Drużyna nie posiada takiej kasy")
+                return rendering(request)
+            druzyna.odejmij(kara, request)
+            return rendering(request)
         elif request.POST.get("koniec-licytacji") and pula.pula == 0:
             print("Nie możesz zakończyć licytacji bez podania kwoty")
             messages.error(request, "Nie możesz zakończyć licytacji bez podania kwoty")
