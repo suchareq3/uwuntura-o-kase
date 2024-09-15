@@ -64,7 +64,8 @@ section .main-container
 }
 
 .srodki span,
-.pula > span
+.pula > span,
+.awantura-font-tweaked
 {
   background: none;
   background-color: transparent!important;

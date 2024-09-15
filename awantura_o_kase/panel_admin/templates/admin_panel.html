@@ -165,12 +165,14 @@
 						<button type = "submit" name = "koniec-licytacji" value = "koniec-licytacji" class="w-full h-full flex-[3] bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-black text-lg font-medium border-l-0">Koniec<br>licytacji</button>
 					</form>
 				</div>
-				<div class="ml-auto min-h-[100%] justify-center items-center w-fit bg-neutral-800/75 border-4 border-neutral-900 rounded-r-2xl object-contain">
+				<div class="ml-auto min-h-[100%] justify-center items-center w-fit bg-neutral-800/75 border-4 border-neutral-900 rounded-r-2xl overflow-hidden">
 					<div class="w-full max-w-xl h-full flex divide-x-4 divide-neutral-900">
 						<div class="shadow h-full items-center px-2 flex text-5xl awantura-font">
 							<span id="popup-modal-czas" class="awantura-font relative top-[5px] left-[2px]">{{minuty|default:"0"}}:{{sekundy|default:"00"}}</span>
 						</div>
-						<button type = "submit" name = "stop_czas" value = "stop_czas" class="px-2 w-full h-full bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-red-600 font-bold odp-zla rounded-r-2xl">STOP</button>
+						<form method = "post" action = "{% url 'gra' %}">
+							<button type = "submit" name = "stop_czas" value = "stop_czas" class="px-2 w-full h-full bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-red-600 font-bold odp-zla ">STOP</button>
+						</form>
 					</div>
 				</div> 
 			</div>
@@ -231,7 +233,7 @@
 					<span class="sr-only">Close modal</span>
 				</button>
 				<div class="p-4 md:p-5 text-center">
-					<h3 class="mb-5 text-lg font-normal text-gray-300">KARA - wybierz drużynę i podaj kwotę</h3>
+					<h3 class="mb-5 text-lg font-normal text-gray-300">PODPOWIEDZ - wybierz drużynę i podaj kwotę</h3>
 					<div class="flex w-full gap-5">
 						<label class="inline-flex cursor-pointer basis-0 grow-[5]">
 							<input type="radio" name="inline-radio-group" id="kara-niebiescy" value="" class="sr-only peer">
@@ -284,9 +286,10 @@
 				</button>
 				<div class="p-4 md:p-5 text-center">
 					<h3 class="mb-5 text-lg font-normal text-gray-300">KARA - wybierz drużynę i podaj kwotę</h3>
-					<div class="flex w-full gap-5">
-					<form method="post" action="{% url 'gra' %}">
+					<div class="flex w-full">
+						<form method="post" action="{% url 'gra' %}" class="flex w-full gap-5 flex-col items-center">
 						{% csrf_token %}
+						<div class="flex w-full gap-5">
 						<label class="inline-flex cursor-pointer basis-0 grow-[5]">
 							<input type="radio" name="kara-druzyna" id="kara-niebiescy" value="niebiescy" class="sr-only peer">
 							<div class="peer peer-focus:outline-none peer-checked:ring-4 peer-checked:ring-gray-300 peer peer-checked:after:translate-x-full peer-checked:text-gray-500 peer-checked:bg-[rgb(8,26,77)] rounded relative h-full flex items-center justify-start text-2xl basis-0 grow-[5] bg-[rgb(8,35,112)] button">
@@ -315,11 +318,14 @@
 								<span class="pt-5 m-auto">{{pula_mistrzowie}}</span>
 							</div>
 						</label>
-					</div>
-					<input type="number" name="add-kara-amount" id="add-kara-amount" class="text-gray-500">
-						<button type="submit" name="kara" value="kara" data-modal-hide="popup-modal-kara" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
-							Aha, spoko
-						</button>
+						</div>
+						<div class="flex flex-col w-1/2 items-center">
+							<input type="number" name="add-kara-amount" id="add-kara-amount" class="max-w-sm text-gray-500 my-5 awantura-font text-center text-3xl">
+							<button type="submit" name="kara" value="kara" data-modal-hide="popup-modal-kara" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+								KARAAAAA >:( grrr
+							</button>
+						</div>
+						
 					</form>
 				</div>
 			</div>
