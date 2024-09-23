@@ -4,9 +4,9 @@ from django.contrib.auth import login as login_user, authenticate
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import LoginForm
 from django.http import JsonResponse, HttpResponseRedirect
-from django.utils import timezone
 import random
 from datetime import timedelta
+from datetime import datetime
 
 pytania = {
     "kategoria-1" : {
@@ -35,6 +35,8 @@ poprawne_odpowiedzi = {
     }
 }
 
+
+
 class kategoria:
     kategoria = ""
     pytanie = ""
@@ -62,6 +64,7 @@ class runda:
     licytacja = False
     czy_nastepna_runda = True
     najwiekszy_bet = 0
+    czas = 0
     minuty = 0
     sekundy = 0
     start_odliczanie = False
@@ -90,6 +93,11 @@ class runda:
     
     def przypisz_do_najwiekszego_betu(self, kwota):
         self.najwiekszy_bet = kwota
+
+    def zeruj_czas(self):
+        self.minuty = 0
+        self.sekundy = 0
+        self.czas = 0
 
 runda = runda()
 
@@ -405,10 +413,18 @@ def gra(request):
                     return rendering(request)
             return rendering(request)
         elif request.POST.get("wlacz_czas"):
-            czas = timezone.now() + timedelta(minutes = 1) - timezone.now()
-            runda.minuty = czas.seconds // 60
-            runda.sekundy = 0
+            if runda.czas == 0:
+                runda.czas = timedelta(minutes = 1)
+                runda.minuty = runda.czas.seconds // 60
+                runda.sekundy = 0
+            else:
+                runda.minuty = runda.czas.seconds // 60
+                runda.sekundy = runda.czas.seconds
             runda.start_odliczanie = True
+            return rendering(request)
+        elif request.POST.get("stop_czas"):
+            runda.czas = timedelta(seconds = int(request.POST.get("remaining_seconds")))
+            runda.start_odliczanie = False
             return rendering(request)
         elif request.POST.get("dobra_odpowiedz"):
             if runda.licytacja == False:
@@ -433,6 +449,7 @@ def gra(request):
                     for name, team in action_map.items():
                         if name != "mistrzowie" and team != najwiekszy_team:
                             team.zmiana_gry()
+            runda.zeruj_czas()
             runda.czy_nastepna_runda = True
             return rendering(request)
         elif request.POST.get("zla_odpowiedz"):
@@ -461,6 +478,7 @@ def gra(request):
                 team.zeruj_tymczasowa_pula()
                 team.liytowal = False
             runda.czy_nastepna_runda = True
+            runda.zeruj_czas()
             return rendering(request)
         elif request.POST.get("dobra_odpowiedz_ostatni"):
             najwiekszy_team = max((team for name, team in action_map.items() if name != "mistrzowie"), key=lambda t: t.pula, default=None)

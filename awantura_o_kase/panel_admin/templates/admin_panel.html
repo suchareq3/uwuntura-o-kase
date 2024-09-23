@@ -170,8 +170,11 @@
 						<div class="shadow h-full items-center px-2 flex text-5xl awantura-font">
 							<span id="popup-modal-czas" class="awantura-font relative top-[5px] left-[2px]">{{minuty|default:"0"}}:{{sekundy|default:"00"}}</span>
 						</div>
-						<form method = "post" action = "{% url 'gra' %}">
-							<button type = "submit" name = "stop_czas" value = "stop_czas" class="px-2 w-full h-full bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-red-600 font-bold odp-zla ">STOP</button>
+						<form method="post" action="{% url 'gra' %}">
+							{% csrf_token %}
+							<input type="hidden" id="remaining-minutes" name="remaining_minutes" value="">
+							<input type="hidden" id="remaining-seconds" name="remaining_seconds" value="">
+							<button type="submit" name="stop_czas" value="stop_czas" class="px-2 w-full h-full bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-red-600 font-bold odp-zla">STOP</button>
 						</form>
 					</div>
 				</div> 
@@ -464,10 +467,12 @@
 		{% endfor %}
 	{% endif %} 
 	<script>
-        // Function to update the countdown timer
-        document.addEventListener("DOMContentLoaded", function() {
+		// Function to update the countdown timer
+		document.addEventListener("DOMContentLoaded", function() {
 			var timerElement = document.getElementById('popup-modal-czas');
 			var timerInterval = null;
+			var remainingMinutesInput = document.getElementById('remaining-minutes');
+			var remainingSecondsInput = document.getElementById('remaining-seconds');
 	
 			function updateTimer() {
 				var timeParts = timerElement.textContent.split(':');
@@ -478,15 +483,19 @@
 					seconds--;
 				} else {
 					if (minutes > 0) {
-						minutes = 0;
+						minutes--;
 						seconds = 59;
-					} else {
 					}
 				}
 	
+				// Zaktualizuj tekst wyświetlania licznika
 				timerElement.textContent =
 					minutes + ':' +
 					(seconds < 10 ? '0' : '') + seconds;
+	
+				// Zaktualizuj ukryte pola formularza
+				remainingMinutesInput.value = minutes;
+				remainingSecondsInput.value = seconds;
 			}
 	
 			// Uruchomienie timera po naciśnięciu przycisku, na podstawie odpowiedzi z backendu
@@ -496,7 +505,7 @@
 				}
 			{% endif %}
 		});
-    </script>
+	</script>
 </body>
 
 </html>
