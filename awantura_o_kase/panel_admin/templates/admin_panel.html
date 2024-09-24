@@ -239,37 +239,37 @@
 					<h3 class="mb-5 text-lg font-normal text-gray-300">PODPOWIEDZ - wybierz drużynę i podaj kwotę</h3>
 					<div class="flex w-full gap-5">
 						<label class="inline-flex cursor-pointer basis-0 grow-[5]">
-							<input type="radio" name="inline-radio-group" id="kara-niebiescy" value="" class="sr-only peer">
+							<input type="radio" name="inline-radio-group" id="podpowiedz-niebiescy" value="" class="sr-only peer">
 							<div class="peer peer-focus:outline-none peer-checked:ring-4 peer-checked:ring-gray-300 peer peer-checked:after:translate-x-full peer-checked:text-gray-500 peer-checked:bg-[rgb(8,26,77)]             rounded relative h-full flex items-center justify-start text-2xl basis-0 grow-[5] bg-[rgb(8,35,112)] button">
 								<span class="!absolute !top-0 !left-0 !right-0 m-auto text-xs text-center text-gray-500 pt-1">niebiescy</span>
 								<span class="pt-5 m-auto">{{pula_niebiescy}}</span>
 							</div>
 						</label>
 						<label class="inline-flex cursor-pointer basis-0 grow-[5] rounded">
-							<input type="radio" name="inline-radio-group" id="kara-zieloni" value="" class="sr-only peer">
+							<input type="radio" name="inline-radio-group" id="podpowiedz-zieloni" value="" class="sr-only peer">
 							<div class="peer peer-focus:outline-none peer-checked:ring-4 peer-checked:ring-gray-300 peer peer-checked:after:translate-x-full peer-checked:text-gray-500 peer-checked:bg-[rgb(3,44,29)] 			rounded relative h-full flex items-center justify-start text-2xl basis-0 grow-[5] bg-[rgb(2,65,43)]  button">
 								<span class="!absolute !top-0 !left-0 !right-0 m-auto text-xs text-center text-gray-500 pt-1">zieloni</span>
 								<span class="pt-5 m-auto">{{pula_zieloni}}</span>
 							</div>
 						</label>
 						<label class="inline-flex cursor-pointer basis-0 grow-[5]">
-							<input type="radio" name="inline-radio-group" id="kara-zolci" value="" class="sr-only peer">
+							<input type="radio" name="inline-radio-group" id="podpowiedz-zolci" value="" class="sr-only peer">
 							<div class="peer peer-focus:outline-none peer-checked:ring-4 peer-checked:ring-gray-300 peer peer-checked:after:translate-x-full peer-checked:text-gray-500 peer-checked:bg-yellow-800               rounded relative h-full flex items-center justify-start text-2xl basis-0 grow-[5] bg-yellow-500 button">
 								<span class="!absolute !top-0 !left-0 !right-0 m-auto text-xs text-center text-gray-500 pt-1">zolci</span>
 								<span class="pt-5 m-auto">{{pula_zolci}}</span>
 							</div>
 						</label>
 						<label class="inline-flex cursor-pointer basis-0 grow-[5]">
-							<input type="radio" name="inline-radio-group" id="kara-mistrzowie" value="" class="sr-only peer">
+							<input type="radio" name="inline-radio-group" id="podpowiedz-mistrzowie" value="" class="sr-only peer">
 							<div class="peer peer-focus:outline-none peer-checked:ring-4 peer-checked:ring-gray-300 peer peer-checked:after:translate-x-full peer-checked:text-gray-500 peer-checked:bg-[rgb(38,13,39)]            rounded relative h-full flex items-center justify-start text-2xl basis-0 grow-[5] bg-[rgb(54,41,66)] button">
 								<span class="!absolute !top-0 !left-0 !right-0 m-auto text-xs text-center text-gray-500 pt-1">mistrzowie</span>
 								<span class="pt-5 m-auto">{{pula_mistrzowie}}</span>
 							</div>
 						</label>
 					</div>
-					<input type="number" name = "add-kara-amount" id = "add-kara-amount" class="text-gray-500">
+					<input type="number" name = "take-podpowiedz-amount" id = "take-podpowiedz-amount" class="text-gray-500">
 					<form method = "post" action = "{% url 'gra' %}">{% csrf_token %}
-						<button type = "submit" name = "kara" value = "kara" data-modal-hide="popup-modal-podpowiedz" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+						<button type = "submit" name = "podpowiedz" value = "podpowiedz" data-modal-hide="popup-modal-podpowiedz" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
 							Aha, spoko
 						</button>
 					</form>

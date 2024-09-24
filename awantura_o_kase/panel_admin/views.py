@@ -256,6 +256,23 @@ def gra(request):
             pula.zeruj_pula()
             kategoria.wyczysc_kategorie()
             return rendering(request)
+        elif request.POST.get("podpowiedz"):
+            druzyna = action_map[request.POST.get("podpowiedz-druzyna")]
+            koszt: int = int(request.POST.get("take-podpowiedz-amount"))
+            if koszt < 0:
+                print("Koszt podpowiedzi nie może być ujemny")
+                messages.error(request, "Koszt podpowiedzi nie może być ujemny")
+                return rendering(request)
+            elif druzyna.czy_gra == False:
+                print("Ta drużyna już nie gra")
+                messages.error(request, "Ta drużyna już nie gra")
+                return rendering(request)
+            elif druzyna.pula < koszt:
+                print("Drużyna nie posiada takiej kasy")
+                messages.error(request, "Drużyna nie posiada takiej kasy")
+                return rendering(request)
+            druzyna.odejmij(koszt, request)
+            return rendering(request)
         elif request.POST.get("kara"):
             druzyna = action_map[request.POST.get("kara-druzyna")]
             kara:int = int(request.POST.get("add-kara-amount"))

@@ -13,6 +13,10 @@ W terminalu należy napisać
 cd .\awantura_o_kase\
 py manage.py runserver
 ```
+Lub pod konkretną wersję pythona
+```
+py -3.X manage.py runserver
+```
 
 Przy zmianie CSS lub dodaniu nowych klas z Tailwind'a, w terminalu należy użyć
 ```
