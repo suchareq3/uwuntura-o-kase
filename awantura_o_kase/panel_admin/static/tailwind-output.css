@@ -1201,11 +1201,6 @@ input:checked + .toggle-bg {
   margin-right: auto;
 }
 
-.my-5 {
-  margin-top: 1.25rem;
-  margin-bottom: 1.25rem;
-}
-
 .mb-1 {
   margin-bottom: 0.25rem;
 }
@@ -1399,26 +1394,6 @@ input:checked + .toggle-bg {
   width: 100%;
 }
 
-.w-\[\] {
-  width: ;
-}
-
-.w-1\/5 {
-  width: 20%;
-}
-
-.w-\[7\] {
-  width: 7;
-}
-
-.w-\[70\%\] {
-  width: 70%;
-}
-
-.w-\[100\%\] {
-  width: 100%;
-}
-
 .min-w-0 {
   min-width: 0px;
 }
@@ -1429,10 +1404,6 @@ input:checked + .toggle-bg {
 
 .max-w-xl {
   max-width: 36rem;
-}
-
-.max-w-sm {
-  max-width: 24rem;
 }
 
 .flex-1 {
@@ -1888,11 +1859,6 @@ input:checked + .toggle-bg {
   background-color: rgb(114 59 19 / var(--tw-bg-opacity));
 }
 
-.object-contain {
-  -o-object-fit: contain;
-     object-fit: contain;
-}
-
 .p-1 {
   padding: 0.25rem;
 }
@@ -2296,6 +2262,7 @@ section .main-container
 
 input[type="text"].kasa,
 div#popup-modal-kara span,
+div#popup-modal-1-na-1 span,
 .awantura-font
 {
   /* Move text down by 2px; adjust as necessary */
