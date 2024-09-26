@@ -6,7 +6,6 @@ from .forms import LoginForm
 from django.http import JsonResponse, HttpResponseRedirect
 import random
 from datetime import timedelta
-from datetime import datetime
 
 pytania = {
     "kategoria-1" : {
@@ -96,6 +95,11 @@ class runda:
 
     def zeruj_czas(self):
         self.minuty = 0
+        self.sekundy = 0
+        self.czas = 0
+
+    def reset_czas(self):
+        self.minuty = 1
         self.sekundy = 0
         self.czas = 0
 
@@ -272,6 +276,7 @@ def gra(request):
                 messages.error(request, "Drużyna nie posiada takiej kasy")
                 return rendering(request)
             druzyna.odejmij(koszt, request)
+            runda.reset_czas()
             return rendering(request)
         elif request.POST.get("kara"):
             druzyna = action_map[request.POST.get("kara-druzyna")]
@@ -343,6 +348,31 @@ def gra(request):
             return rendering(request)
         elif request.POST.get("koniec-licytacji"):
             runda.zmiana_licytacja()
+            return rendering(request)
+        elif request.POST.get("1-na-1"):
+            try:
+                druzyna1 = action_map[request.POST.getlist("1na1-druzyna")[0]]
+                druzyna2 = action_map[request.POST.getlist("1na1-druzyna")[1]]
+            except:
+                print("Nie wybrano 2 drużyn")
+                messages.error(request, "Nie wybrano 2 drużyn")
+                return rendering(request)
+            if druzyna1 == druzyna2:
+                print("Nie możesz grać sam ze sobą")
+                messages.error(request, "Nie możesz grać sam ze sobą")
+                return rendering(request)
+            if druzyna1 == None or druzyna2 == None:
+                print("Nie wybrano drużyn")
+                messages.error(request, "Nie wybrano drużyn")
+                return rendering(request)
+            if druzyna1.czy_gra == False or druzyna2.czy_gra == False:
+                print(f"Jedna z drużyn już nie gra")
+                messages.error(request, "Jedna z drużyn już nie gra")
+                return rendering(request)
+            druzyna1.odejmij(500, request)
+            druzyna2.odejmij(500, request)
+            pula.dodaj_pula(1000, druzyna1)
+            messages.add_message(request, messages.INFO, f"1na1 - etap 2")
             return rendering(request)
         elif request.POST.get("action"):
             if runda.licytacja == True:
