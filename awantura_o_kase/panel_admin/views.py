@@ -372,7 +372,8 @@ def gra(request):
             druzyna1.odejmij(500, request)
             druzyna2.odejmij(500, request)
             pula.dodaj_pula(1000, druzyna1)
-            messages.add_message(request, messages.INFO, f"1na1 - etap 2")
+            print("1 na 1 - etap 2")
+            messages.info(request, "1 na 1 - etap 2")
             return rendering(request)
         elif request.POST.get("action"):
             if runda.licytacja == True:
