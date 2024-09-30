@@ -192,7 +192,7 @@ def login(request):
                 return rendering(request)
             elif user:
                 login_user(request, user)
-                return redirect("viewers")
+                return redirect("localhost:5173/")
             else:
                 messages.error(request, "Incorrect username or password. Please try again.")
                 return HttpResponseRedirect(request.path_info)
@@ -228,17 +228,18 @@ def rendering(request):
 def panel(request):
     return render(request, "panel.html")
 
+action_map = {
+    "niebiescy": niebiescy,
+    "zieloni": zieloni,
+    "zolci": zolci,
+    "mistrzowie": mistrzowie
+}
+
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def gra(request):
     if request.method == "POST":
         print(request.POST)
-        action_map = {
-            "niebiescy": niebiescy,
-            "zieloni": zieloni,
-            "zolci": zolci,
-            "mistrzowie": mistrzowie
-        }
         tymczasowa_pula = max(points.tymczasowa_pula for points in action_map.values())
         if request.POST.get("reset-gry"):
             for _, team in action_map.items():
