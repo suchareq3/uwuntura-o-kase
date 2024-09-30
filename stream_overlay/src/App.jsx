@@ -4,45 +4,39 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import axios from "axios"
 
-function App() {
-  const [count, setCount] = useState(0)
-  const [pula, setPula] = useState([621])
-
-  const client = axios.create({
-    baseURL: "127.0.0.1:8000/gra/" 
-  })
+function Overlay() {
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    client.get().then((response) => {
-       setPula(JSON.stringify(response.data));
+    // Pobieranie danych z endpointu chronionego przez logowanie w Django
+    axios.get('http://127.0.0.1:8000/gra/', {
+      withCredentials: true,  // Umożliwia przesyłanie ciasteczek (sesji)
+    })
+    .then(response => {
+      setData(response.data);
+    })
+    .catch(error => {
+      setError('Nie udało się pobrać danych. Upewnij się, że jesteś zalogowany.');
     });
- }, []);
- 
+  }, []);
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>{pula}</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div>
+      {data ? (
+        <div>
+          <h1>Protected Data</h1>
+          <p>{data.message}</p>
+        </div>
+      ) : (
+        <p>Ładowanie danych...</p>
+      )}
+    </div>
+  );
 }
 
-export default App
+export default Overlay;

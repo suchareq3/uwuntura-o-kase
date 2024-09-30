@@ -6,6 +6,7 @@ Projekt jest w oparciu o teleturniej "Awantura o kasę". Napisany jest za pomoc�
 ## Wymagania
 Python (testowany na wersji 3.10.X)
 Django (najnowszy)
+django-cors-headers (najnowszy)
 
 ## Uruchomienie
 W terminalu należy napisać
