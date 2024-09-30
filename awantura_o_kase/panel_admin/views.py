@@ -34,8 +34,6 @@ poprawne_odpowiedzi = {
     }
 }
 
-
-
 class kategoria:
     kategoria = ""
     pytanie = ""
@@ -110,6 +108,7 @@ class druzyna:
     tymczasowa_pula = 0
     czy_gra = True
     licytowal = False
+    czy_1_na_1 = False
 
     def __init__(self):
         pass
@@ -371,9 +370,17 @@ def gra(request):
                 return rendering(request)
             druzyna1.odejmij(500, request)
             druzyna2.odejmij(500, request)
+            druzyna1.czy_1_na_1 = True
+            druzyna2.czy_1_na_1 = True
             pula.dodaj_pula(1000, druzyna1)
             print("1 na 1 - etap 2")
             messages.info(request, "1 na 1 - etap 2")
+            return rendering(request)
+        elif request.POST.get("1-na-1-etap-2"):
+            kategorie_do_odrzucenia = request.POST.getlist("1na1-kategoria")
+            print(kategorie_do_odrzucenia)
+            print("1 na 1 - etap 3")
+            messages.info(request, "1 na 1 - etap 3")
             return rendering(request)
         elif request.POST.get("action"):
             if runda.licytacja == True:
