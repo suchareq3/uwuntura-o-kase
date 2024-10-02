@@ -192,7 +192,7 @@ def login(request):
                 return rendering(request)
             elif user:
                 login_user(request, user)
-                return redirect("localhost:5173/")
+                return HttpResponseRedirect("http://localhost:5173/")
             else:
                 messages.error(request, "Incorrect username or password. Please try again.")
                 return HttpResponseRedirect(request.path_info)
