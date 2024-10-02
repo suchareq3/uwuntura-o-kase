@@ -1,0 +1,28 @@
+@import "./OverlaySetter.css";
+@import "./StanyKont.css";
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+#root {
+  max-width: min(100vw, 1920px);
+  max-height: min(100vh, 1080px);
+  min-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  /*padding: 2rem;*/
+  text-align: center;
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}

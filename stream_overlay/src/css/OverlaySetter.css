@@ -1,0 +1,9 @@
+.OverlaySetter {
+  /*to mozna adjustowac*/
+  width: 82%;
+  height: 85%;
+  
+  /* temporary border: */
+  border: 6px rgb(108, 0, 0);
+  border-style: dashed;
+}

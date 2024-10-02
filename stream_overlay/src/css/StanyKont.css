@@ -1,0 +1,44 @@
+@import "./_kolorki.css";
+
+.StanyKont {
+  height: 10%;
+  width: 100%;
+}
+
+.niebiescy {
+  background-color: var(--niebieski-ciemny);
+}
+
+.zieloni {
+  background-color: var(--zielony-ciemny);
+}
+
+.zolci {
+  background-color: var(--zolty-ciemny);
+}
+
+.pula {
+  background-color: var(--pula-ciemny);
+}
+
+.niebiescy,
+.zieloni,
+.zolci,
+.mistrzowie {
+  width: 24%;
+}
+
+.pula {
+  width: 28%;
+}
+
+.niebiescy,
+.zieloni,
+.zolci,
+.mistrzowie,
+.pula {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @apply text-3xl;
+}
