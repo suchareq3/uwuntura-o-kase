@@ -190,9 +190,12 @@ def login(request):
             if user and user.is_superuser:
                 login_user(request, user)
                 return rendering(request)
-            elif user:
+            elif user and user.username == "test":
                 login_user(request, user)
                 return HttpResponseRedirect("http://localhost:5173/")
+            elif user and user.username == "steam_panel":
+                login_user(request, user)
+                return render(request, "stream_panel.html")
             else:
                 messages.error(request, "Incorrect username or password. Please try again.")
                 return HttpResponseRedirect(request.path_info)
@@ -595,3 +598,7 @@ def zolci_viewers(request):
 
 def mistrzowie_viewers(request):
     return render(request, "mistrzowie.html")
+
+@login_required
+def stream_panel(request):
+    return render(request, "stream_panel.html")
