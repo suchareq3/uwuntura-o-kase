@@ -604,12 +604,8 @@ def mistrzowie_viewers(request):
     return render(request, "mistrzowie.html")
 
 stream_json = {
-    "licytacja": True,
-    "pytanie": False,
-    "wygrana": False,
-    "czas": False,
-    "kara": False,
-    "podpowiedz": False,
+    "stream": "",
+    "czas": False
 }
 
 @login_required
@@ -617,12 +613,12 @@ def stream_panel(request):
     if request.method == "POST":
         try:
             variables = list(request.POST.keys())[1]
-        except IndexError:
-            return render(request, "stream_panel.html", {"stream_json": stream_json})
-        for i in stream_json:
-            if i == variables:
-                stream_json[i] = True
-            else:
-                stream_json[i] = False
-        return render(request, "stream_panel.html", {"stream_json": stream_json})
-    return render(request, "stream_panel.html", {"stream_json": stream_json})
+        except IndexError as e:
+            messages.error(request, f"Nie wybrano żadnej opcji {e}")
+            return render(request, "stream_panel.html", stream_json)
+        if variables == "czas":
+            stream_json["czas"] = not stream_json["czas"]
+            return render(request, "stream_panel.html", stream_json)
+        stream_json["stream"] = variables
+        return render(request, "stream_panel.html", stream_json)
+    return render(request, "stream_panel.html", stream_json)
