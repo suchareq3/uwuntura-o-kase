@@ -608,6 +608,26 @@ stream_json = {
     "czas": False
 }
 
+def render_stream_panel(request):
+    return render(request, "stream_panel.html", stream_json.update({
+            'pula': pula.pula,
+            'pula_niebiescy': niebiescy.pula,
+            'pula_zieloni': zieloni.pula,
+            'pula_zolci': zolci.pula,
+            'pula_mistrzowie': mistrzowie.pula,
+            'runda': runda.runda,
+            'kategoria': kategoria.kategoria,
+            'tresc_pytania': kategoria.pytanie,
+            'odpowiedz': kategoria.odpowiedz,
+            'pula_niebiescy_runda': niebiescy.tymczasowa_pula,
+            'pula_zieloni_runda': zieloni.tymczasowa_pula,
+            'pula_zolci_runda': zolci.tymczasowa_pula,
+            'pula_mistrzowie_runda': mistrzowie.tymczasowa_pula,
+            'minuty': runda.minuty,
+            'sekundy': runda.sekundy,
+            'start_odliczanie': runda.start_odliczanie
+        }))
+
 @login_required
 def stream_panel(request):
     if request.method == "POST":
@@ -615,10 +635,10 @@ def stream_panel(request):
             variables = list(request.POST.keys())[1]
         except IndexError as e:
             messages.error(request, f"Nie wybrano żadnej opcji {e}")
-            return render(request, "stream_panel.html", stream_json)
+            return render_stream_panel(request)
         if variables == "czas":
             stream_json["czas"] = not stream_json["czas"]
-            return render(request, "stream_panel.html", stream_json)
+            return render_stream_panel(request)
         stream_json["stream"] = variables
-        return render(request, "stream_panel.html", stream_json)
-    return render(request, "stream_panel.html", stream_json)
+        return render_stream_panel(request)
+    return render_stream_panel(request)

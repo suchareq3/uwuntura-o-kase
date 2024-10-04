@@ -16,7 +16,7 @@ function App() {
     // Pobieranie danych z endpointu chronionego przez logowanie w Django
     const intervalId = setInterval(() => {
       axiosService
-        .get("/gra/")
+        .get("/stream_panel/")
         .then((response) => {
           setData(response.data);
           console.log(response.data);
