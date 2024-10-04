@@ -18,6 +18,11 @@ Lub pod konkretną wersję pythona
 ```
 py -3.X manage.py runserver
 ```
+Jeżeli 1 raz uruchamiasz projekt to należy wpisać aby móc skorzystać z reacta
+```
+cd .\stream_overlay\
+npm install
+```
 
 Przy zmianie CSS lub dodaniu nowych klas z Tailwind'a, w terminalu należy użyć
 ```

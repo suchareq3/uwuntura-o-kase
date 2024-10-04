@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Przykładowa strona z przyciskami</title>
+</head>
+<body>
+
+    <h1>Wybierz opcję</h1>
+    <form method = "post" action = "{% url 'stream_panel' %}">{% csrf_token %}   
+        <button type = "submit" name = "licytacja" value = "licytacja">Licytacja</button>
+        <button>Przycisk 2</button>
+    </form>
+</body>
+</html>

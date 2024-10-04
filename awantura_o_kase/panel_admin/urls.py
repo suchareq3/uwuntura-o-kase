@@ -11,5 +11,5 @@ urlpatterns = [
     path('zolci/', views.zolci_viewers, name = 'zolci'),
     path('zieloni/', views.zieloni_viewers, name = 'zieloni'),
     path('mistrzowie/', views.mistrzowie_viewers, name = 'mistrzowie'),
-    path('stream_panel', views.stream_panel, name = 'stream_panel'),
+    path('stream_panel/', views.stream_panel, name = 'stream_panel'),
 ]

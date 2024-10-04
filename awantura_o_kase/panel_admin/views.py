@@ -193,9 +193,9 @@ def login(request):
             elif user and user.username == "test":
                 login_user(request, user)
                 return HttpResponseRedirect("http://localhost:5173/")
-            elif user and user.username == "steam_panel":
+            elif user and user.username == "stream":
                 login_user(request, user)
-                return render(request, "stream_panel.html")
+                return redirect("stream_panel")
             else:
                 messages.error(request, "Incorrect username or password. Please try again.")
                 return HttpResponseRedirect(request.path_info)
@@ -384,6 +384,10 @@ def gra(request):
             kategorie_do_odrzucenia = request.POST.getlist("1na1-kategoria")
             print(kategorie_do_odrzucenia)
             print("1 na 1 - etap 3")
+            if len(kategorie_do_odrzucenia) != 6:
+                print("Wybierz 6 kategorii")
+                messages.info(request, "1 na 1 - etap 2")
+                return rendering(request)
             messages.info(request, "1 na 1 - etap 3")
             return rendering(request)
         elif request.POST.get("action"):
@@ -599,6 +603,26 @@ def zolci_viewers(request):
 def mistrzowie_viewers(request):
     return render(request, "mistrzowie.html")
 
+stream_json = {
+    "licytacja": True,
+    "pytanie": False,
+    "wygrana": False,
+    "czas": False,
+    "kara": False,
+    "podpowiedz": False,
+}
+
 @login_required
 def stream_panel(request):
-    return render(request, "stream_panel.html")
+    if request.method == "POST":
+        try:
+            variables = list(request.POST.keys())[1]
+        except IndexError:
+            return render(request, "stream_panel.html", {"stream_json": stream_json})
+        for i in stream_json:
+            if i == variables:
+                stream_json[i] = True
+            else:
+                stream_json[i] = False
+        return render(request, "stream_panel.html", {"stream_json": stream_json})
+    return render(request, "stream_panel.html", {"stream_json": stream_json})
