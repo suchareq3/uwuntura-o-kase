@@ -9,16 +9,18 @@ from datetime import timedelta
 
 pytania = {
     "kategoria-1" : {
-        "xd",
-        "tak"
+        "pytanie-1",
+        "pytanie-2"
     },
     "kategoria-2" : {
-        "xddd",
-        "nie"
+        "pytanie-1",
+        "pytanie-2",
+        "pytanie-3"
     },
     "kategoria-3" : {
-        "top kek",
-        "może być"
+        "pytanie-1",
+        "pytanie-2",
+        "pytanie-3"
     }
 }
 
@@ -34,10 +36,38 @@ poprawne_odpowiedzi = {
     }
 }
 
+podpowiedzi = {
+    "kategoria-1" : {
+        "pytanie-1": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-2": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+    },
+    "kategoria-2" : {
+        "pytanie-1": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-2": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+    },
+}
+
 class kategoria:
     kategoria = ""
     pytanie = ""
     odpowiedz = ""
+    podpowiedz = []
 
     def __init__(self):
         pass
@@ -203,6 +233,11 @@ def login(request):
             return render(request, "login.html", {'form': form})
     return render(request, "login.html")
 
+stream_json = {
+    "stream": "",
+    "czas": False
+}
+
 def rendering(request):
     return render(
         request, 
@@ -223,7 +258,10 @@ def rendering(request):
             'pula_mistrzowie_runda': mistrzowie.tymczasowa_pula,
             'minuty': runda.minuty,
             'sekundy': runda.sekundy,
-            'start_odliczanie': runda.start_odliczanie
+            'start_odliczanie': runda.start_odliczanie,
+            'stream': stream_json['stream'],
+            'czas': stream_json['czas'],
+            'podpowiedz': kategoria.podpowiedz
         }
         )
 
@@ -264,11 +302,20 @@ def gra(request):
             kategoria.wyczysc_kategorie()
             return rendering(request)
         elif request.POST.get("podpowiedz"):
-            druzyna = action_map[request.POST.get("podpowiedz-druzyna")]
-            koszt: int = int(request.POST.get("take-podpowiedz-amount"))
+            try:
+                druzyna = action_map[request.POST.get("podpowiedz-druzyna")]
+                koszt: int = int(request.POST.get("take-podpowiedz-amount"))
+            except:
+                print("Nie wybrano drużyny lub nie podano kwoty")
+                messages.error(request, "Nie wybrano drużyny lub nie podano kwoty")
+                return rendering(request)
             if koszt < 0:
                 print("Koszt podpowiedzi nie może być ujemny")
                 messages.error(request, "Koszt podpowiedzi nie może być ujemny")
+                return rendering(request)
+            elif koszt % 100 != 0:
+                print("Koszt podpowiedzi musi być podzielny przez 100")
+                messages.error(request, "Koszt podpowiedzi musi być podzielny przez 100")
                 return rendering(request)
             elif druzyna.czy_gra == False:
                 print("Ta drużyna już nie gra")
@@ -279,6 +326,7 @@ def gra(request):
                 messages.error(request, "Drużyna nie posiada takiej kasy")
                 return rendering(request)
             druzyna.odejmij(koszt, request)
+            kategoria.podpowiedz = podpowiedzi.get(kategoria.kategoria, {}).get(kategoria.pytanie, None)
             runda.reset_czas()
             return rendering(request)
         elif request.POST.get("kara"):
@@ -381,7 +429,7 @@ def gra(request):
             messages.info(request, "1 na 1 - etap 2")
             return rendering(request)
         elif request.POST.get("1-na-1-etap-2"):
-            kategorie_do_odrzucenia = request.POST.getlist("1na1-kategoria")
+            kategorie_do_odrzucenia = request.POST.getlist("1na1-kategoria") #do edycji 
             print(kategorie_do_odrzucenia)
             print("1 na 1 - etap 3")
             if len(kategorie_do_odrzucenia) != 6:
@@ -514,6 +562,7 @@ def gra(request):
                             team.zmiana_gry()
             runda.zeruj_czas()
             runda.czy_nastepna_runda = True
+            kategoria.podpowiedz = []
             return rendering(request)
         elif request.POST.get("zla_odpowiedz"):
             if runda.licytacja == False:
@@ -542,6 +591,7 @@ def gra(request):
                 team.liytowal = False
             runda.czy_nastepna_runda = True
             runda.zeruj_czas()
+            kategoria.podpowiedz = []
             return rendering(request)
         elif request.POST.get("dobra_odpowiedz_ostatni"):
             najwiekszy_team = max((team for name, team in action_map.items() if name != "mistrzowie"), key=lambda t: t.pula, default=None)
@@ -555,6 +605,7 @@ def gra(request):
             for _, team in action_map.items():
                 team.zeruj_tymczasowa_pula()
             runda.czy_nastepna_runda = True
+            kategoria.podpowiedz = []
             return rendering(request)
         elif request.POST.get("zla_odpowiedz_ostatni"):
             najwiekszy_team = max((team for name, team in action_map.items() if name != "mistrzowie"), key=lambda t: t.pula, default=None)
@@ -567,6 +618,7 @@ def gra(request):
             for _, team in action_map.items():
                 team.zeruj_tymczasowa_pula()
             runda.czy_nastepna_runda = True
+            kategoria.podpowiedz = []
             return rendering(request)
         else:
             return rendering(request)
@@ -584,7 +636,8 @@ def gra(request):
             'pula_niebiescy_runda': niebiescy.tymczasowa_pula,
             'pula_zieloni_runda': zieloni.tymczasowa_pula,
             'pula_zolci_runda': zolci.tymczasowa_pula,
-            'pula_mistrzowie_runda': mistrzowie.tymczasowa_pula
+            'pula_mistrzowie_runda': mistrzowie.tymczasowa_pula,
+            'podpowiedzi': kategoria.podpowiedz
         })
 
 @login_required
@@ -603,11 +656,6 @@ def zolci_viewers(request):
 def mistrzowie_viewers(request):
     return render(request, "mistrzowie.html")
 
-stream_json = {
-    "stream": "",
-    "czas": False
-}
-
 def render_stream_panel(request):
     return render(request, "stream_panel.html", stream_json.update({
             'pula': pula.pula,
@@ -625,7 +673,8 @@ def render_stream_panel(request):
             'pula_mistrzowie_runda': mistrzowie.tymczasowa_pula,
             'minuty': runda.minuty,
             'sekundy': runda.sekundy,
-            'start_odliczanie': runda.start_odliczanie
+            'start_odliczanie': runda.start_odliczanie,
+            'podpowiedz': kategoria.podpowiedz
         }))
 
 @login_required
