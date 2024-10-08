@@ -10,18 +10,101 @@ from datetime import timedelta
 pytania = {
     "kategoria-1" : {
         "pytanie-1",
-        "pytanie-2"
+        "pytanie-2",
+        "pytanie-3",
+        "pytanie-4",
+        "pytanie-5",
+        "pytanie-6",
+        "pytanie-7",
+        "pytanie-8",
+        "pytanie-9",
+        "pytanie-10",
     },
     "kategoria-2" : {
         "pytanie-1",
         "pytanie-2",
-        "pytanie-3"
+        "pytanie-3",
+        "pytanie-4",
+        "pytanie-5",
+        "pytanie-6",
+        "pytanie-7",
+        "pytanie-8",
+        "pytanie-9",
+        "pytanie-10",
     },
     "kategoria-3" : {
         "pytanie-1",
         "pytanie-2",
-        "pytanie-3"
-    }
+        "pytanie-3",
+        "pytanie-4",
+        "pytanie-5",
+        "pytanie-6",
+        "pytanie-7",
+        "pytanie-8",
+        "pytanie-9",
+        "pytanie-10",
+    },
+    "kategoria-4" : {
+        "pytanie-1",
+        "pytanie-2",
+        "pytanie-3",
+        "pytanie-4",
+        "pytanie-5",
+        "pytanie-6",
+        "pytanie-7",
+        "pytanie-8",
+        "pytanie-9",
+        "pytanie-10",
+    },
+    "kategoria-5" : {
+        "pytanie-1",
+        "pytanie-2",
+        "pytanie-3",
+        "pytanie-4",
+        "pytanie-5",
+        "pytanie-6",
+        "pytanie-7",
+        "pytanie-8",
+        "pytanie-9",
+        "pytanie-10",
+    },
+    "kategoria-6" : {
+        "pytanie-1",
+        "pytanie-2",
+        "pytanie-3",
+        "pytanie-4",
+        "pytanie-5",
+        "pytanie-6",
+        "pytanie-7",
+        "pytanie-8",
+        "pytanie-9",
+        "pytanie-10",
+    },
+    "kategoria-7" : {
+        "pytanie-1",
+        "pytanie-2",
+        "pytanie-3",
+        "pytanie-4",
+        "pytanie-5",
+        "pytanie-6",
+        "pytanie-7",
+        "pytanie-8",
+        "pytanie-9",
+        "pytanie-10",
+    },
+    "kategoria-8" : {
+        "pytanie-1",
+        "pytanie-2",
+        "pytanie-3",
+        "pytanie-4",
+        "pytanie-5",
+        "pytanie-6",
+        "pytanie-7",
+        "pytanie-8",
+        "pytanie-9",
+        "pytanie-10",
+    },
+
 }
 
 poprawne_odpowiedzi = {
@@ -33,7 +116,22 @@ poprawne_odpowiedzi = {
     },
     "kategoria-3" : {
         "a cokolwiek"
-    }
+    },
+    "kategoria-4" : {
+        "nie"
+    },
+    "kategoria-5" : {
+        "tak"
+    },
+    "kategoria-6" : {
+        "nien't"
+    },
+    "kategoria-7" : {
+        "takn't"
+    },
+    "kategoria-8" : {
+        "nie NIE"
+    },
 }
 
 podpowiedzi = {
@@ -48,6 +146,46 @@ podpowiedzi = {
             "podpowiedz-2",
             "podpowiedz-3"
         },
+        "pytanie-3": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-4": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-5": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-6": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-7": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-8": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-9": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-10": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
     },
     "kategoria-2" : {
         "pytanie-1": {
@@ -56,6 +194,358 @@ podpowiedzi = {
             "podpowiedz-3"
         },
         "pytanie-2": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-3": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-4": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-5": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-6": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-7": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-8": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-9": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-10": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+    },
+    "kategoria-3" : {
+        "pytanie-1": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-2": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-3": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-4": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-5": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-6": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-7": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-8": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-9": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-10": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+    },
+    "kategoria-4" : {
+        "pytanie-1": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-2": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-3": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-4": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-5": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-6": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-7": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-8": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-9": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-10": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+    },
+    "kategoria-5" : {
+        "pytanie-1": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-2": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-3": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-4": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-5": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-6": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-7": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-8": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-9": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-10": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+    },
+    "kategoria-6" : {
+        "pytanie-1": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-2": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-3": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-4": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-5": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-6": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-7": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-8": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-9": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-10": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+    },
+    "kategoria-7" : {
+        "pytanie-1": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-2": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-3": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-4": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-5": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-6": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-7": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-8": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-9": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-10": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+    },
+    "kategoria-8" : {
+        "pytanie-1": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-2": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-3": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-4": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-5": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-6": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-7": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-8": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-9": {
+            "podpowiedz-1",
+            "podpowiedz-2",
+            "podpowiedz-3"
+        },
+        "pytanie-10": {
             "podpowiedz-1",
             "podpowiedz-2",
             "podpowiedz-3"
@@ -95,6 +585,7 @@ class runda:
     minuty = 0
     sekundy = 0
     start_odliczanie = False
+    kategorie_do_1_na_1 = {}
 
     def __init__(self):
         pass
@@ -425,14 +916,18 @@ def gra(request):
             druzyna1.czy_1_na_1 = True
             druzyna2.czy_1_na_1 = True
             pula.dodaj_pula(1000, druzyna1)
+            runda.dodaj_runda()
             print("1 na 1 - etap 2")
             messages.info(request, "1 na 1 - etap 2")
+            runda.kategorie_do_1_na_1 = random.sample(list(pytania.keys()), 7)
+            print(runda.kategorie_do_1_na_1)
             return rendering(request)
         elif request.POST.get("1-na-1-etap-2"):
-            kategorie_do_odrzucenia = request.POST.getlist("1na1-kategoria") #do edycji 
-            print(kategorie_do_odrzucenia)
+            kategoria_do_odrzucenia = request.POST.getlist("1na1-kategoria") #do edycji 
+            print(kategoria_do_odrzucenia)
+            runda.kategorie_do_1_na_1.remove(kategoria_do_odrzucenia[0])
             print("1 na 1 - etap 3")
-            if len(kategorie_do_odrzucenia) != 6:
+            if len(runda.kategorie_do_1_na_1) != 1:
                 print("Wybierz 6 kategorii")
                 messages.info(request, "1 na 1 - etap 2")
                 return rendering(request)
