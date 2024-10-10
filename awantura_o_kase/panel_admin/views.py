@@ -753,7 +753,7 @@ def rendering(request):
             'stream': stream_json['stream'],
             'czas': stream_json['czas'],
             'podpowiedz': kategoria.podpowiedz,
-            'kategorie-1-na-1': runda.kategorie_do_1_na_1,
+            'kategorie_1_na_1': runda.kategorie_do_1_na_1,
         }
         )
 
