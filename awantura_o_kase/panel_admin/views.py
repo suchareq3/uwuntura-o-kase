@@ -818,7 +818,6 @@ def gra(request):
                 messages.error(request, "Drużyna nie posiada takiej kasy")
                 return rendering(request)
             druzyna.odejmij(koszt, request)
-            kategoria.podpowiedz = podpowiedzi.get(kategoria.kategoria, {}).get(kategoria.pytanie, None)
             runda.reset_czas()
             return rendering(request)
         elif request.POST.get("kara"):
@@ -884,6 +883,7 @@ def gra(request):
                 if tymczasowa_pula < points.tymczasowa_pula:
                     tymczasowa_pula = points.tymczasowa_pula
             runda.czy_nastepna_runda = False
+            kategoria.podpowiedz = podpowiedzi.get(kategoria.kategoria, {}).get(kategoria.pytanie, None)
             return rendering(request)
         elif kategoria.kategoria == "":
             print("Nie wybrano kategorii")
