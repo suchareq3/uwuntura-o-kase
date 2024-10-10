@@ -1133,7 +1133,7 @@ def gra(request):
             'pula_zieloni_runda': zieloni.tymczasowa_pula,
             'pula_zolci_runda': zolci.tymczasowa_pula,
             'pula_mistrzowie_runda': mistrzowie.tymczasowa_pula,
-            'podpowiedzi': kategoria.podpowiedz
+            'podpowiedz': kategoria.podpowiedz
         })
 
 @login_required
