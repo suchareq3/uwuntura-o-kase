@@ -1133,7 +1133,8 @@ def gra(request):
             'pula_zieloni_runda': list(zieloni.tymczasowa_pula) if isinstance(zieloni.tymczasowa_pula, set) else zieloni.tymczasowa_pula,
             'pula_zolci_runda': list(zolci.tymczasowa_pula) if isinstance(zolci.tymczasowa_pula, set) else zolci.tymczasowa_pula,
             'pula_mistrzowie_runda': list(mistrzowie.tymczasowa_pula) if isinstance(mistrzowie.tymczasowa_pula, set) else mistrzowie.tymczasowa_pula,
-            'podpowiedz': list(kategoria.podpowiedz) if isinstance(kategoria.podpowiedz, set) else kategoria.podpowiedz
+            'podpowiedz': list(kategoria.podpowiedz) if isinstance(kategoria.podpowiedz, set) else kategoria.podpowiedz,
+            'kategorie-1-na-1': runda.kategorie_do_1_na_1,
         })
 
 @login_required
