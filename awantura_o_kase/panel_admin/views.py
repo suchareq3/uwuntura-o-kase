@@ -752,7 +752,8 @@ def rendering(request):
             'start_odliczanie': runda.start_odliczanie,
             'stream': stream_json['stream'],
             'czas': stream_json['czas'],
-            'podpowiedz': kategoria.podpowiedz
+            'podpowiedz': kategoria.podpowiedz,
+            'kategorie-1-na-1': runda.kategorie_do_1_na_1,
         }
         )
 
@@ -1169,7 +1170,8 @@ def render_stream_panel(request):
             'minuty': runda.minuty,
             'sekundy': runda.sekundy,
             'start_odliczanie': runda.start_odliczanie,
-            'podpowiedz': kategoria.podpowiedz
+            'podpowiedz': kategoria.podpowiedz,
+            'kategorie-1-na-1': runda.kategorie_do_1_na_1,
         }))
 
 @login_required
