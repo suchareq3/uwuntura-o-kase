@@ -557,7 +557,7 @@ class kategoria:
     kategoria = ""
     pytanie = ""
     odpowiedz = ""
-    podpowiedz = []
+    podpowiedz:list = []
 
     def __init__(self):
         pass
@@ -1120,20 +1120,20 @@ def gra(request):
             return rendering(request)
     else:
         return JsonResponse({
-            'pula': pula.pula,
-            'pula_niebiescy': niebiescy.pula,
-            'pula_zieloni': zieloni.pula,
-            'pula_zolci': zolci.pula,
-            'pula_mistrzowie': mistrzowie.pula,
+            'pula': list(pula.pula) if isinstance(pula.pula, set) else pula.pula,
+            'pula_niebiescy': list(niebiescy.pula) if isinstance(niebiescy.pula, set) else niebiescy.pula,
+            'pula_zieloni': list(zieloni.pula) if isinstance(zieloni.pula, set) else zieloni.pula,
+            'pula_zolci': list(zolci.pula) if isinstance(zolci.pula, set) else zolci.pula,
+            'pula_mistrzowie': list(mistrzowie.pula) if isinstance(mistrzowie.pula, set) else mistrzowie.pula,
             'runda': runda.runda,
             'kategoria': kategoria.kategoria,
             'tresc_pytania': kategoria.pytanie,
             'odpowiedz': kategoria.odpowiedz,
-            'pula_niebiescy_runda': niebiescy.tymczasowa_pula,
-            'pula_zieloni_runda': zieloni.tymczasowa_pula,
-            'pula_zolci_runda': zolci.tymczasowa_pula,
-            'pula_mistrzowie_runda': mistrzowie.tymczasowa_pula,
-            'podpowiedz': kategoria.podpowiedz
+            'pula_niebiescy_runda': list(niebiescy.tymczasowa_pula) if isinstance(niebiescy.tymczasowa_pula, set) else niebiescy.tymczasowa_pula,
+            'pula_zieloni_runda': list(zieloni.tymczasowa_pula) if isinstance(zieloni.tymczasowa_pula, set) else zieloni.tymczasowa_pula,
+            'pula_zolci_runda': list(zolci.tymczasowa_pula) if isinstance(zolci.tymczasowa_pula, set) else zolci.tymczasowa_pula,
+            'pula_mistrzowie_runda': list(mistrzowie.tymczasowa_pula) if isinstance(mistrzowie.tymczasowa_pula, set) else mistrzowie.tymczasowa_pula,
+            'podpowiedz': list(kategoria.podpowiedz) if isinstance(kategoria.podpowiedz, set) else kategoria.podpowiedz
         })
 
 @login_required
