@@ -920,13 +920,14 @@ def gra(request):
             runda.dodaj_runda()
             print("1 na 1 - etap 2")
             messages.info(request, "1 na 1 - etap 2")
-            runda.kategorie_do_1_na_1 = random.sample(list(pytania.keys()), 7)
+            for i in random.sample(list(pytania.keys()), 7):
+                runda.kategorie_do_1_na_1[i] = True
             print(runda.kategorie_do_1_na_1)
             return rendering(request)
         elif request.POST.get("1-na-1-etap-2"):
             kategoria_do_odrzucenia = request.POST.getlist("1na1-kategoria") #do edycji 
             print(kategoria_do_odrzucenia)
-            runda.kategorie_do_1_na_1.remove(kategoria_do_odrzucenia[0])
+            runda.kategorie_do_1_na_1[kategoria_do_odrzucenia] = False
             print("1 na 1 - etap 3")
             if len(runda.kategorie_do_1_na_1) != 1:
                 print("Wybierz 6 kategorii")
