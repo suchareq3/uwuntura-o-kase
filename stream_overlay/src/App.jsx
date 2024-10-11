@@ -32,21 +32,7 @@ function App() {
     return <div>{error}</div>;
   }
 
-  return (
-    <OverlaySetter {...data} />
-
-    /*
-    <div>
-      {data ? (
-        <div>
-          <h1>Protected Data</h1>
-          <pre>{JSON.stringify(data)}</pre>
-        </div>
-      ) : (
-        <p>Ładowanie danych...</p>
-      )}
-    </div>*/
-  );
+  return <>{data ? <OverlaySetter {...data} /> : <p>Ładowanie danych...</p>}</>;
 }
 
 export default App;

@@ -1,5 +1,6 @@
 @import "./OverlaySetter.css";
 @import "./StanyKont.css";
+@import "./_variables.css";
 
 html,
 body,
@@ -19,10 +20,6 @@ body,
   text-align: center;
 }
 
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+.awantura-font {
+  font-family: var(--awantura-font);
 }
