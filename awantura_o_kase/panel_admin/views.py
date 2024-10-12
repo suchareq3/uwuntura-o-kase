@@ -585,7 +585,7 @@ class runda:
     minuty = 0
     sekundy = 0
     start_odliczanie = False
-    kategorie_do_1_na_1 = {}
+    kategorie_do_1_na_1: dict = {'kategoria-1': {}, 'kategoria-2': {}, 'kategoria-3': {}, 'kategoria-4': {}, 'kategoria-5' : {}, 'kategoria-6': {}, 'kategoria-7': {}}
 
     def __init__(self):
         pass
@@ -753,7 +753,7 @@ def rendering(request):
             'stream': stream_json['stream'],
             'czas': stream_json['czas'],
             'podpowiedz': kategoria.podpowiedz,
-            'kategorie_1_na_1': runda.kategorie_do_1_na_1,
+            'kategorie_1_na_1': dict(runda.kategorie_do_1_na_1) if isinstance(runda.kategorie_do_1_na_1, set) else runda.kategorie_do_1_na_1,
         }
         )
 
@@ -920,8 +920,9 @@ def gra(request):
             runda.dodaj_runda()
             print("1 na 1 - etap 2")
             messages.info(request, "1 na 1 - etap 2")
-            for i in random.sample(list(pytania.keys()), 7):
-                runda.kategorie_do_1_na_1[i] = True
+            for i, j in enumerate(random.sample(list(pytania.keys()), 7), 1):
+                runda.kategorie_do_1_na_1[f'kategoria-{i}'] = {j: True}
+                #runda.kategorie_do_1_na_1[i] = True
             print(runda.kategorie_do_1_na_1)
             return rendering(request)
         elif request.POST.get("1-na-1-etap-2"):
@@ -1135,7 +1136,7 @@ def gra(request):
             'pula_zolci_runda': list(zolci.tymczasowa_pula) if isinstance(zolci.tymczasowa_pula, set) else zolci.tymczasowa_pula,
             'pula_mistrzowie_runda': list(mistrzowie.tymczasowa_pula) if isinstance(mistrzowie.tymczasowa_pula, set) else mistrzowie.tymczasowa_pula,
             'podpowiedz': list(kategoria.podpowiedz) if isinstance(kategoria.podpowiedz, set) else kategoria.podpowiedz,
-            'kategorie-1-na-1': runda.kategorie_do_1_na_1,
+            'kategorie-1-na-1': dict(runda.kategorie_do_1_na_1) if isinstance(runda.kategorie_do_1_na_1, set) else runda.kategorie_do_1_na_1,
         })
 
 @login_required
@@ -1173,7 +1174,7 @@ def render_stream_panel(request):
             'sekundy': runda.sekundy,
             'start_odliczanie': runda.start_odliczanie,
             'podpowiedz': kategoria.podpowiedz,
-            'kategorie-1-na-1': runda.kategorie_do_1_na_1,
+            'kategorie-1-na-1': dict(runda.kategorie_do_1_na_1) if isinstance(runda.kategorie_do_1_na_1, set) else runda.kategorie_do_1_na_1,
         }))
 
 @login_required
