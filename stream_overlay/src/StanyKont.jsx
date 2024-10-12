@@ -1,6 +1,6 @@
 export default function StanyKont({ kwotaZolci, kwotaZieloni, kwotaNiebiescy, kwotaMistrzowie, pula }) {
   return (
-    <div className="StanyKont flex">
+    <div className="StanyKont flex awantura-font">
       <div className="niebiescy">
         <p>{kwotaNiebiescy}</p>
       </div>

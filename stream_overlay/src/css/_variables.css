@@ -12,6 +12,7 @@
   --mistrzowie-jasny: rgb(54, 41, 66);
 
   --pula-ciemny: theme(colors.neutral.800);
-
   --pasek-ciemny: theme(colors.neutral.900);
+
+  --awantura-font: 'LCDDot'
 }
