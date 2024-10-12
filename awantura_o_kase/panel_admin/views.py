@@ -585,7 +585,7 @@ class runda:
     minuty = 0
     sekundy = 0
     start_odliczanie = False
-    kategorie_do_1_na_1: dict = {'kategoria-1': {}, 'kategoria-2': {}, 'kategoria-3': {}, 'kategoria-4': {}, 'kategoria-5' : {}, 'kategoria-6': {}, 'kategoria-7': {}}
+    kategorie_do_1_na_1: dict = {'kategoria_1': {}, 'kategoria_2': {}, 'kategoria_3': {}, 'kategoria_4': {}, 'kategoria_5' : {}, 'kategoria_6': {}, 'kategoria_7': {}}
 
     def __init__(self):
         pass
@@ -921,20 +921,24 @@ def gra(request):
             print("1 na 1 - etap 2")
             messages.info(request, "1 na 1 - etap 2")
             for i, j in enumerate(random.sample(list(pytania.keys()), 7), 1):
-                runda.kategorie_do_1_na_1[f'kategoria-{i}'] = {j: True}
+                runda.kategorie_do_1_na_1[f'kategoria_{i}'] = {j: False}
                 #runda.kategorie_do_1_na_1[i] = True
             print(runda.kategorie_do_1_na_1)
             return rendering(request)
         elif request.POST.get("1-na-1-etap-2"):
-            kategoria_do_odrzucenia = request.POST.getlist("1na1-kategoria") #do edycji 
-            print(kategoria_do_odrzucenia)
-            runda.kategorie_do_1_na_1[kategoria_do_odrzucenia] = False
-            print("1 na 1 - etap 3")
-            if len(runda.kategorie_do_1_na_1) != 1:
-                print("Wybierz 6 kategorii")
-                messages.info(request, "1 na 1 - etap 2")
+            kategorie_do_odrzucenia = request.POST.getlist("1na1-kategoria")
+            for kat in runda.kategorie_do_1_na_1:
+                for nazwaKategorii in runda.kategorie_do_1_na_1[kat]:
+                    if kat in kategorie_do_odrzucenia:
+                        runda.kategorie_do_1_na_1[kat][nazwaKategorii] = True
+                    else:
+                        runda.kategorie_do_1_na_1[kat][nazwaKategorii] = False
+            true_count = sum(value is True for inner_dict in runda.kategorie_do_1_na_1.values() for value in inner_dict.values())
+            if (true_count == 6):
+                messages.info(request, "1 na 1 - etap 3")
                 return rendering(request)
-            messages.info(request, "1 na 1 - etap 3")
+            #print("Wybierz 6 kategorii")
+            messages.info(request, "1 na 1 - etap 2")
             return rendering(request)
         elif request.POST.get("action"):
             if runda.licytacja == True:
