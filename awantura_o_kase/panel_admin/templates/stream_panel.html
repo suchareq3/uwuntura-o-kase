@@ -6,11 +6,14 @@
     <title>Przykładowa strona z przyciskami</title>
 </head>
 <body>
-
+    <h3>Current overlay: '{{stream_json.stream}}'</h5>
+    <h3>Wlaczony czas: '{{stream_json.czas}}'</h5>
+    
     <h1>Wybierz opcję</h1>
     <form method = "post" action = "{% url 'stream_panel' %}">{% csrf_token %}   
         <button type = "submit" name = "licytacja" value = "licytacja">Licytacja</button>
-        <button>Przycisk 2</button>
+        <button type = "submit" name = "cosinnego" value = "cosinnego">cos innego XD</button>
+        <button type = "submit" name = "czas" value="czas">czasssss</button>
     </form>
 </body>
 </html>
