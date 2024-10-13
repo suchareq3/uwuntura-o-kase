@@ -1141,6 +1141,7 @@ def gra(request):
             'pula_mistrzowie_runda': list(mistrzowie.tymczasowa_pula) if isinstance(mistrzowie.tymczasowa_pula, set) else mistrzowie.tymczasowa_pula,
             'podpowiedz': list(kategoria.podpowiedz) if isinstance(kategoria.podpowiedz, set) else kategoria.podpowiedz,
             'kategorie-1-na-1': dict(runda.kategorie_do_1_na_1) if isinstance(runda.kategorie_do_1_na_1, set) else runda.kategorie_do_1_na_1,
+            'stream_json':stream_json
         })
 
 @login_required
@@ -1160,26 +1161,11 @@ def mistrzowie_viewers(request):
     return render(request, "mistrzowie.html")
 
 def render_stream_panel(request):
-    return render(request, "stream_panel.html", stream_json.update({
-            'pula': pula.pula,
-            'pula_niebiescy': niebiescy.pula,
-            'pula_zieloni': zieloni.pula,
-            'pula_zolci': zolci.pula,
-            'pula_mistrzowie': mistrzowie.pula,
-            'runda': runda.runda,
-            'kategoria': kategoria.kategoria,
-            'tresc_pytania': kategoria.pytanie,
-            'odpowiedz': kategoria.odpowiedz,
-            'pula_niebiescy_runda': niebiescy.tymczasowa_pula,
-            'pula_zieloni_runda': zieloni.tymczasowa_pula,
-            'pula_zolci_runda': zolci.tymczasowa_pula,
-            'pula_mistrzowie_runda': mistrzowie.tymczasowa_pula,
-            'minuty': runda.minuty,
-            'sekundy': runda.sekundy,
-            'start_odliczanie': runda.start_odliczanie,
-            'podpowiedz': kategoria.podpowiedz,
-            'kategorie-1-na-1': dict(runda.kategorie_do_1_na_1) if isinstance(runda.kategorie_do_1_na_1, set) else runda.kategorie_do_1_na_1,
-        }))
+    return render(request, "stream_panel.html", {
+            'stream_json': stream_json,
+            'stream': stream_json['stream'],
+            'czas': stream_json['czas'],
+        })
 
 @login_required
 def stream_panel(request):

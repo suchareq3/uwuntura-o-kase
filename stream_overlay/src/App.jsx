@@ -29,7 +29,8 @@ function App() {
   }, [axiosService]);
 
   if (error) {
-    return <div>{error}</div>;
+    console.log("Oopsie Woopsie error description: ",error)
+    return <div>Oopsie woopsie! We did a fucky wucky! A wittle fucko boingo! The code bears at our headquawtews are wowking VEWY HAWD to fix this! (Pwesae wook at the consoww wog to find the ewwow UwU)</div>;
   }
 
   return <>{data ? <OverlaySetter {...data} /> : <p>Ładowanie danych...</p>}</>;
