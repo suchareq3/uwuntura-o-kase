@@ -570,6 +570,9 @@ class kategoria:
         self.odpowiedz = y[0]
 
     def wyczysc_kategorie(self):
+        pytania[self.kategoria].remove(self.pytanie)
+        podpowiedzi[self.kategoria].pop(self.pytanie)
+        print(pytania, podpowiedzi)
         self.kategoria = ""
         self.pytanie = ""
         self.odpowiedz = ""
