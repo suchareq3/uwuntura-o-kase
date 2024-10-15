@@ -12,7 +12,12 @@ export default defineConfig({
           {
             name: "LCDDot",
             local: "LCDDot",
-            src: "./src/assets/fonts/*.ttf",
+            src: "./src/assets/fonts/LCDDot.ttf",
+          },
+          {
+            name: "Eurostile",
+            local: "Eurostile",
+            src: "./src/assets/fonts/Eurostile.ttf",
           },
         ],
         display: "auto",

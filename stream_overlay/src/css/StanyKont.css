@@ -1,44 +1,75 @@
 @import "./_variables.css";
 
 .StanyKont {
-  height: 10%;
+  height: 12%;
   width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
-.niebiescy {
+.StanyKont .niebiescy-pula {
   background-color: var(--niebieski-ciemny);
 }
 
-.zieloni {
+.StanyKont .zieloni-pula {
   background-color: var(--zielony-ciemny);
 }
 
-.zolci {
+.StanyKont .zolci-pula {
   background-color: var(--zolty-ciemny);
 }
 
-.pula {
+.StanyKont .pula {
   background-color: var(--pula-ciemny);
 }
 
-.niebiescy,
-.zieloni,
-.zolci,
-.mistrzowie {
+.StanyKont .niebiescy,
+.StanyKont .zieloni,
+.StanyKont .zolci,
+.StanyKont .mistrzowie {
   width: 24%;
 }
 
-.pula {
+.StanyKont .ogolna-pula {
   width: 28%;
 }
 
-.niebiescy,
-.zieloni,
-.zolci,
-.mistrzowie,
-.pula {
+.StanyKont .niebiescy,
+.StanyKont .zieloni,
+.StanyKont .zolci,
+.StanyKont .mistrzowie,
+.StanyKont .ogolna-pula {
+  display: flex;
+  flex-direction: column;
+}
+
+.StanyKont .stan-konta{
+  height: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
-  @apply text-3xl;
+  font-family: var(--eurostile-font);
+  @apply text-lg;
+}
+
+.StanyKont .niebiescy-pula,
+.StanyKont .zieloni-pula,
+.StanyKont .zolci-pula,
+.StanyKont .mistrzowie-pula,
+.StanyKont .pula {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @apply text-5xl;
+}
+
+
+.StanyKont .niebiescy-pula p,
+.StanyKont .zieloni-pula p,
+.StanyKont .zolci-pula p,
+.StanyKont .mistrzowie-pula p,
+.StanyKont .pula p{
+  position: relative;
+  top: 5px;
 }

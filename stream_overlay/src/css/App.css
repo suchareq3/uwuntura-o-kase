@@ -23,3 +23,7 @@ body,
 .awantura-font {
   font-family: var(--awantura-font);
 }
+
+.eurostile-font {
+  font-family: var(--eurostile-font);
+}
