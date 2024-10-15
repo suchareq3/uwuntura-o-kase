@@ -728,7 +728,7 @@ def login(request):
     return render(request, "login.html")
 
 stream_json = {
-    "stream": "",
+    "overlay": "",
     "czas": False
 }
 
@@ -754,7 +754,7 @@ def rendering(request):
             'minuty': runda.minuty,
             'sekundy': runda.sekundy,
             'start_odliczanie': runda.start_odliczanie,
-            'stream': stream_json['stream'],
+            'overlay': stream_json['overlay'],
             'czas': stream_json['czas'],
             'podpowiedz': kategoria.podpowiedz,
             'kategorie_1_na_1': dict(runda.kategorie_do_1_na_1) if isinstance(runda.kategorie_do_1_na_1, set) else runda.kategorie_do_1_na_1,
@@ -1167,7 +1167,7 @@ def mistrzowie_viewers(request):
 def render_stream_panel(request):
     return render(request, "stream_panel.html", {
             'stream_json': stream_json,
-            'stream': stream_json['stream'],
+            'overlay': stream_json['overlay'],
             'czas': stream_json['czas'],
         })
 
@@ -1182,6 +1182,6 @@ def stream_panel(request):
         if variables == "czas":
             stream_json["czas"] = not stream_json["czas"]
             return render_stream_panel(request)
-        stream_json["stream"] = variables
+        stream_json["overlay"] = variables
         return render_stream_panel(request)
     return render_stream_panel(request)
