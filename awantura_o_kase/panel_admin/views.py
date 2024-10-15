@@ -570,9 +570,10 @@ class kategoria:
         self.odpowiedz = y[0]
 
     def wyczysc_kategorie(self):
-        pytania[self.kategoria].remove(self.pytanie)
-        podpowiedzi[self.kategoria].pop(self.pytanie)
-        print(pytania, podpowiedzi)
+        try:
+            pytania[self.kategoria].remove(self.pytanie)
+            podpowiedzi[self.kategoria].pop(self.pytanie)
+        except: pass
         self.kategoria = ""
         self.pytanie = ""
         self.odpowiedz = ""
@@ -589,6 +590,7 @@ class runda:
     sekundy = 0
     start_odliczanie = False
     kategorie_do_1_na_1: dict = {'kategoria_1': {}, 'kategoria_2': {}, 'kategoria_3': {}, 'kategoria_4': {}, 'kategoria_5' : {}, 'kategoria_6': {}, 'kategoria_7': {}}
+    druzyny_na_1_na_1 = []
 
     def __init__(self):
         pass
@@ -788,10 +790,10 @@ def gra(request):
             kategoria.wyczysc_kategorie()
             return rendering(request)
         elif request.POST.get("reset-rundy"):
-            kategoria.wyczysc_kategorie()
             for _, team in action_map.items():
                 team.dodaj_pula(team.tymczasowa_pula)
                 team.licytowal = False
+                team.zeruj_tymczasowa_pula()
             runda.runda -= 1
             runda.czy_nastepna_runda = True
             pula.zeruj_pula()
@@ -920,13 +922,15 @@ def gra(request):
             druzyna2.odejmij(500, request)
             druzyna1.czy_1_na_1 = True
             druzyna2.czy_1_na_1 = True
+            druzyna1.wyrownaj_tymczasowa_pule(500)
+            druzyna2.wyrownaj_tymczasowa_pule(500)
             pula.dodaj_pula(1000, druzyna1)
             runda.dodaj_runda()
+            runda.druzyny_na_1_na_1 = [druzyna1, druzyna2]
             print("1 na 1 - etap 2")
             messages.info(request, "1 na 1 - etap 2")
             for i, j in enumerate(random.sample(list(pytania.keys()), 7), 1):
                 runda.kategorie_do_1_na_1[f'kategoria_{i}'] = {j: False}
-                #runda.kategorie_do_1_na_1[i] = True
             print(runda.kategorie_do_1_na_1)
             return rendering(request)
         elif request.POST.get("1-na-1-etap-2"):
@@ -941,8 +945,33 @@ def gra(request):
             if (true_count == 6):
                 messages.info(request, "1 na 1 - etap 3")
                 return rendering(request)
-            #print("Wybierz 6 kategorii")
             messages.info(request, "1 na 1 - etap 2")
+            return rendering(request)
+        elif request.POST.get("1-na-1-etap-3-zle"):
+            try:
+                druzyna = request.POST.get("1na1-druzyna")
+                for _, team in runda.druzyny_na_1_na_1:
+                    team.czy_1_na_1 = False
+                    team.zeruj_tymczasowa_pula()
+                runda.druzyny_na_1_na_1.remove(action_map[druzyna])
+            except:
+                print("Błędna drużyna")
+                messages.error(request, "1 na 1 - etap 3")
+                return rendering(request)
+            runda.druzyny_na_1_na_1[0].dodaj_pula(pula.pula)
+            pula.zeruj_pula()
+            return rendering(request)
+        elif request.POST.get("1-na-1-etap-3-dobrze"):
+            druzyna = request.POST.get("1na1-druzyna")
+            if action_map[druzyna] not in runda.druzyny_na_1_na_1:
+                print("Błędna drużyna")
+                messages.error(request, "1 na 1 - etap 3")
+                return rendering(request)
+            action_map[druzyna].dodaj_pula(pula.pula)
+            for _, team in runda.druzyny_na_1_na_1:
+                team.czy_1_na_1 = False
+                team.zeruj_tymczasowa_pula()
+            pula.zeruj_pula()
             return rendering(request)
         elif request.POST.get("action"):
             if runda.licytacja == True:
