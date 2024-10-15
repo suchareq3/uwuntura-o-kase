@@ -744,6 +744,7 @@ def rendering(request):
             'pula_mistrzowie': mistrzowie.pula,
             'runda': runda.runda,
             'kategoria': kategoria.kategoria,
+            'lista_kategorii': pytania,
             'tresc_pytania': kategoria.pytanie,
             'odpowiedz': kategoria.odpowiedz,
             'pula_niebiescy_runda': niebiescy.tymczasowa_pula,

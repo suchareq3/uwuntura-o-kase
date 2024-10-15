@@ -32,9 +32,12 @@
 				<form method = "post" action = "{% url 'gra' %}" class="flex-[1] flex">{% csrf_token %}
 					<select class="flex-[1] ml-[12%] flex items-center justify-center text-3xl text-black pl-5 bg-neutral-300 border-0 rounded-full" name="kategoria" id="kategoria" onchange = "this.form.submit()">
 						<option class="hover:bg-neutral-400" value="" disabled selected {%if not kategoria %} selected {% endif %}>Wybierz kategorię</option>
-						<option class="hover:bg-neutral-400" value="kategoria-1" {%if kategoria == 'kategoria-1' %} selected {% endif %}>Kategoria #1</option>
-						<option class="hover:bg-neutral-400" value="kategoria-2" {%if kategoria == 'kategoria-2' %} selected {% endif %}>Kategoria #2</option>
-						<option class="focus:bg-neutral-400" value="kategoria-3" {%if kategoria == 'kategoria-3' %} selected {% endif %}>Kategoria #3</option>
+
+            {% for kat in lista_kategorii %}
+            <option class="hover:bg-neutral-400" value="{{kat}}" {%if kategoria == kat %} selected {% endif %}>{{kat}}</option>
+
+            {% endfor %}
+
 					</select>
 				</form>
 			</div>
