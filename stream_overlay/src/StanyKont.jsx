@@ -1,46 +1,50 @@
-export default function StanyKont({ kwotaZolci, kwotaZieloni, kwotaNiebiescy, kwotaMistrzowie, pula, isFinal = true}) {
+export default function StanyKont({ kwotaZolci, kwotaZieloni, kwotaNiebiescy, kwotaMistrzowie, pula, 
+      czyGraNiebiescy = true, czyGraZieloni = true, czyGraZolci = true, czyGraMistrzowie = false }) {
   return (
     <div className="StanyKont flex awantura-font">
-      {!isFinal ? <>
+      {czyGraNiebiescy && <>
         <div className="niebiescy">
-        <div className="stan-konta">
-          <p>STAN KONTA</p>
+          <div className="stan-konta">
+            <p>STAN KONTA</p>
+          </div>
+          <div className="niebiescy-pula">
+            <p>{kwotaNiebiescy}</p>
+          </div>
         </div>
-        <div className="niebiescy-pula">
-          <p>{kwotaNiebiescy}</p>
-        </div>
-      </div>
-
-      <div className="zieloni">
-        <div className="stan-konta">
-          <p>STAN KONTA</p>
-        </div>
-        <div className="zieloni-pula">
-          <p>{kwotaZieloni}</p>
-        </div>
-      </div>
+      </>}
       
-      <div className="zolci">
-        <div className="stan-konta">
-          <p>STAN KONTA</p>
+      {czyGraZieloni && <>
+        <div className="zieloni">
+          <div className="stan-konta">
+            <p>STAN KONTA</p>
+          </div>
+          <div className="zieloni-pula">
+            <p>{kwotaZieloni}</p>
+          </div>
         </div>
-        <div className="zolci-pula">
-          <p>{kwotaZolci}</p>
+      </>}
+      
+      {czyGraZolci && <>
+        <div className="zolci">
+          <div className="stan-konta">
+            <p>STAN KONTA</p>
+          </div>
+          <div className="zolci-pula">
+            <p>{kwotaZolci}</p>
+          </div>
         </div>
-      </div>
-    </> 
-    :
-    <>
-      <div className="mistrzowie">
-        <div className="stan-konta">
-          <p>STAN KONTA</p>
+      </>}
+
+      {czyGraMistrzowie && <>
+        <div className="mistrzowie">
+          <div className="stan-konta">
+            <p>STAN KONTA</p>
+          </div>
+          <div className="mistrzowie-pula">
+            <p>{kwotaMistrzowie}</p>
+          </div>
         </div>
-        <div className="mistrzowie-pula">
-          <p>{kwotaMistrzowie}</p>
-        </div>
-      </div>
-    </>
-    }
+      </>}
       
 
       <div className="ogolna-pula">

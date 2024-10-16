@@ -657,7 +657,11 @@ def gra(request):
             'pula_mistrzowie_runda': list(mistrzowie.tymczasowa_pula) if isinstance(mistrzowie.tymczasowa_pula, set) else mistrzowie.tymczasowa_pula,
             'podpowiedz': list(kategoria.podpowiedz) if isinstance(kategoria.podpowiedz, set) else kategoria.podpowiedz,
             'kategorie-1-na-1': dict(runda.kategorie_do_1_na_1) if isinstance(runda.kategorie_do_1_na_1, set) else runda.kategorie_do_1_na_1,
-            'stream_json': stream_json
+            'stream_json':stream_json,
+            'czy_gra_niebiescy':niebiescy.czy_gra,
+            'czy_gra_zieloni':zieloni.czy_gra,
+            'czy_gra_zolci':zolci.czy_gra,
+            'czy_gra_mistrzowie':mistrzowie.czy_gra,
         })
 
 @login_required

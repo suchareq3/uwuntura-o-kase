@@ -16,7 +16,12 @@ export default function OverlaySetter(data) {
             kwotaZieloni={data.pula_zieloni}
             kwotaZolci={data.pula_zolci}
             kwotaMistrzowie={data.pula_mistrzowie}
-            pula={data.pula}/>}
+            pula={data.pula}
+            czyGraNiebiescy={data.czy_gra_niebiescy}
+            czyGraZieloni={data.czy_gra_zieloni}
+            czyGraZolci={data.czy_gra_zolci}
+            czyGraMistrzowie={data.czy_gra_mistrzowie}
+            />}
         
       </div>
     </>

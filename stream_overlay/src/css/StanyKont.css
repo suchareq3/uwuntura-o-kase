@@ -1,7 +1,7 @@
 @import "./_variables.css";
 
 .StanyKont {
-  height: 12%;
+  height: 14%;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -19,8 +19,16 @@
   background-color: var(--zolty-ciemny);
 }
 
+.StanyKont .mistrzowie-pula {
+  background-color: var(--mistrzowie-jasny);
+}
+
 .StanyKont .pula {
   background-color: var(--pula-ciemny);
+}
+
+.StanyKont .stan-konta {
+  background-color: var(--pasek-ciemny);
 }
 
 .StanyKont .niebiescy,
@@ -44,12 +52,13 @@
 }
 
 .StanyKont .stan-konta{
-  height: 22px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: var(--eurostile-font);
-  @apply text-lg;
+  letter-spacing: 1.5px;
+  @apply text-xl;
 }
 
 .StanyKont .niebiescy-pula,
