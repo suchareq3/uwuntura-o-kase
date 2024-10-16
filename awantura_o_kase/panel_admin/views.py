@@ -4,554 +4,12 @@ from django.contrib.auth import login as login_user, authenticate
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import LoginForm
 from django.http import JsonResponse, HttpResponseRedirect
-import random
+import random,json
 from datetime import timedelta
 
-pytania = {
-    "kategoria-1" : {
-        "pytanie-1",
-        "pytanie-2",
-        "pytanie-3",
-        "pytanie-4",
-        "pytanie-5",
-        "pytanie-6",
-        "pytanie-7",
-        "pytanie-8",
-        "pytanie-9",
-        "pytanie-10",
-    },
-    "kategoria-2" : {
-        "pytanie-1",
-        "pytanie-2",
-        "pytanie-3",
-        "pytanie-4",
-        "pytanie-5",
-        "pytanie-6",
-        "pytanie-7",
-        "pytanie-8",
-        "pytanie-9",
-        "pytanie-10",
-    },
-    "kategoria-3" : {
-        "pytanie-1",
-        "pytanie-2",
-        "pytanie-3",
-        "pytanie-4",
-        "pytanie-5",
-        "pytanie-6",
-        "pytanie-7",
-        "pytanie-8",
-        "pytanie-9",
-        "pytanie-10",
-    },
-    "kategoria-4" : {
-        "pytanie-1",
-        "pytanie-2",
-        "pytanie-3",
-        "pytanie-4",
-        "pytanie-5",
-        "pytanie-6",
-        "pytanie-7",
-        "pytanie-8",
-        "pytanie-9",
-        "pytanie-10",
-    },
-    "kategoria-5" : {
-        "pytanie-1",
-        "pytanie-2",
-        "pytanie-3",
-        "pytanie-4",
-        "pytanie-5",
-        "pytanie-6",
-        "pytanie-7",
-        "pytanie-8",
-        "pytanie-9",
-        "pytanie-10",
-    },
-    "kategoria-6" : {
-        "pytanie-1",
-        "pytanie-2",
-        "pytanie-3",
-        "pytanie-4",
-        "pytanie-5",
-        "pytanie-6",
-        "pytanie-7",
-        "pytanie-8",
-        "pytanie-9",
-        "pytanie-10",
-    },
-    "kategoria-7" : {
-        "pytanie-1",
-        "pytanie-2",
-        "pytanie-3",
-        "pytanie-4",
-        "pytanie-5",
-        "pytanie-6",
-        "pytanie-7",
-        "pytanie-8",
-        "pytanie-9",
-        "pytanie-10",
-    },
-    "kategoria-8" : {
-        "pytanie-1",
-        "pytanie-2",
-        "pytanie-3",
-        "pytanie-4",
-        "pytanie-5",
-        "pytanie-6",
-        "pytanie-7",
-        "pytanie-8",
-        "pytanie-9",
-        "pytanie-10",
-    },
-
-}
-
-poprawne_odpowiedzi = {
-    "kategoria-1" : {
-        "yes"
-    },
-    "kategoria-2" : {
-        "yesn't"
-    },
-    "kategoria-3" : {
-        "a cokolwiek"
-    },
-    "kategoria-4" : {
-        "nie"
-    },
-    "kategoria-5" : {
-        "tak"
-    },
-    "kategoria-6" : {
-        "nien't"
-    },
-    "kategoria-7" : {
-        "takn't"
-    },
-    "kategoria-8" : {
-        "nie NIE"
-    },
-}
-
-podpowiedzi = {
-    "kategoria-1" : {
-        "pytanie-1": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-2": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-3": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-4": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-5": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-6": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-7": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-8": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-9": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-10": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-    },
-    "kategoria-2" : {
-        "pytanie-1": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-2": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-3": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-4": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-5": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-6": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-7": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-8": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-9": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-10": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-    },
-    "kategoria-3" : {
-        "pytanie-1": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-2": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-3": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-4": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-5": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-6": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-7": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-8": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-9": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-10": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-    },
-    "kategoria-4" : {
-        "pytanie-1": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-2": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-3": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-4": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-5": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-6": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-7": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-8": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-9": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-10": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-    },
-    "kategoria-5" : {
-        "pytanie-1": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-2": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-3": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-4": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-5": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-6": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-7": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-8": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-9": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-10": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-    },
-    "kategoria-6" : {
-        "pytanie-1": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-2": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-3": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-4": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-5": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-6": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-7": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-8": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-9": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-10": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-    },
-    "kategoria-7" : {
-        "pytanie-1": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-2": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-3": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-4": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-5": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-6": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-7": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-8": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-9": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-10": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-    },
-    "kategoria-8" : {
-        "pytanie-1": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-2": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-3": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-4": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-5": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-6": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-7": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-8": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-9": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-        "pytanie-10": {
-            "podpowiedz-1",
-            "podpowiedz-2",
-            "podpowiedz-3"
-        },
-    },
-}
+pytania = json.loads(open('./panel_admin/pytania_odpowiedzi_podpowiedzi/pytania.json', 'r').read())
+poprawne_odpowiedzi = json.loads(open('./panel_admin/pytania_odpowiedzi_podpowiedzi/odpowiedzi.json', 'r').read())
+podpowiedzi = json.loads(open('./panel_admin/pytania_odpowiedzi_podpowiedzi/podpowiedzi.json', 'r').read())
 
 class kategoria:
     kategoria = ""
@@ -581,7 +39,7 @@ class kategoria:
 kategoria = kategoria()
 
 class runda:
-    runda = 4 #KONIECZNIE DO ZMIANY NA 0
+    runda = 0 #KONIECZNIE DO ZMIANY NA 0
     licytacja = False
     czy_nastepna_runda = True
     najwiekszy_bet = 0
@@ -873,9 +331,10 @@ def gra(request):
                 for _, team in action_map.items():
                     if team == mistrzowie:
                         break
-                    team.odejmij(200, request)
-                    team.wyrownaj_tymczasowa_pule(200)
-                    pula.dodaj_pula(200, team)
+                    if team.czy_gra == True:
+                        team.odejmij(200, request)
+                        team.wyrownaj_tymczasowa_pule(200)
+                        pula.dodaj_pula(200, team)
             else:
                 najwiekszy_team = max((team for name, team in action_map.items() if name != "mistrzowie"), key=lambda t: t.pula, default=None)
                 najwiekszy_team.odejmij(200, request)
@@ -927,11 +386,9 @@ def gra(request):
             pula.dodaj_pula(1000, druzyna1)
             runda.dodaj_runda()
             runda.druzyny_na_1_na_1 = [druzyna1, druzyna2]
-            print("1 na 1 - etap 2")
             messages.info(request, "1 na 1 - etap 2")
             for i, j in enumerate(random.sample(list(pytania.keys()), 7), 1):
                 runda.kategorie_do_1_na_1[f'kategoria_{i}'] = {j: False}
-            print(runda.kategorie_do_1_na_1)
             return rendering(request)
         elif request.POST.get("1-na-1-etap-2"):
             kategorie_do_odrzucenia = request.POST.getlist("1na1-kategoria")
@@ -991,10 +448,6 @@ def gra(request):
                             print("Mistrzowie nie mogą licytować przed 7 rundą")
                             messages.error(request, "Mistrzowie nie mogą licytować przed 7 rundą")
                             return rendering(request)
-                        #elif runda.runda > 6 and points.czy_gra == False:
-                        #    print("Ta drużyna już nie gra")
-                        #    messages.error(request, "Ta drużyna już nie gra")
-                        #    return rendering(request)
                         elif points.czy_gra == False:
                             print("Ta drużyna już nie gra")
                             messages.error(request, "Ta drużyna już nie gra")
@@ -1032,8 +485,8 @@ def gra(request):
                     try:
                         punkty:int = int(action[1])
                     except ValueError:
-                        print("błąd")
-                        messages.error(request, "błąd")
+                        print("To nie jest liczba")
+                        messages.error(request, "To nie jest liczba")
                         continue
                     if punkty < runda.najwiekszy_bet:
                         print("Nie możesz licytować mniej niż poprzednia osoba")
@@ -1119,6 +572,9 @@ def gra(request):
                         if name != "mistrzowie" and team != najwiekszy_team:
                             team.zmiana_gry()
                 pula.zeruj_pula()
+            if action_map[pula.wypisz_team()].pula <= 200:
+                action_map[pula.wypisz_team()].zeruj_tymczasowa_pula()
+                action_map[pula.wypisz_team()].czy_gra = False
             kategoria.wyczysc_kategorie()
             runda.zmiana_licytacja()
             for _, team in action_map.items():
