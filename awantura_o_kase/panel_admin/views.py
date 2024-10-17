@@ -24,7 +24,7 @@ class kategoria:
         self.kategoria = kategoria
         x = list(pytania[kategoria])
         self.pytanie = x[random.randint(0, len(x) - 1)]
-        y = list(poprawne_odpowiedzi[kategoria])
+        y = list(poprawne_odpowiedzi[kategoria][self.pytanie])
         self.odpowiedz = y[0]
 
     def wyczysc_kategorie(self):
@@ -84,6 +84,9 @@ class runda:
         self.minuty = 1
         self.sekundy = 0
         self.czas = 0
+
+    def cofnij_runde(self):
+        self.runda -= 1
 
 runda = runda()
 
@@ -216,7 +219,7 @@ def rendering(request):
             'start_odliczanie': runda.start_odliczanie,
             'overlay': stream_json['overlay'],
             'czas': stream_json['czas'],
-            'podpowiedz': kategoria.podpowiedz,
+            'podpowiedz': ",".join(kategoria.podpowiedz),
             'kategorie_1_na_1': dict(runda.kategorie_do_1_na_1) if isinstance(runda.kategorie_do_1_na_1, set) else runda.kategorie_do_1_na_1,
         }
         )
@@ -260,7 +263,6 @@ def gra(request):
         elif request.POST.get("podpowiedz"):
             try:
                 druzyna = action_map[request.POST.get("podpowiedz-druzyna")]
-                print(druzyna)
                 if druzyna.czy_gra == False:
                     print("Ta drużyna już nie gra")
                     messages.error(request, "Ta drużyna już nie gra")
@@ -416,7 +418,11 @@ def gra(request):
         elif request.POST.get("1-na-1-etap-3-zle"):
             try:
                 druzyna = request.POST.get("1na1-druzyna")
-                for _, team in runda.druzyny_na_1_na_1:
+                if druzyna is None:
+                    print("Nie wybrano drużyny")
+                    messages.error(request, "Nie wybrano drużyny")
+                    return rendering(request)
+                for team in runda.druzyny_na_1_na_1:
                     team.czy_1_na_1 = False
                     team.zeruj_tymczasowa_pula()
                 runda.druzyny_na_1_na_1.remove(action_map[druzyna])
@@ -426,18 +432,24 @@ def gra(request):
                 return rendering(request)
             runda.druzyny_na_1_na_1[0].dodaj_pula(pula.pula)
             pula.zeruj_pula()
+            runda.druzyny_na_1_na_1 = []
             return rendering(request)
         elif request.POST.get("1-na-1-etap-3-dobrze"):
             druzyna = request.POST.get("1na1-druzyna")
+            if druzyna is None:
+                print("Nie wybrano drużyny")
+                messages.error(request, "Nie wybrano drużyny")
+                return rendering(request)
             if action_map[druzyna] not in runda.druzyny_na_1_na_1:
                 print("Błędna drużyna")
                 messages.error(request, "1 na 1 - etap 3")
                 return rendering(request)
             action_map[druzyna].dodaj_pula(pula.pula)
-            for _, team in runda.druzyny_na_1_na_1:
+            for team in runda.druzyny_na_1_na_1:
                 team.czy_1_na_1 = False
                 team.zeruj_tymczasowa_pula()
             pula.zeruj_pula()
+            runda.druzyny_na_1_na_1 = []
             return rendering(request)
         elif request.POST.get("action"):
             if runda.licytacja == True:
@@ -543,7 +555,12 @@ def gra(request):
                 print("Runda nie może być zerowa")
                 messages.error(request, "Runda nie może być zerowa")
                 return rendering(request)
-            druzyna = action_map[pula.wypisz_team()]
+            try:
+                druzyna = action_map[pula.wypisz_team()]
+            except:
+                print("Brak drużyny")
+                messages.error(request, "Brak drużyny")
+                return rendering(request)
             druzyna.dodaj_pula(pula.pula)
             pula.zeruj_pula()
             kategoria.wyczysc_kategorie()
@@ -621,6 +638,7 @@ def gra(request):
             kategoria.podpowiedz = []
             return rendering(request)
         else:
+            messages.error(request, "Nie wybrano żadnej opcji")
             return rendering(request)
     else:
         return JsonResponse({
@@ -639,7 +657,7 @@ def gra(request):
             'pula_mistrzowie_runda': list(mistrzowie.tymczasowa_pula) if isinstance(mistrzowie.tymczasowa_pula, set) else mistrzowie.tymczasowa_pula,
             'podpowiedz': list(kategoria.podpowiedz) if isinstance(kategoria.podpowiedz, set) else kategoria.podpowiedz,
             'kategorie-1-na-1': dict(runda.kategorie_do_1_na_1) if isinstance(runda.kategorie_do_1_na_1, set) else runda.kategorie_do_1_na_1,
-            'stream_json':stream_json
+            'stream_json': stream_json
         })
 
 @login_required
