@@ -1,14 +1,14 @@
 import PulaTile from "./PulaTile";
 
-export default function KupowaniePodpowiedzi({
-  ktoKupuje,
-  kwotaPodpowiedzi,
-}) {
+export default function KupowaniePodpowiedzi({ ktoKupuje, kwotaPodpowiedzi }) {
   return (
-    <PulaTile
-      nazwaDruzyny={ktoKupuje}
-      pula={kwotaPodpowiedzi}
-      opis="PODPOWIEDZ"
-    />
+    <div className="KupowaniePodpowiedzi">
+      <PulaTile
+        nazwaDruzyny={ktoKupuje}
+        pula={kwotaPodpowiedzi}
+        opis="PODPOWIEDZ"
+      />
+      <div className="space-waster"></div>
+    </div>
   );
 }

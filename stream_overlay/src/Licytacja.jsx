@@ -24,7 +24,7 @@ export default function Licytacja({
         <div className="opis" style={{ width: widthPercentage }}>
           <p>LICYTACJA</p>
         </div>
-        <div className="space-waster"></div>{" "}
+        <div className="space-waster"></div>
         {/* zeby sie ukladalo ladnie z pulą z komponentu StanyKont */}
       </div>
 

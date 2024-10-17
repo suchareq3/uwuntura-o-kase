@@ -12,7 +12,7 @@ export default function StanyKont({
   czyActiveMistrzowie = false,
 }) {
   return (
-    <div className="StanyKont flex awantura-font">
+    <div className="StanyKont flex">
       {czyActiveNiebiescy && !czyActiveMistrzowie && (
         <PulaTile nazwaDruzyny="niebiescy" pula={kwotaNiebiescy} opis="STAN KONTA"/>
       )}
