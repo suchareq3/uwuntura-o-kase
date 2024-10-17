@@ -260,6 +260,15 @@ def gra(request):
         elif request.POST.get("podpowiedz"):
             try:
                 druzyna = action_map[request.POST.get("podpowiedz-druzyna")]
+                print(druzyna)
+                if druzyna.czy_gra == False:
+                    print("Ta drużyna już nie gra")
+                    messages.error(request, "Ta drużyna już nie gra")
+                    return rendering(request)
+                if druzyna.licytowal == False:
+                    print("Ta drużyna nie wygrała licytacji")
+                    messages.error(request, "Ta drużyna nie wygrała licytacji")
+                    return rendering(request)
                 koszt: int = int(request.POST.get("take-podpowiedz-amount"))
             except:
                 print("Nie wybrano drużyny lub nie podano kwoty")
