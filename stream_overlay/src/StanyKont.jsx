@@ -1,76 +1,36 @@
+import PulaTile from "./PulaTile"
+
 export default function StanyKont({
   kwotaZolci,
   kwotaZieloni,
   kwotaNiebiescy,
   kwotaMistrzowie,
   pula,
-  czyGraNiebiescy = true,
-  czyGraZieloni = true,
-  czyGraZolci = true,
-  czyGraMistrzowie = false,
+  czyActiveNiebiescy = true,
+  czyActiveZieloni = true,
+  czyActiveZolci = true,
+  czyActiveMistrzowie = false,
 }) {
   return (
     <div className="StanyKont flex awantura-font">
-      {czyGraNiebiescy && !czyGraMistrzowie && (
-        <>
-          <div className="niebiescy">
-            <div className="opis">
-              <p>STAN KONTA</p>
-            </div>
-            <div className="niebiescy-pula">
-              <p>{kwotaNiebiescy}</p>
-            </div>
-          </div>
-        </>
+      {czyActiveNiebiescy && !czyActiveMistrzowie && (
+        <PulaTile nazwaDruzyny="niebiescy" pula={kwotaNiebiescy} opis="STAN KONTA"/>
       )}
 
-      {czyGraZieloni && !czyGraMistrzowie && (
-        <>
-          <div className="zieloni">
-            <div className="opis">
-              <p>STAN KONTA</p>
-            </div>
-            <div className="zieloni-pula">
-              <p>{kwotaZieloni}</p>
-            </div>
-          </div>
-        </>
+      {czyActiveZieloni && !czyActiveMistrzowie && (
+        <PulaTile nazwaDruzyny="zieloni" pula={kwotaZieloni} opis="STAN KONTA"/>
       )}
 
-      {czyGraZolci && !czyGraMistrzowie && (
-        <>
-          <div className="zolci">
-            <div className="opis">
-              <p>STAN KONTA</p>
-            </div>
-            <div className="zolci-pula">
-              <p>{kwotaZolci}</p>
-            </div>
-          </div>
-        </>
+      {czyActiveZolci && !czyActiveMistrzowie && (
+        <PulaTile nazwaDruzyny="zolci" pula={kwotaZolci} opis="STAN KONTA"/>
       )}
 
-      {czyGraMistrzowie && (
-        <>
-          <div className="mistrzowie">
-            <div className="opis">
-              <p>STAN KONTA</p>
-            </div>
-            <div className="mistrzowie-pula">
-              <p>{kwotaMistrzowie}</p>
-            </div>
-          </div>
-        </>
+      {czyActiveMistrzowie && (
+        <PulaTile nazwaDruzyny="mistrzowie" pula={kwotaMistrzowie} opis="STAN KONTA"/>
       )}
 
-      <div className="ogolna-pula">
-        <div className="opis">
-          <p>PULA</p>
-        </div>
-        <div className="pula">
-          <p>{pula}</p>
-        </div>
-      </div>
+      <PulaTile nazwaDruzyny="ogolna" pula={pula} opis="PULA"/>
+
     </div>
   );
 }

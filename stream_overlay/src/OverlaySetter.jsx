@@ -1,13 +1,14 @@
 import LosowanieKategorii from "./LosowanieKategorii";
 import StanyKont from "./StanyKont";
 import Licytacja from "./Licytacja";
+import KupowaniePodpowiedzi from "./KupowaniePodpowiedzi";
 
 export default function OverlaySetter(data) {
   if (!data.stream_json.overlay || data.stream_json.overlay === "wylaczony") {
     return null;
   }
 
-  const czyFinal = (data.runda >= 7)
+  const czyFinal = data.runda >= 7;
 
   return (
     <>
@@ -21,10 +22,10 @@ export default function OverlaySetter(data) {
             kwotaZolci={data.pula_zolci}
             kwotaMistrzowie={data.pula_mistrzowie}
             pula={data.pula}
-            czyGraNiebiescy={data.czy_gra_niebiescy}
-            czyGraZieloni={data.czy_gra_zieloni}
-            czyGraZolci={data.czy_gra_zolci}
-            czyGraMistrzowie={czyFinal}
+            czyActiveNiebiescy={data.czy_gra_niebiescy}
+            czyActiveZieloni={data.czy_gra_zieloni}
+            czyActiveZolci={data.czy_gra_zolci}
+            czyActiveMistrzowie={czyFinal}
           />
         )}
         {data.stream_json.overlay === "licytacja" && (
@@ -34,24 +35,41 @@ export default function OverlaySetter(data) {
               kwotaZieloni={data.pula_zieloni_runda}
               kwotaZolci={data.pula_zolci_runda}
               kwotaMistrzowie={data.pula_mistrzowie_runda}
-              czyGraNiebiescy={data.czy_gra_niebiescy}
-              czyGraZieloni={data.czy_gra_zieloni}
-              czyGraZolci={data.czy_gra_zolci}
-              czyGraMistrzowie={czyFinal}
+              czyActiveNiebiescy={data.czy_gra_niebiescy}
+              czyActiveZieloni={data.czy_gra_zieloni}
+              czyActiveZolci={data.czy_gra_zolci}
+              czyActiveMistrzowie={czyFinal}
             />
             <StanyKont
               kwotaNiebiescy={data.pula_niebiescy}
               kwotaZieloni={data.pula_zieloni}
               kwotaZolci={data.pula_zolci}
               kwotaMistrzowie={data.pula_mistrzowie}
-              czyGraNiebiescy={data.czy_gra_niebiescy}
-              czyGraZieloni={data.czy_gra_zieloni}
-              czyGraZolci={data.czy_gra_zolci}
-              czyGraMistrzowie={czyFinal}
+              pula={data.pula}
+              czyActiveNiebiescy={data.czy_gra_niebiescy}
+              czyActiveZieloni={data.czy_gra_zieloni}
+              czyActiveZolci={data.czy_gra_zolci}
+              czyActiveMistrzowie={czyFinal}
             />
           </>
         )}
-
+        {/*TODO: poprawic zeby odbieralo dane z backendu*/}
+        {data.stream_json.overlay === "kupowanie-podpowiedzi" && (
+          <>
+            <KupowaniePodpowiedzi ktoKupuje={"zolci"} kwotaPodpowiedzi={1000}/>
+            <StanyKont
+              kwotaNiebiescy={data.pula_niebiescy}
+              kwotaZieloni={data.pula_zieloni}
+              kwotaZolci={data.pula_zolci}
+              kwotaMistrzowie={data.pula_mistrzowie}
+              pula={data.pula}
+              czyActiveNiebiescy={false}
+              czyActiveZieloni={false}
+              czyActiveZolci={true}
+              czyActiveMistrzowie={false}
+            />
+          </>
+        )}
         {data.stream_json.overlay === "losowanie-kategorii" && <></>}
       </div>
     </>

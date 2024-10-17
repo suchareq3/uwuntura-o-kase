@@ -35,7 +35,7 @@
   background-color: var(--mistrzowie-ciemny);
 }
 
-.StanyKont .pula {
+.StanyKont .ogolna-pula {
   background-color: var(--pula-ciemny);
 }
 
@@ -46,7 +46,7 @@
   width: 24%;
 }
 
-.StanyKont .ogolna-pula,
+.StanyKont .ogolna,
 .Licytacja .space-waster {
   width: 28%;
 }
@@ -55,7 +55,7 @@
 .StanyKont .zieloni, .Licytacja .zieloni,
 .StanyKont .zolci, .Licytacja .zolci,
 .StanyKont .mistrzowie, .Licytacja .mistrzowie,
-.StanyKont .ogolna-pula {
+.StanyKont .ogolna {
   display: flex;
   flex-direction: column;
 }
@@ -81,7 +81,7 @@
 .StanyKont .zieloni-pula, .Licytacja .zieloni-pula,
 .StanyKont .zolci-pula, .Licytacja .zolci-pula,
 .StanyKont .mistrzowie-pula, .Licytacja .mistrzowie-pula,
-.StanyKont .pula {
+.StanyKont .ogolna-pula {
   flex: 1;
   display: flex;
   align-items: center;
@@ -94,7 +94,7 @@
 .StanyKont .zieloni-pula p, .Licytacja .zieloni-pula p,
 .StanyKont .zolci-pula p, .Licytacja .zolci-pula p,
 .StanyKont .mistrzowie-pula p, .Licytacja .mistrzowie-pula p,
-.StanyKont .pula p{
+.StanyKont .ogolna-pula p{
   position: relative;
   top: 5px;
   left: 3px;
