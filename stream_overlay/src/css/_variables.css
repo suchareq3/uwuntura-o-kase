@@ -6,9 +6,9 @@
   --zielony-jasny: rgb(2, 65, 43);
 
   --zolty-ciemny: theme(colors.yellow.700);
-  --zolty-jasny: theme(colors.green.500);
+  --zolty-jasny: theme(colors.yellow.600);
 
-  --mistrzowie-ciemny: rgb(38, 13, 39);
+  --mistrzowie-ciemny: rgb(61, 55, 65);
   --mistrzowie-jasny: rgb(86, 78, 92);
 
   --pula-ciemny: theme(colors.neutral.800);

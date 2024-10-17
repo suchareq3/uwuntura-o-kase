@@ -1,0 +1,101 @@
+@import "./_variables.css";
+
+.StanyKont, .Licytacja {
+  height: 14%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.StanyKont .niebiescy-pula {
+  background-color: var(--niebieski-jasny);
+}
+.Licytacja .niebiescy-pula {
+  background-color: var(--niebieski-ciemny);
+}
+
+.StanyKont .zieloni-pula {
+  background-color: var(--zielony-jasny);
+}
+.Licytacja .zieloni-pula {
+  background-color: var(--zielony-ciemny);
+}
+
+.StanyKont .zolci-pula {
+  background-color: var(--zolty-jasny);
+}
+.Licytacja .zolci-pula {
+  background-color: var(--zolty-ciemny);
+}
+
+.StanyKont .mistrzowie-pula {
+  background-color: var(--mistrzowie-jasny);
+}
+.Licytacja .mistrzowie-pula {
+  background-color: var(--mistrzowie-ciemny);
+}
+
+.StanyKont .pula {
+  background-color: var(--pula-ciemny);
+}
+
+.StanyKont .niebiescy, .Licytacja .niebiescy,
+.StanyKont .zieloni, .Licytacja .zieloni,
+.StanyKont .zolci, .Licytacja .zolci,
+.StanyKont .mistrzowie, .Licytacja .mistrzowie{
+  width: 24%;
+}
+
+.StanyKont .ogolna-pula,
+.Licytacja .space-waster {
+  width: 28%;
+}
+
+.StanyKont .niebiescy, .Licytacja .niebiescy,
+.StanyKont .zieloni, .Licytacja .zieloni,
+.StanyKont .zolci, .Licytacja .zolci,
+.StanyKont .mistrzowie, .Licytacja .mistrzowie,
+.StanyKont .ogolna-pula {
+  display: flex;
+  flex-direction: column;
+}
+
+.StanyKont .opis,
+.Licytacja .opis{
+  background-color: var(--pasek-ciemny);
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--eurostile-font);
+  letter-spacing: 1.5px;
+  @apply text-xl;
+}
+
+.Licytacja .opis {
+  
+  letter-spacing: 8px;
+}
+
+.StanyKont .niebiescy-pula, .Licytacja .niebiescy-pula,
+.StanyKont .zieloni-pula, .Licytacja .zieloni-pula,
+.StanyKont .zolci-pula, .Licytacja .zolci-pula,
+.StanyKont .mistrzowie-pula, .Licytacja .mistrzowie-pula,
+.StanyKont .pula {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @apply text-5xl;
+}
+
+
+.StanyKont .niebiescy-pula p, .Licytacja .niebiescy-pula p,
+.StanyKont .zieloni-pula p, .Licytacja .zieloni-pula p,
+.StanyKont .zolci-pula p, .Licytacja .zolci-pula p,
+.StanyKont .mistrzowie-pula p, .Licytacja .mistrzowie-pula p,
+.StanyKont .pula p{
+  position: relative;
+  top: 5px;
+  left: 3px;
+}
