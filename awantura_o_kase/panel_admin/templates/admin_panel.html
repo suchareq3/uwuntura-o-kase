@@ -204,11 +204,7 @@
 				</div>
 				<div class="flex-[3] flex overflow-hidden divide-y-2 divide-neutral-900 gap-1">
 					<div class="w-1/2 flex flex-col gap-1">
-						<form method = "post" action = "{% url 'gra' %}" class="h-1/2">
-							{% csrf_token %}
-							<button type = "submit" name = "wlacz_czas" value = "wlacz_czas" class="w-full h-full bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-blue-600 font-bold odp-czas">Włącz CZAS</button>
-						</form>
-						<button data-modal-target="popup-modal-podpowiedz" data-modal-toggle="popup-modal-podpowiedz" class="w-full h-1/2 bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-amber-600 font-bold odp-podpowiedz">Kup PODPOWIEDŹ</button>
+						<button data-modal-target="popup-modal-podpowiedz" data-modal-toggle="popup-modal-podpowiedz" class="w-full h-full bg-neutral-300 hover:bg-neutral-400 active:bg-neutral-500 text-amber-600 font-bold odp-podpowiedz">Kup PODPOWIEDŹ</button>
 					</div>
 					<form method = "post" action = "{% url 'gra' %}" class="w-1/2 flex flex-col gap-1 border-none">
 						{% csrf_token %}
