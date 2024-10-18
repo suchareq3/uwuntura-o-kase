@@ -1,5 +1,5 @@
 @import "./OverlaySetter.css";
-@import "./StanyKont_Licytacja.css";
+@import "./PulaTile.css";
 @import "./_variables.css";
 
 html,
@@ -20,10 +20,24 @@ body,
   text-align: center;
 }
 
-.awantura-font {
-  font-family: var(--awantura-font);
+.StanyKont, .Licytacja, .KupowaniePodpowiedzi, .WykupienieZawodnika {
+  height: 13%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
-.eurostile-font {
+.awantura-font p{
+  font-family: var(--awantura-font);
+  position: relative;
+  top: 5px;
+  left: 3px;
+}
+
+.eurostile-font p{
   font-family: var(--eurostile-font);
+}
+
+.vt323-font p{
+  font-family: var(--vt323-font);
 }

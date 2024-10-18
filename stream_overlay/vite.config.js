@@ -19,6 +19,11 @@ export default defineConfig({
             local: "Eurostile",
             src: "./src/assets/fonts/Eurostile.ttf",
           },
+          {
+            name: "VT323",
+            local: "VT323",
+            src: "./src/assets/fonts/VT323.ttf",
+          }
         ],
         display: "auto",
         preload: true,

@@ -11,9 +11,10 @@
   --mistrzowie-ciemny: rgb(61, 55, 65);
   --mistrzowie-jasny: rgb(86, 78, 92);
 
-  --pula-ciemny: theme(colors.neutral.800);
+  --pula-ciemny: theme(colors.neutral.700);
   --pasek-ciemny: theme(colors.neutral.900);
 
   --awantura-font: 'LCDDot';
   --eurostile-font: 'Eurostile';
+  --vt323-font: 'VT323';
 }
