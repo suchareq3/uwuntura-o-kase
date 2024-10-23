@@ -28,3 +28,22 @@ Przy zmianie CSS lub dodaniu nowych klas z Tailwind'a, w terminalu należy uży�
 ```
 npx tailwindcss -i ./panel_admin/static/admin_panel_style.css -o ./panel_admin/static/tailwind-output.css --watch
 ```
+
+## Dodawanie użytkowników
+
+Aby dodać użytkownika admin należy wpisać
+```
+py manage.py createsuperuser
+```
+I wpisać dla user: admin, hasło dowolne
+
+Aby dodać użytkowników do gry (test lub stream) nalezy wpisać
+```
+py manage.py shell
+
+from django.contrib.auth.models import User
+user = User.objects.create_user(username = <user>, password = <password>)
+user.save()
+#Można ponownie wywołać 2 ostatnie linie aby dodać więcej użytkowników wymaganych
+exit()
+```
