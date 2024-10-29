@@ -282,7 +282,6 @@ def gra(request):
                     messages.error(request, "Nie ta drużyna")
                     return rendering(request)
                 koszt: int = int(request.POST.get("wykup-zawodnika-amount"))
-                print(druzyna, koszt)
             except:
                 print("Nie wybrano drużyny lub nie podano kwoty")
                 messages.error(request, "Nie wybrano drużyny lub nie podano kwoty")
@@ -304,6 +303,7 @@ def gra(request):
                 messages.error(request, "Drużyna nie posiada takiej kasy")
                 return rendering(request)
             if wykup_zawodnika == druzyna:
+                wykup_zawodnika = None
                 druzyna.odejmij(koszt, request)
                 return rendering(request)
             else:
