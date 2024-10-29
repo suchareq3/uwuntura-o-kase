@@ -141,6 +141,7 @@ niebiescy = niebiescy()
 zieloni = zieloni()
 zolci = zolci()
 mistrzowie = mistrzowie()
+wykup_zawodnika = None
 
 class pula:
     pula = 0
@@ -195,7 +196,21 @@ stream_json = {
     "czas": False
 }
 
+action_map = {
+    "niebiescy": niebiescy,
+    "zieloni": zieloni,
+    "zolci": zolci,
+    "mistrzowie": mistrzowie
+}
+action_map_reverse = {
+    niebiescy: "niebiescy",
+    zieloni: "zieloni",
+    zolci: "zolci",
+    mistrzowie: "mistrzowie"
+}
+
 def rendering(request):
+    global wykup_zawodnika
     return render(
         request, 
         "admin_panel.html", 
@@ -221,6 +236,7 @@ def rendering(request):
             'czas': stream_json['czas'],
             'podpowiedz': ",".join(kategoria.podpowiedz),
             'kategorie_1_na_1': dict(runda.kategorie_do_1_na_1) if isinstance(runda.kategorie_do_1_na_1, set) else runda.kategorie_do_1_na_1,
+            'wykup_zawodnika': action_map_reverse[wykup_zawodnika] if wykup_zawodnika is not None else None,
         }
         )
 
@@ -228,16 +244,10 @@ def rendering(request):
 def panel(request):
     return render(request, "panel.html")
 
-action_map = {
-    "niebiescy": niebiescy,
-    "zieloni": zieloni,
-    "zolci": zolci,
-    "mistrzowie": mistrzowie
-}
-
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def gra(request):
+    global wykup_zawodnika
     if request.method == "POST":
         print(request.POST)
         tymczasowa_pula = max(points.tymczasowa_pula for points in action_map.values())
@@ -260,6 +270,46 @@ def gra(request):
             pula.zeruj_pula()
             kategoria.wyczysc_kategorie()
             return rendering(request)
+        elif request.POST.get("wykup"):
+            try:
+                druzyna = action_map[request.POST.get("wykup-zawodnika-druzyna")]
+                if druzyna.czy_gra == False:
+                    print("Ta drużyna już nie gra")
+                    messages.error(request, "Ta drużyna już nie gra")
+                    return rendering(request)
+                if wykup_zawodnika != druzyna:
+                    print("Nie ta drużyna")
+                    messages.error(request, "Nie ta drużyna")
+                    return rendering(request)
+                koszt: int = int(request.POST.get("wykup-zawodnika-amount"))
+                print(druzyna, koszt)
+            except:
+                print("Nie wybrano drużyny lub nie podano kwoty")
+                messages.error(request, "Nie wybrano drużyny lub nie podano kwoty")
+                return rendering(request)
+            if koszt < 0:
+                print("Koszt podpowiedzi nie może być ujemny")
+                messages.error(request, "Koszt podpowiedzi nie może być ujemny")
+                return rendering(request)
+            elif koszt % 100 != 0:
+                print("Koszt podpowiedzi musi być podzielny przez 100")
+                messages.error(request, "Koszt podpowiedzi musi być podzielny przez 100")
+                return rendering(request)
+            elif druzyna.czy_gra == False:
+                print("Ta drużyna już nie gra")
+                messages.error(request, "Ta drużyna już nie gra")
+                return rendering(request)
+            elif druzyna.pula < koszt:
+                print("Drużyna nie posiada takiej kasy")
+                messages.error(request, "Drużyna nie posiada takiej kasy")
+                return rendering(request)
+            if wykup_zawodnika == druzyna:
+                druzyna.odejmij(koszt, request)
+                return rendering(request)
+            else:
+                print("Nie ta drużyna")
+                messages.error(request, "Nie ta drużyna")
+                return rendering(request)
         elif request.POST.get("podpowiedz"):
             try:
                 druzyna = action_map[request.POST.get("podpowiedz-druzyna")]
@@ -430,6 +480,7 @@ def gra(request):
                 print("Błędna drużyna")
                 messages.error(request, "1 na 1 - etap 3")
                 return rendering(request)
+            wykup_zawodnika = action_map[druzyna]
             runda.druzyny_na_1_na_1[0].dodaj_pula(pula.pula)
             pula.zeruj_pula()
             runda.druzyny_na_1_na_1 = []
@@ -448,6 +499,8 @@ def gra(request):
             for team in runda.druzyny_na_1_na_1:
                 team.czy_1_na_1 = False
                 team.zeruj_tymczasowa_pula()
+            runda.druzyny_na_1_na_1.remove(action_map[druzyna])
+            wykup_zawodnika = action_map[druzyna]
             pula.zeruj_pula()
             runda.druzyny_na_1_na_1 = []
             return rendering(request)
@@ -662,6 +715,7 @@ def gra(request):
             'czy_gra_zieloni':zieloni.czy_gra,
             'czy_gra_zolci':zolci.czy_gra,
             'czy_gra_mistrzowie':mistrzowie.czy_gra,
+            'wykup_zawodnika': action_map_reverse[wykup_zawodnika] if wykup_zawodnika is not None else None,
         })
 
 @login_required
