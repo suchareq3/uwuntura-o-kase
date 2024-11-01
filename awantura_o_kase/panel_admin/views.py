@@ -7,9 +7,7 @@ from django.http import JsonResponse, HttpResponseRedirect
 import random,json
 from datetime import timedelta
 
-pytania = json.loads(open('./panel_admin/pytania_odpowiedzi_podpowiedzi/pytania.json', 'r').read())
-poprawne_odpowiedzi = json.loads(open('./panel_admin/pytania_odpowiedzi_podpowiedzi/odpowiedzi.json', 'r').read())
-podpowiedzi = json.loads(open('./panel_admin/pytania_odpowiedzi_podpowiedzi/podpowiedzi.json', 'r').read())
+pytania = json.loads(open('./panel_admin/pytania_odpowiedzi_podpowiedzi/nowy.json', 'r').read())
 
 class kategoria:
     kategoria = ""
@@ -24,17 +22,18 @@ class kategoria:
         self.kategoria = kategoria
         x = list(pytania[kategoria])
         self.pytanie = x[random.randint(0, len(x) - 1)]
-        y = list(poprawne_odpowiedzi[kategoria][self.pytanie])
-        self.odpowiedz = y[0]
+        y = list(pytania[kategoria][self.pytanie]["odpowiedz"])
+        self.odpowiedz = "".join(y)
 
     def wyczysc_kategorie(self):
         try:
-            pytania[self.kategoria].remove(self.pytanie)
-            podpowiedzi[self.kategoria].pop(self.pytanie)
-        except: pass
+            pytania[self.kategoria].pop(self.pytanie)
+        except Exception as e:
+            print(e)
         self.kategoria = ""
         self.pytanie = ""
         self.odpowiedz = ""
+        self.podpowiedz = []
 
 kategoria = kategoria()
 
@@ -287,12 +286,12 @@ def gra(request):
                 messages.error(request, "Nie wybrano drużyny lub nie podano kwoty")
                 return rendering(request)
             if koszt < 0:
-                print("Koszt podpowiedzi nie może być ujemny")
-                messages.error(request, "Koszt podpowiedzi nie może być ujemny")
+                print("Koszt wykupu nie może być ujemny")
+                messages.error(request, "Koszt wykupu nie może być ujemny")
                 return rendering(request)
             elif koszt % 100 != 0:
-                print("Koszt podpowiedzi musi być podzielny przez 100")
-                messages.error(request, "Koszt podpowiedzi musi być podzielny przez 100")
+                print("Koszt wykupu musi być podzielny przez 100")
+                messages.error(request, "Koszt wykupu musi być podzielny przez 100")
                 return rendering(request)
             elif druzyna.czy_gra == False:
                 print("Ta drużyna już nie gra")
@@ -409,7 +408,7 @@ def gra(request):
                 if tymczasowa_pula < points.tymczasowa_pula:
                     tymczasowa_pula = points.tymczasowa_pula
             runda.czy_nastepna_runda = False
-            kategoria.podpowiedz = podpowiedzi.get(kategoria.kategoria, {}).get(kategoria.pytanie, None)
+            kategoria.podpowiedz = pytania.get(kategoria.kategoria, {}).get(kategoria.pytanie, None).get("podpowiedz", [])
             return rendering(request)
         elif kategoria.kategoria == "":
             print("Nie wybrano kategorii")
@@ -601,8 +600,8 @@ def gra(request):
             return rendering(request)
         elif request.POST.get("dobra_odpowiedz"):
             if runda.licytacja == False:
-                print("nie możesz odpowiedzieć na pytanie zanim się nie zamknie licytacja")
-                messages.error(request, "nie możesz odpowiedzieć na pytanie zanim się nie zamknie licytacja")
+                print("Nie możesz odpowiedzieć na pytanie zanim się nie zamknie licytacja")
+                messages.error(request, "Nie możesz odpowiedzieć na pytanie zanim się nie zamknie licytacja")
                 return rendering(request)
             elif runda.runda == 0:
                 print("Runda nie może być zerowa")
