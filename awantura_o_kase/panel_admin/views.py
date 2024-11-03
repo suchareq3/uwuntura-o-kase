@@ -208,6 +208,14 @@ action_map_reverse = {
     mistrzowie: "mistrzowie"
 }
 
+def wygral_licytacje():
+    for _, team in action_map.items():
+        if team.czy_gra == False:
+            continue
+        if team.licytowal == True:
+            return action_map_reverse[team]
+    return None
+
 def rendering(request):
     global wykup_zawodnika
     return render(
@@ -236,6 +244,7 @@ def rendering(request):
             'podpowiedz': ",".join(kategoria.podpowiedz),
             'kategorie_1_na_1': dict(runda.kategorie_do_1_na_1) if isinstance(runda.kategorie_do_1_na_1, set) else runda.kategorie_do_1_na_1,
             'wykup_zawodnika': action_map_reverse[wykup_zawodnika] if wykup_zawodnika is not None else None,
+            'wygral_licytacje': wygral_licytacje() if runda.licytacja == False else None,
         }
         )
 
@@ -371,7 +380,7 @@ def gra(request):
             return rendering(request)
         elif request.POST.get("kategoria"):
             kategoria.dodaj_kategorie(request.POST.get("kategoria"))
-            if runda.licytacja == True:
+            if runda.licytacja == False:
                 runda.zmiana_licytacja()
             return rendering(request)
         elif request.POST.get("runda"):
@@ -504,7 +513,7 @@ def gra(request):
             runda.druzyny_na_1_na_1 = []
             return rendering(request)
         elif request.POST.get("action"):
-            if runda.licytacja == True:
+            if runda.licytacja == False:
                 print("Koniec licytacji")
                 messages.error(request, "Koniec licytacji")
                 return rendering(request)
@@ -530,6 +539,13 @@ def gra(request):
                             points.odejmij(punkty, request)
                             pula.dodaj_pula(punkty, team)
                             runda.zmiana_licytacja()
+                            if points.licytowal == True:
+                                print("Ta drużyna już licytowała")
+                                messages.error(request, "Ta drużyna już licytowała")
+                                return rendering(request)
+                            for _, team in action_map.items():
+                                team.licytowal = False
+                            points.licytowal = True
                         else:
                             if points.licytowal == True:
                                 print("Ta drużyna już licytowała")
@@ -546,7 +562,7 @@ def gra(request):
                         return rendering(request)
             return rendering(request)
         elif any(key.startswith("add-X-") for key in request.POST.keys()):
-            if runda.licytacja == True:
+            if runda.licytacja == False:
                 return rendering(request)
             for team, points in action_map.items():
                 if runda.runda <= 6 and team == "mistrzowie":
@@ -599,7 +615,7 @@ def gra(request):
             runda.start_odliczanie = False
             return rendering(request)
         elif request.POST.get("dobra_odpowiedz"):
-            if runda.licytacja == False:
+            if runda.licytacja == True:
                 print("Nie możesz odpowiedzieć na pytanie zanim się nie zamknie licytacja")
                 messages.error(request, "Nie możesz odpowiedzieć na pytanie zanim się nie zamknie licytacja")
                 return rendering(request)
@@ -631,7 +647,7 @@ def gra(request):
             kategoria.podpowiedz = []
             return rendering(request)
         elif request.POST.get("zla_odpowiedz"):
-            if runda.licytacja == False:
+            if runda.licytacja == True:
                 print("nie możesz odpowiedzieć na pytanie zanim się nie zamknie licytacja")
                 messages.error(request, "nie możesz odpowiedzieć na pytanie zanim się nie zamknie licytacja")
                 return rendering(request)
@@ -694,28 +710,30 @@ def gra(request):
             return rendering(request)
     else:
         return JsonResponse({
-            'pula': list(pula.pula) if isinstance(pula.pula, set) else pula.pula,
-            'pula_niebiescy': list(niebiescy.pula) if isinstance(niebiescy.pula, set) else niebiescy.pula,
-            'pula_zieloni': list(zieloni.pula) if isinstance(zieloni.pula, set) else zieloni.pula,
-            'pula_zolci': list(zolci.pula) if isinstance(zolci.pula, set) else zolci.pula,
-            'pula_mistrzowie': list(mistrzowie.pula) if isinstance(mistrzowie.pula, set) else mistrzowie.pula,
-            'runda': runda.runda,
-            'kategoria': kategoria.kategoria,
-            'tresc_pytania': kategoria.pytanie,
-            'odpowiedz': kategoria.odpowiedz,
-            'pula_niebiescy_runda': list(niebiescy.tymczasowa_pula) if isinstance(niebiescy.tymczasowa_pula, set) else niebiescy.tymczasowa_pula,
-            'pula_zieloni_runda': list(zieloni.tymczasowa_pula) if isinstance(zieloni.tymczasowa_pula, set) else zieloni.tymczasowa_pula,
-            'pula_zolci_runda': list(zolci.tymczasowa_pula) if isinstance(zolci.tymczasowa_pula, set) else zolci.tymczasowa_pula,
-            'pula_mistrzowie_runda': list(mistrzowie.tymczasowa_pula) if isinstance(mistrzowie.tymczasowa_pula, set) else mistrzowie.tymczasowa_pula,
-            'podpowiedz': list(kategoria.podpowiedz) if isinstance(kategoria.podpowiedz, set) else kategoria.podpowiedz,
-            'kategorie-1-na-1': dict(runda.kategorie_do_1_na_1) if isinstance(runda.kategorie_do_1_na_1, set) else runda.kategorie_do_1_na_1,
-            'stream_json':stream_json,
-            'czy_gra_niebiescy':niebiescy.czy_gra,
-            'czy_gra_zieloni':zieloni.czy_gra,
-            'czy_gra_zolci':zolci.czy_gra,
-            'czy_gra_mistrzowie':mistrzowie.czy_gra,
-            'wykup_zawodnika': action_map_reverse[wykup_zawodnika] if wykup_zawodnika is not None else None,
+            # 'pula': list(pula.pula) if isinstance(pula.pula, set) else pula.pula,
+            # 'pula_niebiescy': list(niebiescy.pula) if isinstance(niebiescy.pula, set) else niebiescy.pula,
+            # 'pula_zieloni': list(zieloni.pula) if isinstance(zieloni.pula, set) else zieloni.pula,
+            # 'pula_zolci': list(zolci.pula) if isinstance(zolci.pula, set) else zolci.pula,
+            # 'pula_mistrzowie': list(mistrzowie.pula) if isinstance(mistrzowie.pula, set) else mistrzowie.pula,
+            # 'runda': runda.runda,
+            # 'kategoria': kategoria.kategoria,
+            # 'tresc_pytania': kategoria.pytanie,
+            # 'odpowiedz': kategoria.odpowiedz,
+            # 'pula_niebiescy_runda': list(niebiescy.tymczasowa_pula) if isinstance(niebiescy.tymczasowa_pula, set) else niebiescy.tymczasowa_pula,
+            # 'pula_zieloni_runda': list(zieloni.tymczasowa_pula) if isinstance(zieloni.tymczasowa_pula, set) else zieloni.tymczasowa_pula,
+            # 'pula_zolci_runda': list(zolci.tymczasowa_pula) if isinstance(zolci.tymczasowa_pula, set) else zolci.tymczasowa_pula,
+            # 'pula_mistrzowie_runda': list(mistrzowie.tymczasowa_pula) if isinstance(mistrzowie.tymczasowa_pula, set) else mistrzowie.tymczasowa_pula,
+            # 'podpowiedz': list(kategoria.podpowiedz) if isinstance(kategoria.podpowiedz, set) else kategoria.podpowiedz,
+            # 'kategorie-1-na-1': dict(runda.kategorie_do_1_na_1) if isinstance(runda.kategorie_do_1_na_1, set) else runda.kategorie_do_1_na_1,
+            # 'stream_json':stream_json,
+            # 'czy_gra_niebiescy':niebiescy.czy_gra,
+            # 'czy_gra_zieloni':zieloni.czy_gra,
+            # 'czy_gra_zolci':zolci.czy_gra,
+            # 'czy_gra_mistrzowie':mistrzowie.czy_gra,
+            # 'wykup_zawodnika': action_map_reverse[wykup_zawodnika] if wykup_zawodnika is not None else None,
+            'wygral_licytacje': wygral_licytacje() if runda.licytacja == False else None,
         })
+
 
 @login_required
 def viewers(request):
