@@ -418,6 +418,7 @@ def gra(request):
                     tymczasowa_pula = points.tymczasowa_pula
             runda.czy_nastepna_runda = False
             kategoria.podpowiedz = pytania.get(kategoria.kategoria, {}).get(kategoria.pytanie, None).get("podpowiedz", [])
+            random.shuffle(kategoria.podpowiedz)
             return rendering(request)
         elif kategoria.kategoria == "":
             print("Nie wybrano kategorii")
