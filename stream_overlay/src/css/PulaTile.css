@@ -36,18 +36,7 @@
   width: 28%;
 }
 
-.opis {
-  background-color: var(--pasek-ciemny);
-  height: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--eurostile-font);
-  letter-spacing: 1.5px;
-  @apply text-xl;
-}
-
-.Licytacja .opis, {
+.Licytacja .opis {
   letter-spacing: 8px;
 }
 

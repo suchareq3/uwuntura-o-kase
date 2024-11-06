@@ -23,6 +23,11 @@ export default defineConfig({
             name: "VT323",
             local: "VT323",
             src: "./src/assets/fonts/VT323.ttf",
+          },
+          {
+            name: "Questrial",
+            local: "Questrial",
+            src: "./src/assets/fonts/Questrial.ttf",
           }
         ],
         display: "auto",

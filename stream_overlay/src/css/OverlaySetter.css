@@ -1,3 +1,5 @@
+@import "./_variables.css";
+
 .OverlaySetter {
   /*to mozna adjustowac*/
   width: 76%;
@@ -6,4 +8,8 @@
   /* temporary border: */
   border: 6px rgb(108, 0, 0);
   border-style: dashed;
+}
+
+.OverlaySetter .czas {
+  background-color: var(--pula-ciemny);
 }

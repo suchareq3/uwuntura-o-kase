@@ -1,0 +1,6 @@
+@import "./_variables.css";
+
+.JedenNaJeden {
+  background-color: var(--pula-ciemny);
+  color: white;
+}

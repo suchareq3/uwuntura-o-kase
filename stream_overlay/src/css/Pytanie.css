@@ -1,0 +1,25 @@
+@import "./_variables.css";
+
+.Pytanie {
+  background-color: var(--pula-ciemny);
+}
+
+.Pytanie.niebiescy {
+  background-color: var(--niebieski-ciemny);
+}
+
+.Pytanie.zieloni {
+  background-color: var(--zielony-ciemny);
+}
+
+.Pytanie.zolci {
+  background-color: var(--zolty-ciemny);
+}
+
+.Pytanie.mistrzowie {
+  background-color: var(--mistrzowie-ciemny);
+}
+
+/*.Pytanie.ibisz-info {
+  background-color: var(--ibisz-jasny);
+}*/

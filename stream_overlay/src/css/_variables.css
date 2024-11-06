@@ -12,9 +12,11 @@
   --mistrzowie-jasny: rgb(86, 78, 92);
 
   --pula-ciemny: theme(colors.neutral.700);
+  --ibisz-jasny: theme(colors.zinc.600);
   --pasek-ciemny: theme(colors.neutral.900);
 
   --awantura-font: 'LCDDot';
   --eurostile-font: 'Eurostile';
   --vt323-font: 'VT323';
+  --questrial-font: 'Questrial';
 }

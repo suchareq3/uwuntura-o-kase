@@ -1,17 +1,20 @@
 @import "./OverlaySetter.css";
 @import "./PulaTile.css";
+@import "./PlayerInfoSetter.css";
+@import "./Pytanie.css";
 @import "./_variables.css";
 
 html,
 body,
 #root {
-  height: 100%;
+  min-height: 100%;
 }
 
 #root {
-  max-width: min(100vw, 1920px);
-  max-height: min(100vh, 1080px);
+  /*max-width: min(100vw, 1920px);*/
+  /*max-height: min(100vh, 1080px);*/
   min-width: 100%;
+  min-height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -27,11 +30,23 @@ body,
   justify-content: center;
 }
 
-.awantura-font p{
+.awantura-font p,
+p.awantura-font{
   font-family: var(--awantura-font);
   position: relative;
   top: 5px;
   left: 3px;
+}
+
+.opis {
+  background-color: var(--pasek-ciemny);
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--eurostile-font);
+  letter-spacing: 1.5px;
+  @apply text-xl;
 }
 
 .eurostile-font p{
@@ -40,4 +55,8 @@ body,
 
 .vt323-font p{
   font-family: var(--vt323-font);
+}
+
+.questrial-font p{
+  font-family: var(--questrial-font);
 }

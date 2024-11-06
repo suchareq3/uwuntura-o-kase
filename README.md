@@ -29,6 +29,18 @@ Przy zmianie CSS lub dodaniu nowych klas z Tailwind'a, w terminalu należy uży�
 npx tailwindcss -i ./panel_admin/static/admin_panel_style.css -o ./panel_admin/static/tailwind-output.css --watch
 ```
 
+## Korzystanie
+
+localhost:8000 - admin panel
+localhost:8000/stream_panel/ - stream panel 
+localhost:5173 - glowny overlay na stream'a
+localhost:5173/niebiescy-info - strona informacyjna druzyny niebieskich
+localhost:5173/zieloni-info - strona informacyjna druzyny zielonych
+localhost:5173/zolci-info - strona informacyjna dla druzyny zoltych
+localhost:5173/mistrzowie-info - strona informacyjna dla druzyny mistrzow
+localhost:5173/ibisz-info - strona informacyjna dla prowadzacego, pokazuje odpowiedz do pytania
+localhost:5173/1na1 - overlay na osobny monitor do pokazania kategorii podczas '1 na 1'
+
 ## Dodawanie użytkowników
 
 Aby dodać użytkownika admin należy wpisać
