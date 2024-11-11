@@ -183,6 +183,21 @@ def login(request):
             elif user and user.username == "stream":
                 login_user(request, user)
                 return redirect("stream_panel")
+            elif user and user.username == "ibisz":
+                login_user(request, user)
+                return HttpResponseRedirect("http://localhost:5173/ibisz-info")
+            elif user and user.username == "niebiescy":
+                login_user(request, user)
+                return HttpResponseRedirect("http://localhost:5173/niebiescy-info")
+            elif user and user.username == "zolci":
+                login_user(request, user)
+                return HttpResponseRedirect("http://localhost:5173/zolci-info")
+            elif user and user.username == "zieloni":
+                login_user(request, user)
+                return HttpResponseRedirect("http://localhost:5173/zieloni-info")
+            elif user and user.username == "mistrzowie":
+                login_user(request, user)
+                return HttpResponseRedirect("http://localhost:5173/mistrzowie-info")
             else:
                 messages.error(request, "Incorrect username or password. Please try again.")
                 return HttpResponseRedirect(request.path_info)
