@@ -22,9 +22,13 @@ class kategoria:
         self.kategoria = kategoria
         x = list(pytania[kategoria])
         self.pytanie = x[random.randint(0, len(x) - 1)]
+        #y = list(pytania[kategoria][self.pytanie]["odpowiedz"])
+        #self.odpowiedz = "".join(y)
+
+    def dodaj_pytanie(self, kategoria):
         y = list(pytania[kategoria][self.pytanie]["odpowiedz"])
         self.odpowiedz = "".join(y)
-
+    
     def wyczysc_kategorie(self):
         try:
             pytania[self.kategoria].pop(self.pytanie)
@@ -441,6 +445,7 @@ def gra(request):
             return rendering(request)
         elif request.POST.get("koniec-licytacji"):
             runda.zmiana_licytacja()
+            kategoria.dodaj_pytanie()
             return rendering(request)
         elif request.POST.get("1-na-1"):
             try:
