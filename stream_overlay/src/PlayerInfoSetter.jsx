@@ -22,6 +22,7 @@ export default function PlayerInfoSetter(props) {
           odpowiedz={data.odpowiedz}
           podpowiedzi={data.podpowiedz}
           pokazPodpowiedzi={data.stream_json.overlay === "pytanie-podpowiedzi"}
+          pokazPytanie={data.stream_json.overlay === "pytanie" || data.stream_json.overlay === "pytanie-podpowiedzi" }
           pokazCzas={data.stream_json.czas}
           countdownStarted={countdownStarted}
           kategoria={data.kategoria}

@@ -2,7 +2,7 @@ import Czas from "./Czas";
 import PulaTile from "./PulaTile";
 import Pytanie from "./Pytanie";
 
-export default function PlayerInfo({ kwotaZolci, kwotaZieloni, kwotaNiebiescy, kwotaMistrzowie, kwotaMistrzowieLicytacja, kwotaZieloniLicytacja, kwotaZolciLicytacja, kwotaNiebiescyLicytacja, pula, trescPytania, podpowiedzi, pokazPodpowiedzi, pokazCzas, runda, kategoria, route, odpowiedz, ktoOdpowiada }) {
+export default function PlayerInfo({ kwotaZolci, kwotaZieloni, kwotaNiebiescy, kwotaMistrzowie, kwotaMistrzowieLicytacja, kwotaZieloniLicytacja, kwotaZolciLicytacja, kwotaNiebiescyLicytacja, pula, trescPytania, podpowiedzi, pokazPodpowiedzi, pokazPytanie, pokazCzas, runda, kategoria, route, odpowiedz, ktoOdpowiada }) {
   return (
 
     
@@ -30,7 +30,8 @@ export default function PlayerInfo({ kwotaZolci, kwotaZieloni, kwotaNiebiescy, k
         <PulaTile nazwaDruzyny="ogolna" pula={pula} opis="PULA" customOpisClasses={"!text-2xl md:!text-3xl p-5"} customKwotaFontSize={"!text-4xl sm:!text-3xl md:!text-4xl lg:!text-5xl"} customClasses={"flex-1"} />
       </div>
 
-      <div className="flex flex-col">
+      {pokazPytanie &&
+        <div className="flex flex-col">
         <div className="opis px-3 text-xl flex-col items-start h-auto">
           <div className="flex justify-between w-full">
             <div className="flex flex-col">
@@ -42,6 +43,7 @@ export default function PlayerInfo({ kwotaZolci, kwotaZieloni, kwotaNiebiescy, k
         </div>
         <Pytanie pula={pula} runda={runda} nazwaKategorii={kategoria} trescPytania={trescPytania} podpowiedzi={podpowiedzi} pokazPodpowiedzi={pokazPodpowiedzi} showOpis={false} customClasses={"p-0"} customTrescPytaniaClasses={"!p-2 md:!p-4 lg:!px-10 !text-2xl"} pokazOdpowiedz={route === "ibisz-info"} odpowiedz={odpowiedz} ktoOdpowiada={ktoOdpowiada}/>
       </div>
+      }
     </div>
   );
 }
