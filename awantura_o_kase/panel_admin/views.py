@@ -211,7 +211,8 @@ def login(request):
 
 stream_json = {
     "overlay": "",
-    "czas": False
+    "czas": False,
+    "pokaz_1na1": False,
 }
 
 action_map = {
@@ -260,6 +261,7 @@ def rendering(request):
             'start_odliczanie': runda.start_odliczanie,
             'overlay': stream_json['overlay'],
             'czas': stream_json['czas'],
+            'pokaz_1na1': stream_json['pokaz_1na1'],
             'podpowiedz': ",".join(kategoria.podpowiedz),
             'kategorie_1_na_1': dict(runda.kategorie_do_1_na_1) if isinstance(runda.kategorie_do_1_na_1, set) else runda.kategorie_do_1_na_1,
             'wykup_zawodnika': action_map_reverse[wykup_zawodnika] if wykup_zawodnika is not None else None,
@@ -777,6 +779,7 @@ def render_stream_panel(request):
             'stream_json': stream_json,
             'overlay': stream_json['overlay'],
             'czas': stream_json['czas'],
+            'pokaz_1na1': stream_json['pokaz_1na1']
         })
 
 @login_required
@@ -789,6 +792,9 @@ def stream_panel(request):
             return render_stream_panel(request)
         if variables == "czas":
             stream_json["czas"] = not stream_json["czas"]
+            return render_stream_panel(request)
+        if variables == "pokaz_1na1":
+            stream_json["pokaz_1na1"] = not stream_json["pokaz_1na1"]
             return render_stream_panel(request)
         stream_json["overlay"] = variables
         return render_stream_panel(request)

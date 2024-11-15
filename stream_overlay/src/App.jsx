@@ -45,8 +45,8 @@ function App({ route }) {
   }
 
   console.log("data: " + JSON.stringify(data["kategorie-1-na-1"]))
-  if (route === "1na1"){
-    return <JedenNaJeden kategorie={data["kategorie-1-na-1"]}/>
+  if (route === "1na1" ){
+    return <JedenNaJeden kategorie={data["kategorie-1-na-1"]} pokaz_1na1={data.stream_json.pokaz_1na1}/>
   }
 
   return (
