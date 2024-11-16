@@ -6,8 +6,8 @@ import Czas from "./Czas";
 export default function OverlaySetter(props) {
 
   const data = props; // wszystko z '...data'
-  
-  if (!data.stream_json.overlay || data.stream_json.overlay === "wylaczony") {
+
+  if (!data.stream_json?.overlay || data.stream_json?.overlay === "wylaczony") {
     return null;
   }
 

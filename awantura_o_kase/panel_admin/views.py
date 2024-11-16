@@ -60,6 +60,7 @@ class runda:
         if self.runda >= 12:
             return False
         self.runda += 1
+        self.najwiekszy_bet = 0
     
     def wypisz(self):
         return self.runda
@@ -68,6 +69,7 @@ class runda:
         self.runda = 0
         self.licytacja = False
         self.czy_nastepna_runda = True
+        self.najwiekszy_bet = 0
 
     def zmiana_licytacja(self):
         self.licytacja = not self.licytacja
@@ -100,7 +102,8 @@ class druzyna:
     licytowal = False
     czy_1_na_1 = False
 
-    def __init__(self):
+    def __init__(self, pula = 5000):
+        self.pula = pula
         pass
 
     def odejmij(self, kwota, request):
@@ -143,7 +146,7 @@ class mistrzowie(druzyna):
 niebiescy = niebiescy()
 zieloni = zieloni()
 zolci = zolci()
-mistrzowie = mistrzowie()
+mistrzowie = mistrzowie(pula = 10000)
 wykup_zawodnika = None
 
 class pula:
@@ -183,25 +186,25 @@ def login(request):
                 return rendering(request)
             elif user and user.username == "test":
                 login_user(request, user)
-                return HttpResponseRedirect("http://localhost:5173/")
+                return HttpResponseRedirect("http://10.5.50.229:5173/")
             elif user and user.username == "stream":
                 login_user(request, user)
                 return redirect("stream_panel")
             elif user and user.username == "ibisz":
                 login_user(request, user)
-                return HttpResponseRedirect("http://localhost:5173/ibisz-info")
+                return HttpResponseRedirect("http://10.5.50.229:5173/ibisz-info")
             elif user and user.username == "niebiescy":
                 login_user(request, user)
-                return HttpResponseRedirect("http://localhost:5173/niebiescy-info")
+                return HttpResponseRedirect("http://10.5.50.229:5173/niebiescy-info")
             elif user and user.username == "zolci":
                 login_user(request, user)
-                return HttpResponseRedirect("http://localhost:5173/zolci-info")
+                return HttpResponseRedirect("http://10.5.50.229:5173/zolci-info")
             elif user and user.username == "zieloni":
                 login_user(request, user)
-                return HttpResponseRedirect("http://localhost:5173/zieloni-info")
+                return HttpResponseRedirect("http://10.5.50.229:5173/zieloni-info")
             elif user and user.username == "mistrzowie":
                 login_user(request, user)
-                return HttpResponseRedirect("http://localhost:5173/mistrzowie-info")
+                return HttpResponseRedirect("http://10.5.50.229:5173/mistrzowie-info")
             else:
                 messages.error(request, "Incorrect username or password. Please try again.")
                 return HttpResponseRedirect(request.path_info)
@@ -370,6 +373,7 @@ def gra(request):
                 messages.error(request, "Drużyna nie posiada takiej kasy")
                 return rendering(request)
             druzyna.odejmij(koszt, request)
+            kategoria.podpowiedz = pytania.get(kategoria.kategoria, {}).get(kategoria.pytanie, None).get("podpowiedz", [])
             runda.reset_czas()
             return rendering(request)
         elif request.POST.get("kara"):
@@ -436,7 +440,7 @@ def gra(request):
                 if tymczasowa_pula < points.tymczasowa_pula:
                     tymczasowa_pula = points.tymczasowa_pula
             runda.czy_nastepna_runda = False
-            kategoria.podpowiedz = pytania.get(kategoria.kategoria, {}).get(kategoria.pytanie, None).get("podpowiedz", [])
+            #kategoria.podpowiedz = pytania.get(kategoria.kategoria, {}).get(kategoria.pytanie, None).get("podpowiedz", [])
             random.shuffle(kategoria.podpowiedz)
             return rendering(request)
         elif kategoria.kategoria == "":
@@ -445,7 +449,7 @@ def gra(request):
             return rendering(request)
         elif request.POST.get("koniec-licytacji"):
             runda.zmiana_licytacja()
-            kategoria.dodaj_pytanie()
+            kategoria.dodaj_pytanie(kategoria.kategoria)
             return rendering(request)
         elif request.POST.get("1-na-1"):
             try:
