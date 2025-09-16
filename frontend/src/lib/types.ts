@@ -13,6 +13,8 @@ export type Game = {
   current_category?: Category;
   current_question?: Question;
   hint_purchased?: boolean;
+  timer_paused?: boolean;
+  question_deadline?: Date;
 };
 export type Category = {
   id: string;

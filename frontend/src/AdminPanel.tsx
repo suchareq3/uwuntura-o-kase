@@ -5,6 +5,7 @@ import { Box, Button, Group, Text } from '@mantine/core';
 import pb from './lib/pb';
 import type { Game, Team } from './lib/types';
 import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
+import Countdown, { type CountdownApi } from 'react-countdown';
 
 function AdminPanel() {
   const [teams, setTeams] = useState<Team[]>([]);
@@ -15,6 +16,7 @@ function AdminPanel() {
   const [debouncedInputValues] = useDebouncedValue(inputValues, 500);
   const [openedHintModal, { open: openHintModal, close: closeHintModal }] = useDisclosure(false);
   const [hintPrice, setHintPrice] = useState<string | number>(0);
+  let countdownApi: CountdownApi | null = null;
 
   const theme = useMantineTheme();
 
@@ -41,6 +43,8 @@ function AdminPanel() {
           current_category: item.expand?.current_category,
           current_question: item.expand?.current_question,
           hint_purchased: item.hint_purchased,
+          timer_paused: item.timer_paused,
+          question_deadline: item.question_deadline,
         })
       } catch (err) {
         console.error('Failed to initialize game state realtime:', err);
@@ -82,6 +86,8 @@ function AdminPanel() {
         current_category: e.record.expand?.current_category,
         current_question: e.record.expand?.current_question,
         hint_purchased: e.record.hint_purchased,
+        timer_paused: e.record.timer_paused,
+        question_deadline: e.record.question_deadline,
       })
       console.log("item:", e.record)
       //setGameState(item);
@@ -172,6 +178,24 @@ function AdminPanel() {
   useEffect(() => {
     console.log('game changed:', game);
   }, [game]);
+
+  const setRef = (countdown: Countdown | null): void => {
+    if (countdown) {
+      countdownApi = countdown.getApi();
+    }
+  };
+
+  
+
+  useEffect(() => {
+    const handlePauseClick = (): void => {
+      countdownApi && countdownApi.pause();
+    };
+    
+    if (game?.timer_paused) {
+      handlePauseClick();
+    }
+  }, [game?.timer_paused])
 
   const stepperIndexByGameStatus: Record<Game['status'], number> = {
     losowanie_kategorii: 0,
@@ -281,7 +305,27 @@ function AdminPanel() {
             <Divider orientation='vertical' />
 
             {/* Odpowiedz */}
-            <Stack>
+            <Stack><Group>
+              <Button disabled={game?.status !== "odpowiadanie"} onClick={async () => {
+                try {
+                  await pb.send('/api/game/timer', { method: 'POST' });
+                } catch (err) {
+                  console.error('Failed to start timer:', err);
+                }
+              }}>Start timer</Button>
+              <Button disabled={game?.status !== "odpowiadanie"} onClick={async () => {
+                try {
+                  await pb.collection('game').update("1", { timer_paused: true });
+                } catch (err) {
+                  console.error('Failed to stop timer:', err);
+                }
+              }}>Stop timer</Button>
+              {game?.question_deadline ? <Countdown 
+                key={game?.question_deadline?.toString()} 
+                date={game?.question_deadline}
+                ref={setRef}
+              /> : <Text>-</Text>}
+              </Group>
               <Card>
                 <Text>Kategoria: {game?.current_category?.name}</Text>
               </Card>
