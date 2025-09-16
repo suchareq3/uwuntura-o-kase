@@ -12,6 +12,7 @@ export type Game = {
   answering_team?: Team;
   current_category?: Category;
   current_question?: Question;
+  hint_purchased?: boolean;
 };
 export type Category = {
   id: string;

@@ -1,10 +1,10 @@
-import { Alert, AppShell, Card, Divider, NumberInput, Select, Stack, Stepper, useMantineTheme } from '@mantine/core';
+import { Alert, AppShell, Card, Divider, Modal, NumberInput, Select, Stack, Stepper, useMantineTheme } from '@mantine/core';
 import './AdminPanel.css'
 import { useEffect, useState } from 'react';
 import { Box, Button, Group, Text } from '@mantine/core';
 import pb from './lib/pb';
 import type { Game, Team } from './lib/types';
-import { useDebouncedValue } from '@mantine/hooks';
+import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
 
 function AdminPanel() {
   const [teams, setTeams] = useState<Team[]>([]);
@@ -13,6 +13,8 @@ function AdminPanel() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [inputValues, setInputValues] = useState<Record<string, number>>({});
   const [debouncedInputValues] = useDebouncedValue(inputValues, 500);
+  const [openedHintModal, { open: openHintModal, close: closeHintModal }] = useDisclosure(false);
+  const [hintPrice, setHintPrice] = useState<string | number>(0);
 
   const theme = useMantineTheme();
 
@@ -38,6 +40,7 @@ function AdminPanel() {
           answering_team: item.expand?.answering_team,
           current_category: item.expand?.current_category,
           current_question: item.expand?.current_question,
+          hint_purchased: item.hint_purchased,
         })
       } catch (err) {
         console.error('Failed to initialize game state realtime:', err);
@@ -78,6 +81,7 @@ function AdminPanel() {
         answering_team: e.record.expand?.answering_team,
         current_category: e.record.expand?.current_category,
         current_question: e.record.expand?.current_question,
+        hint_purchased: e.record.hint_purchased,
       })
       console.log("item:", e.record)
       //setGameState(item);
@@ -130,6 +134,15 @@ function AdminPanel() {
     }
   }
 
+  const purchaseHint = async () => {
+    try {
+      await pb.collection('teams').update(game!.answering_team!.id, { "amount-": hintPrice });
+      await pb.collection('game').update("1", { hint_purchased: true });
+    } catch (err) {
+      console.error('buyHint error:', err);
+    }
+  }
+
   const getTeamColor = (name: Team['name']) => {
     const colors: Record<string, string> = {
       'niebiescy': 'blue',
@@ -173,119 +186,139 @@ function AdminPanel() {
   const highlightedId = maxGiven > 0 ? (teams.find(t => (t.amount_given || 0) === maxGiven)?.id ?? null) : null;
 
   return (
-    <AppShell>
-      <Stack>
-        <Stepper active={game ? stepperIndexByGameStatus[game.status] : 0}>
-          <Stepper.Step label="Losowanie kategorii" description="Step 1" />
-          <Stepper.Step label="Licytacja" description="Step 2" />
-          <Stepper.Step label="Odpowiedz" description="Step 3" />
-        </Stepper>
-        <Divider />
-        <Group>
-          {/* Losowanie kategorii */}
-          <Stack>
-            Runda: {game?.round}
-            {/* TODO: disabled but when????? idk??? */}
-            <Button onClick={() => updateGameStatus("losowanie_kategorii")}>Nastepna runda (manualnie)</Button>
-
-            <Select
-              disabled={game?.status !== "losowanie_kategorii"}
-              label="Kategoria"
-              placeholder="Wybierz kategorię"
-              data={categories}
-              value={selectedCategory}
-              onChange={setSelectedCategory}
-            />
-            <Button onClick={() => {
-              if (selectedCategory) {
-                updateGameStatus("licytacja", selectedCategory);
-              }
-            }} disabled={!selectedCategory || game?.status !== "losowanie_kategorii"}>Zatwierdź</Button>
-
-          </Stack>
-          <Divider orientation='vertical' />
-
-          {/* Licytacja */}
-          <Stack>
-            <Card>
-              <Group>
-                <Button variant='filled' onClick={() => updateGameStatus("odpowiadanie")} disabled={game?.status !== "licytacja"}>Zakoncz licytacje</Button>
-                <Text>Jackpot: {game?.jackpot}</Text>
-              </Group>
-            </Card>
-            {teams.length === 0 ? (
-              <Text>Loading teams…</Text>
-            ) : (
-              teams.map((team) => (
-                <Alert style={{ minWidth: '330px', border: (team.id === highlightedId || team.id === game?.answering_team?.id)  ? '6px solid' : undefined }} key={team.id} variant='light' color={getTeamColor(team.name)} 
-                  title={<Group justify='space-between' align='baseline'>
-                    <Stack align='start'>
-                      <Text size='28px' fw={700}>{team.amount + " zł"}</Text>
-                      <Text>given: {team.amount_given + " zł"}</Text>
-                    </Stack>
-                    <Stack align='end' gap="xs">
-                      <NumberInput
-                        // the key is needed to force re-render when amount_given changes
-                        key={`${team.id}-${team.amount_given}`}
-                        disabled={game?.status !== "licytacja"}
-                        defaultValue={team.amount_given ?? 0}
-                        min={0}
-                        step={100}
-                        max={team.amount + team.amount_given}
-                        size='md'
-                        style={{ width: '100px' }}
-                        onChange={(value: number | string | null) => {
-                          const next = typeof value === 'number' ? value : value == null || value === '' ? 0 : Number(value);
-                          if (!Number.isNaN(next)) {
-                            setInputValues(prev => ({ ...prev, [team.id]: next }));
-                          }
-                        }}
-                      />
-                      <Button variant='filled' onClick={() => vaBanque(team)} disabled={game?.status !== "licytacja"}>VA BANQUE!</Button>
-                    </Stack>
-                  </Group>}
-                >
-                </Alert>
-              ))
-            )}
-          </Stack>
-          <Divider orientation='vertical' />
-
-          {/* Odpowiedz */}
-          <Stack>
-            <Card>
-              <Text>Kategoria: {game?.current_category?.name}</Text>
-            </Card>
-            <Card>
-              <Text>Pytanie: {game?.current_question?.description}</Text>
-            </Card>
-            <Card>
-              <Text>Odpowiedz: {game?.current_question?.answer}</Text>
-            </Card>
-            <Card>
-              <Text>Podpowiedzi: {game?.current_question?.fake_answers}</Text>
-            </Card>
-            <Group>
-              <Button disabled={game?.status !== "odpowiadanie"} variant='filled' onClick={async () => {
-                try {
-                  await pb.send('/api/game/answer', { method: 'POST', body: { correct: true } });
-                } catch (err) {
-                  console.error('Failed to submit correct answer:', err);
-                }
-              }}>Poprawna</Button>
-              <Button disabled={game?.status !== "odpowiadanie"} variant='filled' onClick={async () => {
-                try {
-                  await pb.send('/api/game/answer', { method: 'POST', body: { correct: false } });
-                } catch (err) {
-                  console.error('Failed to submit incorrect answer:', err);
-                }
-              }}>Zła</Button>
-            </Group>
-          </Stack>
-        </Group>
-      </Stack>
+    <>
       
-    </AppShell>
+      <AppShell>
+      <Modal opened={openedHintModal} onClose={closeHintModal} title="Kupowanie podpowiedzi" zIndex={10000} centered> 
+        <Group>
+          <NumberInput
+            label="Kwota za podpowiedz"
+            value={hintPrice}
+            onChange={setHintPrice}
+            min={0}
+            step={100}
+            size='md'
+          />
+          <Button onClick={() => purchaseHint().then(closeHintModal)}>Zatwierdz</Button>
+          <Text>hiiiii :3 hiaiii</Text>
+        </Group>
+      </Modal>
+        <Stack>
+          <Stepper active={game ? stepperIndexByGameStatus[game.status] : 0}>
+            <Stepper.Step label="Losowanie kategorii" description="Step 1" />
+            <Stepper.Step label="Licytacja" description="Step 2" />
+            <Stepper.Step label="Odpowiedz" description="Step 3" />
+          </Stepper>
+          <Divider />
+          <Group>
+            {/* Losowanie kategorii */}
+            <Stack>
+              Runda: {game?.round}
+              {/* TODO: disabled but when????? idk??? */}
+              <Button onClick={() => updateGameStatus("losowanie_kategorii")}>Nastepna runda (manualnie)</Button>
+
+              <Select
+                disabled={game?.status !== "losowanie_kategorii"}
+                label="Kategoria"
+                placeholder="Wybierz kategorię"
+                data={categories}
+                value={selectedCategory}
+                onChange={setSelectedCategory}
+              />
+              <Button onClick={() => {
+                if (selectedCategory) {
+                  updateGameStatus("licytacja", selectedCategory);
+                }
+              }} disabled={!selectedCategory || game?.status !== "losowanie_kategorii"}>Zatwierdź</Button>
+
+            </Stack>
+            <Divider orientation='vertical' />
+
+            {/* Licytacja */}
+            <Stack>
+              <Card>
+                <Group>
+                  <Button variant='filled' onClick={() => updateGameStatus("odpowiadanie")} disabled={game?.status !== "licytacja" && game?.jackpot !>= 0}>Zakoncz licytacje</Button>
+                  <Text>Jackpot: {game?.jackpot}</Text>
+                </Group>
+              </Card>
+              {teams.length === 0 ? (
+                <Text>Loading teams…</Text>
+              ) : (
+                teams.map((team) => (
+                  <Alert style={{ minWidth: '330px', border: (team.id === highlightedId || team.id === game?.answering_team?.id)  ? '6px solid' : undefined }} key={team.id} variant='light' color={getTeamColor(team.name)} 
+                    title={<Group justify='space-between' align='baseline'>
+                      <Stack align='start'>
+                        <Text size='28px' fw={700}>{team.amount + " zł"}</Text>
+                        <Text>given: {team.amount_given + " zł"}</Text>
+                      </Stack>
+                      <Stack align='end' gap="xs">
+                        <NumberInput
+                          // the key is needed to force re-render when amount_given changes
+                          key={`${team.id}-${team.amount_given}`}
+                          disabled={game?.status !== "licytacja"}
+                          defaultValue={team.amount_given ?? 0}
+                          min={0}
+                          step={100}
+                          max={team.amount + team.amount_given}
+                          size='md'
+                          style={{ width: '100px' }}
+                          onChange={(value: number | string | null) => {
+                            const next = typeof value === 'number' ? value : value == null || value === '' ? 0 : Number(value);
+                            if (!Number.isNaN(next)) {
+                              setInputValues(prev => ({ ...prev, [team.id]: next }));
+                            }
+                          }}
+                        />
+                        <Button variant='filled' onClick={() => vaBanque(team)} disabled={game?.status !== "licytacja"}>VA BANQUE!</Button>
+                      </Stack>
+                    </Group>}
+                  >
+                  </Alert>
+                ))
+              )}
+            </Stack>
+            <Divider orientation='vertical' />
+
+            {/* Odpowiedz */}
+            <Stack>
+              <Card>
+                <Text>Kategoria: {game?.current_category?.name}</Text>
+              </Card>
+              <Card>
+                <Text>Pytanie: {game?.current_question?.description}</Text>
+              </Card>
+              <Card>
+                <Text>Odpowiedz: {game?.current_question?.answer}</Text>
+              </Card>
+              <Card>
+                <Text>Podpowiedzi (KUPIONE={game?.hint_purchased?.toString()}): {game?.current_question?.fake_answers}</Text>
+              </Card>
+              <Group>
+                <Button disabled={game?.status !== "odpowiadanie"} variant='filled' onClick={async () => {
+                  try {
+                    await pb.send('/api/game/answer', { method: 'POST', body: { correct: true } });
+                  } catch (err) {
+                    console.error('Failed to submit correct answer:', err);
+                  }
+                }}>Poprawna</Button>
+                <Button disabled={game?.status !== "odpowiadanie"} variant='filled' onClick={async () => {
+                  try {
+                    await pb.send('/api/game/answer', { method: 'POST', body: { correct: false } });
+                  } catch (err) {
+                    console.error('Failed to submit incorrect answer:', err);
+                  }
+                }}>Zła</Button>
+              </Group>
+              <Button disabled={game?.status !== "odpowiadanie" || game?.hint_purchased} onClick={openHintModal}>
+                Kup podpowiedz
+              </Button>
+            </Stack>
+          </Group>
+        </Stack>
+        
+      </AppShell>
+    </>
   )
 }
 export default AdminPanel;

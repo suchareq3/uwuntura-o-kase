@@ -104,6 +104,7 @@ routerAdd('POST', '/api/game/answer', (e) => {
     game.set('answering_team', '');
     game.set('current_question', '');
     game.set('current_category', '');
+    game.set('hint_purchased', false);
     txApp.save(game);
   });
 
