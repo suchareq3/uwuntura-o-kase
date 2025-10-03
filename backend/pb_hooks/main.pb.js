@@ -110,7 +110,6 @@ routerAdd('POST', '/api/game/answer', (e) => {
     game.set('current_question', '');
     game.set('current_category', '');
     game.set('hint_purchased', false);
-    game.set('timer_paused', false);
     game.set('question_deadline', null);
     txApp.save(game);
   });
@@ -123,7 +122,6 @@ routerAdd('POST', '/api/game/timer', (e) => {
   $app.runInTransaction((txApp) => {
     const game = txApp.findRecordById('game', '1');
     game.set("question_deadline", new Date(Date.now() + 60 * 1000));
-    game.set("timer_paused", false);
     txApp.save(game);
   });
   return e.json(200, { success: true });

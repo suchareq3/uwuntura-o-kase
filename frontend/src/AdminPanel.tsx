@@ -44,7 +44,6 @@ function AdminPanel() {
           current_category: item.expand?.current_category,
           current_question: item.expand?.current_question,
           hint_purchased: item.hint_purchased,
-          timer_paused: item.timer_paused,
           question_deadline: item.question_deadline,
           has_vabanqued: item.has_vabanqued,
         })
@@ -88,7 +87,6 @@ function AdminPanel() {
         current_category: e.record.expand?.current_category,
         current_question: e.record.expand?.current_question,
         hint_purchased: e.record.hint_purchased,
-        timer_paused: e.record.timer_paused,
         question_deadline: e.record.question_deadline,
         has_vabanqued: e.record.has_vabanqued,
       })
@@ -199,10 +197,10 @@ function AdminPanel() {
       countdownApi && countdownApi.pause();
     };
     
-    if (game?.timer_paused) {
+    if (game?.question_deadline) {
       handlePauseClick();
     }
-  }, [game?.timer_paused])
+  }, [game?.question_deadline])
 
   const stepperIndexByGameStatus: Record<Game['status'], number> = {
     losowanie_kategorii: 0,
@@ -329,7 +327,7 @@ function AdminPanel() {
               }}>Start timer</Button>
               <Button disabled={game?.status !== "odpowiadanie"} onClick={async () => {
                 try {
-                  await pb.collection('game').update("1", { timer_paused: true });
+                  await pb.collection('game').update("1", { question_deadline: null });
                 } catch (err) {
                   console.error('Failed to stop timer:', err);
                 }

@@ -54,7 +54,6 @@ export default function StreamOverlay() {
                 current_category: item.expand?.current_category,
                 current_question: item.expand?.current_question,
                 hint_purchased: item.hint_purchased,
-                timer_paused: item.timer_paused,
                 question_deadline: item.question_deadline,
               })
             } catch (err) {
@@ -98,7 +97,6 @@ export default function StreamOverlay() {
                 current_category: e.record.expand?.current_category,
                 current_question: e.record.expand?.current_question,
                 hint_purchased: e.record.hint_purchased,
-                timer_paused: e.record.timer_paused,
                 question_deadline: e.record.question_deadline,
             })
             console.log("item:", e.record)

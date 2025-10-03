@@ -1,4 +1,4 @@
-import { Group, Stack } from "@mantine/core";
+import { Group, Stack, Text } from "@mantine/core";
 import PulaTile from "./PulaTile";
 
 export default function Licytacja({ kwotaZolci, kwotaZieloni, kwotaNiebiescy, kwotaMistrzowie, czyActiveNiebiescy = true, czyActiveZieloni = true, czyActiveZolci = true, czyActiveMistrzowie = false }: { kwotaZolci: number, kwotaZieloni: number, kwotaNiebiescy: number, kwotaMistrzowie: number, czyActiveNiebiescy?: boolean, czyActiveZieloni?: boolean, czyActiveZolci?: boolean, czyActiveMistrzowie?: boolean }) {
@@ -12,7 +12,7 @@ export default function Licytacja({ kwotaZolci, kwotaZieloni, kwotaNiebiescy, kw
           className="opis"
           style={{ width: widthPercentage }}
         >
-          <p>LICYTACJA</p>
+          <Text lts={8}>LICYTACJA</Text>
         </div>
         <div className="space-waster"></div>
         {/* zeby sie ukladalo ladnie z pulą z komponentu StanyKont */}
