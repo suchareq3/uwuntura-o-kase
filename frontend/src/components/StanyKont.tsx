@@ -1,8 +1,9 @@
+import { Group } from "@mantine/core";
 import PulaTile from "./PulaTile";
 
-export default function StanyKont({ kwotaZolci, kwotaZieloni, kwotaNiebiescy, kwotaMistrzowie, pula, czyActiveNiebiescy = true, czyActiveZieloni = true, czyActiveZolci = true, czyActiveMistrzowie = false, czyPokazacPule = true }) {
+export default function StanyKont({ kwotaZolci = 0, kwotaZieloni = 0, kwotaNiebiescy = 0, kwotaMistrzowie = 0, pula = 0, czyActiveNiebiescy = true, czyActiveZieloni = true, czyActiveZolci = true, czyActiveMistrzowie = false, czyPokazacPule = true }: { kwotaZolci: number, kwotaZieloni: number, kwotaNiebiescy: number, kwotaMistrzowie: number, pula: number, czyActiveNiebiescy?: boolean, czyActiveZieloni?: boolean, czyActiveZolci?: boolean, czyActiveMistrzowie?: boolean, czyPokazacPule?: boolean }) {
   return (
-    <div className="StanyKont flex">
+    <Group className="StanyKont" gap={0}>
       {czyActiveNiebiescy && (
         <PulaTile
           nazwaDruzyny="niebiescy"
@@ -42,6 +43,6 @@ export default function StanyKont({ kwotaZolci, kwotaZieloni, kwotaNiebiescy, kw
           opis="PULA"
         />
       )}
-    </div>
+    </Group>
   );
 }

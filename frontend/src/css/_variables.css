@@ -5,15 +5,16 @@
   --zielony-ciemny: rgb(3, 44, 29);
   --zielony-jasny: rgb(2, 65, 43);
 
-  --zolty-ciemny: theme(colors.yellow.700);
-  --zolty-jasny: theme(colors.yellow.600);
+  /* Add fallbacks for theme() resolution */
+  --zolty-ciemny: #a65f00;
+  --zolty-jasny: #d78600;
 
   --mistrzowie-ciemny: rgb(61, 55, 65);
   --mistrzowie-jasny: rgb(86, 78, 92);
 
-  --pula-ciemny: theme(colors.neutral.700);
-  --ibisz-jasny: theme(colors.zinc.600);
-  --pasek-ciemny: theme(colors.neutral.900);
+  --pula-ciemny: #404040;
+  --ibisz-jasny: #52525c;
+  --pasek-ciemny: #171717;
 
   --awantura-font: 'LCDDot';
   --eurostile-font: 'Eurostile';
