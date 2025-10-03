@@ -1,5 +1,5 @@
 import { Alert, AppShell, Card, Divider, Modal, NumberInput, Select, Stack, Stepper, useMantineTheme } from '@mantine/core';
-import './AdminPanel.css'
+import './css/AdminPanel.css'
 import { useEffect, useState } from 'react';
 import { Box, Button, Group, Text } from '@mantine/core';
 import pb from './lib/pb';
@@ -8,12 +8,13 @@ import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
 import Countdown, { type CountdownApi } from 'react-countdown';
 
 function AdminPanel() {
+  const debounceMs = 500;
   const [teams, setTeams] = useState<Team[]>([]);
   const [game, setGame] = useState<Game | null>(null);
   const [categories, setCategories] = useState<{ value: string; label: string }[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [inputValues, setInputValues] = useState<Record<string, number>>({});
-  const [debouncedInputValues] = useDebouncedValue(inputValues, 500);
+  const [debouncedInputValues] = useDebouncedValue(inputValues, debounceMs);
   const [openedHintModal, { open: openHintModal, close: closeHintModal }] = useDisclosure(false);
   const [hintPrice, setHintPrice] = useState<string | number>(0);
   let countdownApi: CountdownApi | null = null;
@@ -25,9 +26,9 @@ function AdminPanel() {
     const getTeams = async () => {
       try {
         const list = await pb.collection('teams').getFullList({ sort: 'name' });
-        setTeams(list.map((t: any) => ({ id: t.id, name: t.name, amount: Number(t.amount), amount_given: Number(t.amount_given) })));
+        setTeams(list.map((t: any) => ({ id: t.id, name: t.name, amount: Number(t.amount), amount_given: Number(t.amount_given), active: t.active })));
       } catch (err) {
-        console.error('Failed to initialize teams realtime:', err);
+        console.error('Failed to initialize teams:', err);
       }
     };
 
@@ -45,9 +46,10 @@ function AdminPanel() {
           hint_purchased: item.hint_purchased,
           timer_paused: item.timer_paused,
           question_deadline: item.question_deadline,
+          has_vabanqued: item.has_vabanqued,
         })
       } catch (err) {
-        console.error('Failed to initialize game state realtime:', err);
+        console.error('Failed to initialize game state:', err);
       }
     };
 
@@ -56,7 +58,7 @@ function AdminPanel() {
         const coll = await pb.collection("categories").getFullList();
         setCategories(coll.map((c: any) => ({ value: c.id, label: c.name })));
       } catch (err) {
-        console.error('Failed to initialize categories realtime:', err);
+        console.error('Failed to initialize categories:', err);
       }
     };
 
@@ -69,7 +71,7 @@ function AdminPanel() {
   useEffect(() => {
     pb.collection('teams').subscribe('*', (e) => {
       setTeams(prev =>
-        prev.map(x => (x.id === e.record.id ? { id: e.record.id, name: e.record.name, amount: Number(e.record.amount), amount_given: Number(e.record.amount_given) } : x))
+        prev.map(x => (x.id === e.record.id ? { id: e.record.id, name: e.record.name, amount: Number(e.record.amount), amount_given: Number(e.record.amount_given), active: e.record.active } : x))
       );
     })
     .catch(err => {
@@ -88,6 +90,7 @@ function AdminPanel() {
         hint_purchased: e.record.hint_purchased,
         timer_paused: e.record.timer_paused,
         question_deadline: e.record.question_deadline,
+        has_vabanqued: e.record.has_vabanqued,
       })
       console.log("item:", e.record)
       //setGameState(item);
@@ -140,6 +143,14 @@ function AdminPanel() {
     }
   }
 
+  const updateHasVaBanqued = async (hasVaBanqued: boolean) => {
+    try {
+      await pb.collection('game').update("1", { has_vabanqued: hasVaBanqued });
+    } catch (err) {
+      console.error('updateHasVaBanqued error:', err);
+    }
+  }
+
   const purchaseHint = async () => {
     try {
       await pb.collection('teams').update(game!.answering_team!.id, { "amount-": hintPrice });
@@ -163,12 +174,8 @@ function AdminPanel() {
     try {
       const newAmountGiven = team.amount + team.amount_given;
       
-      // Update inputValues to prevent debounced effect from overriding
-      setInputValues(prev => ({ ...prev, [team.id]: newAmountGiven }));
-      updateAmountGiven(team.id, newAmountGiven).then(() => {
-        pb.collection('game').update("1", { answering_team: team.id }).then(() => {
-          updateGameStatus("odpowiadanie");
-        });
+      updateHasVaBanqued(true).then(() => {
+        setInputValues(prev => ({ ...prev, [team.id]: newAmountGiven }));
       });
     } catch (err) {
       console.error('Failed to perform va banque:', err);
@@ -262,15 +269,18 @@ function AdminPanel() {
             <Stack>
               <Card>
                 <Group>
-                  <Button variant='filled' onClick={() => updateGameStatus("odpowiadanie")} disabled={game?.status !== "licytacja" && game?.jackpot !>= 0}>Zakoncz licytacje</Button>
+                  <Button variant='filled' onClick={() => updateGameStatus("odpowiadanie")} disabled={game?.status !== "licytacja" || game?.jackpot <= 0}>Zakoncz licytacje</Button>
                   <Text>Jackpot: {game?.jackpot}</Text>
                 </Group>
+                <Text>
+                  {game?.has_vabanqued ? "hasVaBanqued true!" : "hasVaBanqued false :("}
+                </Text>
               </Card>
               {teams.length === 0 ? (
                 <Text>Loading teams…</Text>
               ) : (
                 teams.map((team) => (
-                  <Alert style={{ minWidth: '330px', border: (team.id === highlightedId || team.id === game?.answering_team?.id)  ? '6px solid' : undefined }} key={team.id} variant='light' color={getTeamColor(team.name)} 
+                  <Alert style={{ minWidth: '330px', boxShadow: (team.id === highlightedId || team.id === game?.answering_team?.id)  ? 'inset 0px 0px 0px 5px' : undefined }} key={team.id} variant='light' color={getTeamColor(team.name)} 
                     title={<Group justify='space-between' align='baseline'>
                       <Stack align='start'>
                         <Text size='28px' fw={700}>{team.amount + " zł"}</Text>
@@ -278,10 +288,8 @@ function AdminPanel() {
                       </Stack>
                       <Stack align='end' gap="xs">
                         <NumberInput
-                          // the key is needed to force re-render when amount_given changes
-                          key={`${team.id}-${team.amount_given}`}
-                          disabled={game?.status !== "licytacja"}
-                          defaultValue={team.amount_given ?? 0}
+                          disabled={game?.status !== "licytacja" || game?.has_vabanqued}
+                          value={inputValues[team.id] ?? (team.amount_given ?? 0)}
                           min={0}
                           step={100}
                           max={team.amount + team.amount_given}
@@ -294,7 +302,13 @@ function AdminPanel() {
                             }
                           }}
                         />
-                        <Button variant='filled' onClick={() => vaBanque(team)} disabled={game?.status !== "licytacja"}>VA BANQUE!</Button>
+                        <Button 
+                          variant='filled' 
+                          onClick={() => vaBanque(team)} 
+                          disabled={game?.status !== "licytacja" || game?.has_vabanqued}
+                        >
+                          VA BANQUE!
+                        </Button>
                       </Stack>
                     </Group>}
                   >

@@ -73,6 +73,11 @@ onRecordAfterUpdateSuccess((e) => {
                 $app.logger().info("teaam amount after " + team.get("amount_given") + " " + team.get("name"));
             });
         });
+
+        $app.runInTransaction(txApp => {
+            e.record.set("has_vabanqued", false);
+            txApp.save(e.record);
+        });
     }
     e.next();
 }, "game"); 

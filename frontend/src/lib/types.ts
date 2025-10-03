@@ -2,7 +2,8 @@ export type Team = {
   id: string; 
   name: 'mistrzowie' | 'niebiescy' | 'zieloni' | 'zolci'; 
   amount: number; 
-  amount_given: number 
+  amount_given: number;
+  active: boolean;
 };
 export type Game = {
   id: string;
@@ -15,6 +16,7 @@ export type Game = {
   hint_purchased?: boolean;
   timer_paused?: boolean;
   question_deadline?: Date;
+  has_vabanqued?: boolean;
 };
 export type Category = {
   id: string;
