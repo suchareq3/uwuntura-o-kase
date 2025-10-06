@@ -75,8 +75,10 @@ onRecordAfterUpdateSuccess((e) => {
         });
 
         $app.runInTransaction(txApp => {
-            e.record.set("has_vabanqued", false);
-            txApp.save(e.record);
+            if (e.record.originaget("has_vabanqued") === true) {
+                e.record.set("has_vabanqued", false);
+                txApp.save(e.record);
+            }
         });
     }
     e.next();
