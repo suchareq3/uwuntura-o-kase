@@ -5,7 +5,7 @@ import { Box, Button, Group, Text } from '@mantine/core';
 import pb from './lib/pb';
 import type { Game, Team } from './lib/types';
 import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
-import Countdown, { type CountdownApi } from 'react-countdown';
+import Countdown, { zeroPad, type CountdownApi } from 'react-countdown';
 
 function AdminPanel() {
   const debounceMs = 500;
@@ -336,6 +336,15 @@ function AdminPanel() {
                 key={game?.question_deadline?.toString()} 
                 date={game?.question_deadline}
                 ref={setRef}
+                renderer={({ minutes, seconds }: { minutes: number; seconds: number }) => {
+                    return (
+                      
+                        <Text fz={"1.5rem"} className="awantura-font">
+                          {minutes}:{zeroPad(seconds)}
+                        </Text>
+                      
+                    );
+                  }}
               /> : <Text>-</Text>}
               </Group>
               <Card>

@@ -10,6 +10,7 @@ import 'unfonts.css'
 import StanyKont from './components/StanyKont';
 import { Center, Group, Stack } from '@mantine/core';
 import Pytanie from './components/Pytanie';
+import Czas from './components/Czas';
 
 
 const pb = new PocketBase('http://127.0.0.1:8090');
@@ -119,8 +120,10 @@ export default function StreamOverlay() {
     return (
         <>
         <Group w={"100%"} h={"100%"} align="center" justify="center" gap={0}>
-            <Stack justify='end' w={"76%"} h={"85%"} gap={0}>
+            <Stack justify='end' w={"76%"} h={"85%"} gap={0} pos={'relative'}>
                  {/* {game?.status === "losowanie_kategorii" && <h1>Losowanie kategorii</h1>} */}
+            {game?.question_deadline && <Czas date={game?.question_deadline} />}
+                 
             {game?.status === "licytacja" && 
             <>
                 <Licytacja
