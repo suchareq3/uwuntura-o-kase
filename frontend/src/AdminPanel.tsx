@@ -1,11 +1,13 @@
-import { Alert, AppShell, Card, Divider, Modal, NumberInput, Select, Stack, Stepper, useMantineTheme } from '@mantine/core';
+import { Alert, AppShell, Card, Divider, Select, Stack, Stepper, useMantineTheme } from '@mantine/core';
 import './css/AdminPanel.css'
 import { useEffect, useState } from 'react';
-import { Box, Button, Group, Text } from '@mantine/core';
+import { Button, Group, Text } from '@mantine/core';
 import pb from './lib/pb';
 import type { Game, Team } from './lib/types';
 import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
 import Countdown, { zeroPad, type CountdownApi } from 'react-countdown';
+import CustomNumberInputModal from './components/CustomNumberInputModal';
+import CustomNumberInput from './components/CustomNumberInput';
 
 function AdminPanel() {
   const debounceMs = 500;
@@ -17,6 +19,11 @@ function AdminPanel() {
   const [debouncedInputValues] = useDebouncedValue(inputValues, debounceMs);
   const [openedHintModal, { open: openHintModal, close: closeHintModal }] = useDisclosure(false);
   const [hintPrice, setHintPrice] = useState<string | number>(0);
+  const [openedPenaltyModal, { open: openPenaltyModal, close: closePenaltyModal }] = useDisclosure(false);
+  const [penaltyPrice, setPenaltyPrice] = useState<string | number>(0);
+  const [openedBuybackPlayerModal, { open: openBuybackPlayerModal, close: closeBuybackPlayerModal }] = useDisclosure(false);
+  const [buybackPlayerPrice, setBuybackPlayerPrice] = useState<string | number>(0);
+
   let countdownApi: CountdownApi | null = null;
 
   const theme = useMantineTheme();
@@ -158,6 +165,14 @@ function AdminPanel() {
     }
   }
 
+  const deductAnsweringTeamAmount = async (amount: string | number) => {
+    try {
+      await pb.collection('teams').update(game!.answering_team!.id, { "amount-": amount });
+    } catch (err) {
+      console.error('deductAmount error:', err);
+    }
+  }
+
   const getTeamColor = (name: Team['name']) => {
     const colors: Record<string, string> = {
       'niebiescy': 'blue',
@@ -188,9 +203,7 @@ function AdminPanel() {
     if (countdown) {
       countdownApi = countdown.getApi();
     }
-  };
-
-  
+  };  
 
   useEffect(() => {
     const handlePauseClick = (): void => {
@@ -216,22 +229,34 @@ function AdminPanel() {
 
   return (
     <>
-      
       <AppShell>
-      <Modal opened={openedHintModal} onClose={closeHintModal} title="Kupowanie podpowiedzi" zIndex={10000} centered> 
-        <Group>
-          <NumberInput
-            label="Kwota za podpowiedz"
-            value={hintPrice}
-            onChange={setHintPrice}
-            min={0}
-            step={100}
-            size='md'
-          />
-          <Button onClick={() => purchaseHint().then(closeHintModal)}>Zatwierdz</Button>
-          <Text>hiiiii :3 hiaiii</Text>
-        </Group>
-      </Modal>
+      <CustomNumberInputModal
+        opened={openedHintModal}
+        onClose={closeHintModal}
+        modalTitle="Kupowanie podpowiedzi"
+        inputLabel="Kwota za podpowiedz"
+        inputValue={hintPrice}
+        inputOnChange={setHintPrice}
+        buttonOnClick={() => purchaseHint().then(closeHintModal)}
+      />
+      <CustomNumberInputModal
+        opened={openedPenaltyModal}
+        onClose={closePenaltyModal}
+        modalTitle="Kara"
+        inputLabel="Kwota za kare"
+        inputValue={penaltyPrice}
+        inputOnChange={setPenaltyPrice}
+        buttonOnClick={() => deductAnsweringTeamAmount(penaltyPrice).then(closePenaltyModal)}
+      />
+      <CustomNumberInputModal
+        opened={openedBuybackPlayerModal}
+        onClose={closeBuybackPlayerModal}
+        modalTitle="Wykup ziomka"
+        inputLabel="Kwota za wykupienie ziomka"
+        inputValue={buybackPlayerPrice}
+        inputOnChange={setBuybackPlayerPrice}
+        buttonOnClick={() => deductAnsweringTeamAmount(buybackPlayerPrice).then(closeBuybackPlayerModal)}
+      />
         <Stack>
           <Stepper active={game ? stepperIndexByGameStatus[game.status] : 0}>
             <Stepper.Step label="Losowanie kategorii" description="Step 1" />
@@ -285,7 +310,7 @@ function AdminPanel() {
                         <Text>given: {team.amount_given + " zł"}</Text>
                       </Stack>
                       <Stack align='end' gap="xs">
-                        <NumberInput
+                        <CustomNumberInput
                           disabled={game?.status !== "licytacja" || game?.has_vabanqued}
                           value={inputValues[team.id] ?? (team.amount_given ?? 0)}
                           min={0}
@@ -377,6 +402,12 @@ function AdminPanel() {
               </Group>
               <Button disabled={game?.status !== "odpowiadanie" || game?.hint_purchased} onClick={openHintModal}>
                 Kup podpowiedz
+              </Button>
+              <Button disabled={game?.status !== "odpowiadanie"} onClick={openPenaltyModal}>
+                Kara 
+              </Button>
+              <Button disabled={game?.status !== "odpowiadanie"} onClick={openBuybackPlayerModal}>
+                Wykup ziomka
               </Button>
             </Stack>
           </Group>
