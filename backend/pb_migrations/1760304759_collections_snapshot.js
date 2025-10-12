@@ -910,13 +910,10 @@ migrate((app) => {
           "system": false,
           "type": "select",
           "values": [
-            "losowanie_pytania",
             "losowanie_kategorii",
             "licytacja",
-            "odpowiadanie",
-            "kupowanie_podpowiedzi",
-            "odpowiadanie_z_podpowiedzia",
             "1v1",
+            "odpowiadanie",
             "1v1_odpowiadanie"
           ]
         },

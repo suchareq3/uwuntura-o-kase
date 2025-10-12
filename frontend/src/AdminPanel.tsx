@@ -243,8 +243,6 @@ function AdminPanel() {
     licytacja: 1,
     "1v1": 1,
     odpowiadanie: 2,
-    kupowanie_podpowiedzi: 2,
-    odpowiadanie_z_podpowiedzia: 2,
     "1v1_odpowiadanie": 2,
   }
 
