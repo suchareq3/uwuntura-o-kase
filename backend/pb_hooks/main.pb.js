@@ -1,4 +1,4 @@
-// while "game" is in "licytacja" state, any changes to 'amount_given' reduce 'amount' and add to 'jackpot'.
+// while "game" status is "licytacja", any changes to 'amount_given' reduce 'amount' and add to 'jackpot'.
 onRecordUpdateExecute((e) => {
     $app.runInTransaction(txApp => {
         const game = txApp.findRecordById("game", "1");
@@ -16,7 +16,7 @@ onRecordUpdateExecute((e) => {
 }, "teams");
 
 
-// when "game" is set to "odpowiadanie":
+// when "game" status is set to "odpowiadanie":
 // 1. pick the team with the highest amount_given as the answering team
 // 2. amount_given is reset to 0 for all teams (without transferring to 'amount'/'jackpot'!)
 // 3. get random (unused) question and assign it to "current_question"
@@ -84,25 +84,117 @@ onRecordAfterUpdateSuccess((e) => {
     e.next();
 }, "game"); 
 
-// Custom route to finish answering: moves jackpot conditionally and resets status to 'losowanie_kategorii'
+
+// TODO: add extra check for round>6 (mistrzowie become active)
+// when "game" status is set to "1v1" :
+// 1. grab 200 from each active team's "amount" and add to jackpot
+// 2. randomly pick 7 categories, then assign them to "1v1_available_categories"
+// 3. set "1v1_selected_categories" to an empty array
+// 4. ???
+onRecordAfterUpdateSuccess((e) => {
+    if (e.record.original().get("status") == "losowanie_kategorii" && e.record.get("status") == "1v1" 
+    // this check prevents an infinite loop:
+    && e.record.get("1v1_available_categories").length == 0) {
+        $app.logger().info("1v1 started");
+        $app.runInTransaction(txApp => {
+            // 1. grab 200 from each active team's "amount" and add to jackpot
+            const teams = txApp.findRecordsByFilter(
+                "teams",
+                "active = true",
+                "",
+                0,
+                0
+            );
+            teams.forEach((team) => {
+                team.set("amount-", 200);
+                txApp.save(team);
+            });
+            e.record.set("jackpot+", 200 * teams.length);
+            $app.logger().info("1v1 jackpot: " + e.record.get("jackpot"));
+            //txApp.save(e.record);
+
+            // 2. randomly pick 7 categories, then assign them to "1v1_available_categories"
+            const categories = txApp.findRecordsByFilter(
+                "categories",
+                "name != '1v1'",
+                "@random",
+                7,
+                0
+            );
+            const categoryIds = categories.map(c => c.get("id"));
+            e.record.set("1v1_available_categories", categoryIds);
+            $app.logger().info("1v1 available categories: " + JSON.stringify(categories));
+            //txApp.save(e.record);
+
+            // 3. set "1v1_selected_categories" to an empty array
+            e.record.set("1v1_selected_categories", []);
+            $app.logger().info("1v1 selected categories: " + e.record.get("1v1_selected_categories"));
+            txApp.save(e.record);
+            $app.logger().info("1v1 finished");
+            $app.logger().info("1v1 after:", e.record);
+        });
+    }
+    e.next();
+}, "game");
+
+
+// when "game" status is changed from "1v1" to "odpowiadanie":
+// 1. grab 1v1_available_categories & 1v1_selected_categories
+// 2. find the missing category from 1v1_available_categories
+// 3. assign it to "current_category"
+// 4. find a random unused question from the missing category
+// 5. assign it to "current_question"
+onRecordAfterUpdateSuccess((e) => {
+    if (e.record.original().get("status") == "1v1" && e.record.get("status") == "odpowiadanie") {
+        $app.runInTransaction(txApp => {
+            const availableCategories = e.record.get("1v1_available_categories");
+            const selectedCategories = e.record.get("1v1_selected_categories");
+            const missingCategory = availableCategories.find(c => !selectedCategories.includes(c));
+            e.record.set("current_category", missingCategory);
+            $app.logger().info("1v1 missing category: ", JSON.stringify(missingCategory));
+            const results = txApp.findRecordsByFilter(
+                "questions",
+                `used = false && category = '${missingCategory}'`,
+                "@random",
+                1,
+                0
+            );
+            const randomQuestion = results && results[0];
+            if (randomQuestion) {                
+                randomQuestion.set("used", true);
+                txApp.save(randomQuestion);
+                e.record.set("current_question", randomQuestion.get("id"));
+                txApp.save(e.record);
+            }
+        });
+        $app.logger().info("1v1 odp finished");
+        $app.logger().info("1v1 odp after:", e.record);
+    }
+    e.next();
+}, "game");
+
+
+
+// Custom route to finish answering: 
+// -moves jackpot conditionally
+// -sets round+1
+// -sets status back to 'losowanie_kategorii'
+// -resets other game fields
 routerAdd('POST', '/api/game/answer', (e) => {
-  // Require admin auth to protect the endpoint (adjust if you use user auth instead)
-  const correct = e.requestInfo().body.correct;
-  $app.logger().info("correct: ", correct)
 
   $app.runInTransaction((txApp) => {
     const game = txApp.findRecordById('game', '1');
 
-    // If correct, transfer jackpot to answering team
-    if (correct) {
-      const answeringTeamId = game.get('answering_team');
-      const jackpot = Number(game.get('jackpot') || 0);
-      if (answeringTeamId && jackpot > 0) {
-        const team = txApp.findRecordById('teams', answeringTeamId);
-        team.set('amount+', jackpot);
-        txApp.save(team);
-        game.set('jackpot', 0);
-      }
+    const isCorrect = e.requestInfo().body.correct;
+    if (isCorrect) {
+        const answeringTeamId = game.get('answering_team');
+        const jackpot = Number(game.get('jackpot') || 0);
+        if (answeringTeamId && jackpot > 0) {
+            const team = txApp.findRecordById('teams', answeringTeamId);
+            team.set('amount+', jackpot);
+            txApp.save(team);
+            game.set('jackpot', 0);
+        }
     }
 
     // Reset game state back to category draw
@@ -113,6 +205,8 @@ routerAdd('POST', '/api/game/answer', (e) => {
     game.set('current_category', '');
     game.set('hint_purchased', false);
     game.set('question_deadline', null);
+    game.set('1v1_available_categories', []);
+    game.set('1v1_selected_categories', []);
     txApp.save(game);
   });
 

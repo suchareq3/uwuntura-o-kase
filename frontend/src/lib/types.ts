@@ -8,7 +8,7 @@ export type Team = {
 export type Game = {
   id: string;
   round: number;
-  status: 'losowanie_kategorii' | 'licytacja' | 'odpowiadanie' | 'kupowanie_podpowiedzi' | 'odpowiadanie_z_podpowiedzia';
+  status: 'losowanie_kategorii' | 'licytacja' | 'odpowiadanie' | '1v1' | 'kupowanie_podpowiedzi' | 'odpowiadanie_z_podpowiedzia' | '1v1_odpowiadanie';
   jackpot: number;
   answering_team?: Team;
   current_category?: Category;
@@ -16,6 +16,8 @@ export type Game = {
   hint_purchased?: boolean;
   question_deadline?: Date;
   has_vabanqued?: boolean;
+  "1v1_available_categories"?: Category[];
+  "1v1_selected_categories"?: Category[];
 };
 export type Category = {
   id: string;

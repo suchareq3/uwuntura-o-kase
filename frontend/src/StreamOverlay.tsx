@@ -8,9 +8,10 @@ import './css/PulaTile.css';
 import './css/Pytanie.css';
 import 'unfonts.css'
 import StanyKont from './components/StanyKont';
-import { Center, Group, Stack } from '@mantine/core';
+import { Center, Group, Stack, Text } from '@mantine/core';
 import Pytanie from './components/Pytanie';
 import Czas from './components/Czas';
+import JedenNaJedenOverlay from './components/JedenNaJedenOverlay';
 
 
 const pb = new PocketBase('http://127.0.0.1:8090');
@@ -45,7 +46,7 @@ export default function StreamOverlay() {
       
         const getGame = async () => {
             try {
-              const item = await pb.collection('game').getOne("1", {expand: "answering_team,current_category,current_question"});
+              const item = await pb.collection('game').getOne("1", {expand: "answering_team,current_category,current_question,1v1_available_categories,1v1_selected_categories"});
               setGame({
                 id: item.id,
                 round: item.round,
@@ -56,6 +57,8 @@ export default function StreamOverlay() {
                 current_question: item.expand?.current_question,
                 hint_purchased: item.hint_purchased,
                 question_deadline: item.question_deadline,
+                "1v1_available_categories": item.expand?.["1v1_available_categories"],
+                "1v1_selected_categories": item.expand?.["1v1_selected_categories"]
               })
             } catch (err) {
               console.error('Failed to initialize game state:', err);
@@ -99,10 +102,12 @@ export default function StreamOverlay() {
                 current_question: e.record.expand?.current_question,
                 hint_purchased: e.record.hint_purchased,
                 question_deadline: e.record.question_deadline,
+                "1v1_available_categories": e.record.expand?.["1v1_available_categories"],
+                "1v1_selected_categories": e.record.expand?.["1v1_selected_categories"]
             })
             console.log("item:", e.record)
             //setGameState(item);
-        }, {expand: "answering_team,current_category,current_question"})
+        }, {expand: "answering_team,current_category,current_question,1v1_available_categories,1v1_selected_categories"})
         .catch(err => {
             console.error('Failed to subscribe to game state realtime:', err);
         })
@@ -120,72 +125,61 @@ export default function StreamOverlay() {
     return (
         <>
         <Group w={"100%"} h={"100%"} align="center" justify="center" gap={0}>
-            <Stack justify='end' w={"76%"} h={"85%"} gap={0} pos={'relative'}>
-                 {/* {game?.status === "losowanie_kategorii" && <h1>Losowanie kategorii</h1>} */}
-            {game?.question_deadline && <Czas date={game?.question_deadline} />}
-                 
-            {game?.status === "licytacja" && 
-            <>
-                <Licytacja
-                    kwotaZolci={teams.find(team => team.name === "zolci")?.amount_given ?? 0}
-                    kwotaZieloni={teams.find(team => team.name === "zieloni")?.amount_given ?? 0}
-                    kwotaNiebiescy={teams.find(team => team.name === "niebiescy")?.amount_given ?? 0}
-                    kwotaMistrzowie={teams.find(team => team.name === "mistrzowie")?.amount_given ?? 0}
-                    czyActiveNiebiescy={teams.find(team => team.name === "niebiescy")?.active}
-                    czyActiveZieloni={teams.find(team => team.name === "zieloni")?.active}
-                    czyActiveZolci={teams.find(team => team.name === "zolci")?.active}
-                    czyActiveMistrzowie={teams.find(team => team.name === "mistrzowie")?.active == false}
-                />
-                <StanyKont
-                    kwotaZolci={teams.find(team => team.name === "zolci")?.amount ?? 0}
-                    kwotaZieloni={teams.find(team => team.name === "zieloni")?.amount ?? 0}
-                    kwotaNiebiescy={teams.find(team => team.name === "niebiescy")?.amount ?? 0}
-                    kwotaMistrzowie={teams.find(team => team.name === "mistrzowie")?.amount ?? 0}
-                    pula={game?.jackpot}
-                    czyActiveNiebiescy={teams.find(team => team.name === "niebiescy")?.active}
-                    czyActiveZieloni={teams.find(team => team.name === "zieloni")?.active}
-                    czyActiveZolci={teams.find(team => team.name === "zolci")?.active}
-                    czyActiveMistrzowie={teams.find(team => team.name === "mistrzowie")?.active == false}
-                />
-            </>
+            {game?.status === "1v1" ?
+                <>
+                    <JedenNaJedenOverlay 
+                        wszystkieKategorie={game?.["1v1_available_categories"] || []}
+                        wybraneKategorie={game?.["1v1_selected_categories"] || []}
+                    />
+                </>
+                :
+                <Stack justify='end' w={"76%"} h={"85%"} gap={0} pos={'relative'}>
+                    {/* {game?.status === "losowanie_kategorii" && <h1>Losowanie kategorii</h1>} */}
+                {game?.question_deadline && <Czas date={game?.question_deadline} />}
+                    
+                {game?.status === "licytacja" && 
+                <>
+                    <Licytacja
+                        kwotaZolci={teams.find(team => team.name === "zolci")?.amount_given ?? 0}
+                        kwotaZieloni={teams.find(team => team.name === "zieloni")?.amount_given ?? 0}
+                        kwotaNiebiescy={teams.find(team => team.name === "niebiescy")?.amount_given ?? 0}
+                        kwotaMistrzowie={teams.find(team => team.name === "mistrzowie")?.amount_given ?? 0}
+                        czyActiveNiebiescy={teams.find(team => team.name === "niebiescy")?.active}
+                        czyActiveZieloni={teams.find(team => team.name === "zieloni")?.active}
+                        czyActiveZolci={teams.find(team => team.name === "zolci")?.active}
+                        czyActiveMistrzowie={teams.find(team => team.name === "mistrzowie")?.active == false}
+                    />
+                    <StanyKont
+                        kwotaZolci={teams.find(team => team.name === "zolci")?.amount ?? 0}
+                        kwotaZieloni={teams.find(team => team.name === "zieloni")?.amount ?? 0}
+                        kwotaNiebiescy={teams.find(team => team.name === "niebiescy")?.amount ?? 0}
+                        kwotaMistrzowie={teams.find(team => team.name === "mistrzowie")?.amount ?? 0}
+                        pula={game?.jackpot}
+                        czyActiveNiebiescy={teams.find(team => team.name === "niebiescy")?.active}
+                        czyActiveZieloni={teams.find(team => team.name === "zieloni")?.active}
+                        czyActiveZolci={teams.find(team => team.name === "zolci")?.active}
+                        czyActiveMistrzowie={teams.find(team => team.name === "mistrzowie")?.active == false}
+                    />
+                </>
+                }
+                {game?.status === "odpowiadanie" && 
+                <>
+                    <Pytanie 
+                        runda={game.round}
+                        nazwaKategorii={game.current_category?.name || ''}
+                        trescPytania={game.current_question?.description || ''}
+                        ktoOdpowiada={game.answering_team?.name || ''}  
+                        pula={game.jackpot}
+                        podpowiedzi={game.current_question?.fake_answers || ''}
+                        odpowiedz={game.current_question?.answer || ''}
+                        pokazPodpowiedzi={game.hint_purchased}
+                    />
+                </>
+                }
+                </Stack>
             }
-            {game?.status === "odpowiadanie" && 
-            <>
-                <Pytanie 
-                    runda={game.round}
-                    nazwaKategorii={game.current_category?.name || ''}
-                    trescPytania={game.current_question?.description || ''}
-                    ktoOdpowiada={game.answering_team?.name || ''}  
-                    pula={game.jackpot}
-                    podpowiedzi={game.current_question?.fake_answers || ''}
-                    odpowiedz={game.current_question?.answer || ''}
-                    pokazPodpowiedzi={game.hint_purchased}
-                />
-            </>
-            }
-            {game?.status === "kupowanie_podpowiedzi" && <h1>Kupowanie podpowiedzi</h1>}
-            {game?.status === "odpowiadanie_z_podpowiedzia" && <h1>Odpowiadanie z podpowiedzia</h1>}
-
-                {/* <>
-                <div className="p-4 border border-gray-200 rounded text-3xl">Awantura O Kase</div>
-                <div className="p-4 border border-gray-200 rounded text-2xl">{game?.status}</div>
-                <div className="p-4 border border-gray-200 rounded text-2xl">{game?.round}</div>
-                <div className="p-4 border border-gray-200 rounded text-2xl">{game?.jackpot}</div>
-                <div className="p-4 border border-gray-200 rounded text-2xl">{game?.answering_team?.name}</div>
-                <div className="p-4 border border-gray-200 rounded text-2xl">{game?.current_category?.name}</div>
-                <div className="p-4 border border-gray-200 rounded text-2xl">{game?.current_question?.description}</div>
-                <div className="p-4 border border-gray-200 rounded text-2xl">{game?.hint_purchased}</div>
-                <div className="p-4 border border-gray-200 rounded text-2xl">{game?.timer_paused}</div>
-                </> */}
-            </Stack>
 
         </Group>
-        {/* <div className='w-full h-full flex items-center justify-center'>
-        <div className="flex flex-col justify-end relative w-[76%] h-[85%]">
-
-           
-        </div>
-        </div> */}
         </>
     );
 }

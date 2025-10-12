@@ -1,20 +1,21 @@
-import { Alert, AppShell, Card, Divider, Select, Stack, Stepper, useMantineTheme } from '@mantine/core';
+import { Alert, AppShell, Card, Divider, Radio, Select, Stack, Stepper, useMantineTheme } from '@mantine/core';
 import './css/AdminPanel.css'
 import { useEffect, useState } from 'react';
 import { Button, Group, Text } from '@mantine/core';
 import pb from './lib/pb';
-import type { Game, Team } from './lib/types';
+import type { Category, Game, Team } from './lib/types';
 import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
 import Countdown, { zeroPad, type CountdownApi } from 'react-countdown';
 import CustomNumberInputModal from './components/CustomNumberInputModal';
 import CustomNumberInput from './components/CustomNumberInput';
+import CustomCombobox from './components/CustomCombobox';
 
 function AdminPanel() {
   const debounceMs = 500;
   const [teams, setTeams] = useState<Team[]>([]);
   const [game, setGame] = useState<Game | null>(null);
   const [categories, setCategories] = useState<{ value: string; label: string }[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [inputValues, setInputValues] = useState<Record<string, number>>({});
   const [debouncedInputValues] = useDebouncedValue(inputValues, debounceMs);
   const [openedHintModal, { open: openHintModal, close: closeHintModal }] = useDisclosure(false);
@@ -23,6 +24,7 @@ function AdminPanel() {
   const [penaltyPrice, setPenaltyPrice] = useState<string | number>(0);
   const [openedBuybackPlayerModal, { open: openBuybackPlayerModal, close: closeBuybackPlayerModal }] = useDisclosure(false);
   const [buybackPlayerPrice, setBuybackPlayerPrice] = useState<string | number>(0);
+  const [selected1v1AnsweringTeam, setSelected1v1AnsweringTeam] = useState<string | null>(null);
 
   let countdownApi: CountdownApi | null = null;
 
@@ -41,7 +43,7 @@ function AdminPanel() {
 
     const getGame = async () => {
       try {
-        const item = await pb.collection('game').getOne("1", {expand: "answering_team,current_category,current_question"});
+        const item = await pb.collection('game').getOne("1", {expand: "answering_team,current_category,current_question,1v1_available_categories,1v1_selected_categories"});
         setGame({
           id: item.id,
           round: item.round,
@@ -53,7 +55,10 @@ function AdminPanel() {
           hint_purchased: item.hint_purchased,
           question_deadline: item.question_deadline,
           has_vabanqued: item.has_vabanqued,
+          "1v1_available_categories": item.expand?.["1v1_available_categories"],
+          "1v1_selected_categories": item.expand?.["1v1_selected_categories"]
         })
+        console.log("game:", game)
       } catch (err) {
         console.error('Failed to initialize game state:', err);
       }
@@ -96,10 +101,12 @@ function AdminPanel() {
         hint_purchased: e.record.hint_purchased,
         question_deadline: e.record.question_deadline,
         has_vabanqued: e.record.has_vabanqued,
+        "1v1_available_categories": e.record.expand?.["1v1_available_categories"],
+        "1v1_selected_categories": e.record.expand?.["1v1_selected_categories"]
       })
       console.log("item:", e.record)
       //setGameState(item);
-    }, {expand: "answering_team,current_category,current_question"})
+    }, {expand: "answering_team,current_category,current_question,1v1_available_categories,1v1_selected_categories"})
     .catch(err => {
       console.error('Failed to subscribe to game state realtime:', err);
     })
@@ -153,6 +160,22 @@ function AdminPanel() {
       await pb.collection('game').update("1", { has_vabanqued: hasVaBanqued });
     } catch (err) {
       console.error('updateHasVaBanqued error:', err);
+    }
+  }
+
+  const update1v1SelectedCategories = async (categoryIds: string[]) => {
+    try {
+      await pb.collection('game').update("1", { "1v1_selected_categories": categoryIds });
+    } catch (err) {
+      console.error('update1v1SelectedCategories error:', err);
+    }
+  }
+
+  const updateAnsweringTeam = async (teamId: string) => {
+    try {
+      await pb.collection('game').update("1", { answering_team: teamId });
+    } catch (err) {
+      console.error('updateAnsweringTeam error:', err);
     }
   }
 
@@ -218,9 +241,11 @@ function AdminPanel() {
   const stepperIndexByGameStatus: Record<Game['status'], number> = {
     losowanie_kategorii: 0,
     licytacja: 1,
+    "1v1": 1,
     odpowiadanie: 2,
     kupowanie_podpowiedzi: 2,
     odpowiadanie_z_podpowiedzia: 2,
+    "1v1_odpowiadanie": 2,
   }
 
   // Determine which team has the highest amount_given (> 0)
@@ -260,36 +285,61 @@ function AdminPanel() {
         <Stack>
           <Stepper active={game ? stepperIndexByGameStatus[game.status] : 0}>
             <Stepper.Step label="Losowanie kategorii" description="Step 1" />
-            <Stepper.Step label="Licytacja" description="Step 2" />
+            <Stepper.Step label="Licytacja/1v1" description="Step 2" />
             <Stepper.Step label="Odpowiedz" description="Step 3" />
           </Stepper>
           <Divider />
           <Group>
             {/* Losowanie kategorii */}
             <Stack>
-              Runda: {game?.round}
-              {/* TODO: disabled but when????? idk??? */}
-              <Button onClick={() => updateGameStatus("losowanie_kategorii")}>Nastepna runda (manualnie)</Button>
+              <Text>Runda: {game?.round}</Text>
 
               <Select
                 disabled={game?.status !== "losowanie_kategorii"}
                 label="Kategoria"
                 placeholder="Wybierz kategorię"
                 data={categories}
-                value={selectedCategory}
-                onChange={setSelectedCategory}
+                value={selectedCategory?.id}
+                onChange={value => {
+                  const opt = categories.find((c) => c.value === value);
+                  setSelectedCategory(opt ? { id: opt.value, name: opt.label } : null);
+                }}
               />
               <Button onClick={() => {
                 if (selectedCategory) {
-                  updateGameStatus("licytacja", selectedCategory);
+                  if (selectedCategory.name === "1v1") {
+                    updateGameStatus("1v1", selectedCategory.id);
+                  } else {
+                    updateGameStatus("licytacja", selectedCategory.id);
+                  }
                 }
-              }} disabled={!selectedCategory || game?.status !== "losowanie_kategorii"}>Zatwierdź</Button>
-
+              }} disabled={!selectedCategory || game?.status !== "losowanie_kategorii"}>{selectedCategory?.name === "1v1" ? "1 na 1!!!" : "Zatwierdź"}</Button>
             </Stack>
             <Divider orientation='vertical' />
 
-            {/* Licytacja */}
-            <Stack>
+            {game?.status === "1v1" ? (
+              // 1v1 kategorie
+              <Stack>
+              <Text>1v1</Text>
+              <CustomCombobox 
+                available_categories={game?.['1v1_available_categories'] || []} 
+                selected_categories={game?.['1v1_selected_categories'] || []} 
+                onOptionSubmit={(id) => {
+                  const selectedIds = (game?.['1v1_selected_categories'] || []).map(c => c.id);
+                  if (selectedIds.length >= 6 && !selectedIds.includes(id)) {
+                    return;
+                  }
+                  const next = selectedIds.includes(id) ? selectedIds.filter(x => x !== id) : [...selectedIds, id];
+                  update1v1SelectedCategories(next);
+                }}
+              />
+              <Button onClick={() => updateGameStatus("1v1_odpowiadanie")}
+                disabled={game?.status !== "1v1" || (game?.['1v1_selected_categories']?.length ?? 0) < 6}
+              >{`(${game?.['1v1_selected_categories']?.length ?? 0}/6) Zakoncz 1v1`}</Button>
+            </Stack>
+            ) : (
+              // Licytacja
+              <Stack>
               <Card>
                 <Group>
                   <Button variant='filled' onClick={() => updateGameStatus("odpowiadanie")} disabled={game?.status !== "licytacja" || game?.jackpot <= 0}>Zakoncz licytacje</Button>
@@ -339,10 +389,67 @@ function AdminPanel() {
                 ))
               )}
             </Stack>
+            )}
             <Divider orientation='vertical' />
 
-            {/* Odpowiedz */}
-            <Stack><Group>
+            {game?.status === "1v1_odpowiadanie" ? (
+              // 1v1 odpowiedz
+              <Stack>
+                <Card>
+                  <Stack gap={"md"}>
+                    <Text fw={700}>Wybierz druzyne</Text>
+                    <Radio.Group value={game?.answering_team?.id} onChange={setSelected1v1AnsweringTeam}>
+                      <Text>Wybrana druzyna local: {selected1v1AnsweringTeam}</Text>
+                        <Text>Wybrana druzyne: {game?.answering_team?.name}</Text>
+                      <Group>
+                        
+                      {teams.filter((team) => team.active).map((team) => (
+                        <Radio disabled={game?.answering_team != undefined} key={team.id} value={team.id} label={team.name} />
+                      ))}
+                      </Group>
+                    </Radio.Group>
+                    <Button variant='filled' disabled={!selected1v1AnsweringTeam || game?.answering_team != undefined} 
+                      onClick={() => {
+                        updateAnsweringTeam(selected1v1AnsweringTeam || "");
+                        setSelected1v1AnsweringTeam(null);
+                      }}>
+                      Wybierz
+                    </Button>
+                  </Stack>
+                </Card>
+                <Divider />
+                <Card>
+                  <Text>Kategoria: {game?.current_category?.name}</Text>
+                </Card>
+                <Card>
+                  <Text>Pytanie: {game?.current_question?.description}</Text>
+                </Card>
+                <Card>
+                  <Text>Odpowiedz: {game?.current_question?.answer}</Text>
+                </Card>
+                <Card>
+                  <Text>Podpowiedzi: {game?.current_question?.fake_answers}</Text>
+                </Card>
+                <Group>
+                  <Button disabled={!game?.answering_team} variant='filled' onClick={async () => {
+                    try {
+                      await pb.send('/api/game/answer', { method: 'POST', body: { correct: true } });
+                    } catch (err) {
+                      console.error('Failed to submit correct answer:', err);
+                    }
+                  }}>Poprawna</Button>
+                  <Button disabled={!game?.answering_team} variant='filled' onClick={async () => {
+                    try {
+                      await pb.send('/api/game/answer', { method: 'POST', body: { correct: false } });
+                    } catch (err) {
+                      console.error('Failed to submit incorrect answer:', err);
+                    }
+                  }}>Zła</Button>
+                </Group>
+              </Stack>
+            ) : (
+              // Odpowiedz
+              <Stack><Group>
               <Button disabled={game?.status !== "odpowiadanie"} onClick={async () => {
                 try {
                   await pb.send('/api/game/timer', { method: 'POST' });
@@ -409,7 +516,8 @@ function AdminPanel() {
               <Button disabled={game?.status !== "odpowiadanie"} onClick={openBuybackPlayerModal}>
                 Wykup ziomka
               </Button>
-            </Stack>
+              </Stack>
+            )}
           </Group>
         </Stack>
         
