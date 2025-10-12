@@ -1,3 +1,4 @@
+/// <reference path="../pb_data/types.d.ts" />
 // while "game" status is "licytacja", any changes to 'amount_given' reduce 'amount' and add to 'jackpot'.
 onRecordUpdateExecute((e) => {
     $app.runInTransaction(txApp => {
