@@ -377,6 +377,7 @@ function AdminPanel() {
                           variant='filled' 
                           onClick={() => vaBanque(team)} 
                           disabled={game?.status !== "licytacja" || game?.has_vabanqued || (team.amount_given + team.amount ) === 0}
+                          tabIndex={-1}
                         >
                           VA BANQUE!
                         </Button>
