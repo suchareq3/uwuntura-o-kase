@@ -9,6 +9,7 @@ import Countdown, { zeroPad, type CountdownApi } from 'react-countdown';
 import CustomNumberInputModal from './components/CustomNumberInputModal';
 import CustomNumberInput from './components/CustomNumberInput';
 import CustomCombobox from './components/CustomCombobox';
+import { getTeamColor } from './lib/functions';
 
 function AdminPanel() {
   const debounceMs = 500;
@@ -19,11 +20,8 @@ function AdminPanel() {
   const [inputValues, setInputValues] = useState<Record<string, number>>({});
   const [debouncedInputValues] = useDebouncedValue(inputValues, debounceMs);
   const [openedHintModal, { open: openHintModal, close: closeHintModal }] = useDisclosure(false);
-  const [hintPrice, setHintPrice] = useState<string | number>(0);
   const [openedPenaltyModal, { open: openPenaltyModal, close: closePenaltyModal }] = useDisclosure(false);
-  const [penaltyPrice, setPenaltyPrice] = useState<string | number>(0);
   const [openedBuybackPlayerModal, { open: openBuybackPlayerModal, close: closeBuybackPlayerModal }] = useDisclosure(false);
-  const [buybackPlayerPrice, setBuybackPlayerPrice] = useState<string | number>(0);
   const [selected1v1AnsweringTeam, setSelected1v1AnsweringTeam] = useState<string | null>(null);
 
   let countdownApi: CountdownApi | null = null;
@@ -179,9 +177,9 @@ function AdminPanel() {
     }
   }
 
-  const purchaseHint = async () => {
+  const purchaseHint = async (hintPrice: string | number) => {
     try {
-      await pb.collection('teams').update(game!.answering_team!.id, { "amount-": hintPrice });
+      await deductAnsweringTeamAmount(hintPrice);
       await pb.collection('game').update("1", { hint_purchased: true });
     } catch (err) {
       console.error('buyHint error:', err);
@@ -196,15 +194,13 @@ function AdminPanel() {
     }
   }
 
-  const getTeamColor = (name: Team['name']) => {
-    const colors: Record<string, string> = {
-      'niebiescy': 'blue',
-      'zieloni': 'green',
-      'zolci': 'yellow',
-      'mistrzowie': 'gray',
-    };
-    return colors[name];
-  };
+  const deductTeamAmount = async (teamId: string, amount: string | number) => {
+    try {
+      await pb.collection('teams').update(teamId, { "amount-": amount });
+    } catch (err) {
+      console.error('deductTeamAmount error:', err);
+    }
+  }
 
   const vaBanque = async (team: Team) => {
     try {
@@ -258,27 +254,25 @@ function AdminPanel() {
         onClose={closeHintModal}
         modalTitle="Kupowanie podpowiedzi"
         inputLabel="Kwota za podpowiedz"
-        inputValue={hintPrice}
-        inputOnChange={setHintPrice}
-        buttonOnClick={() => purchaseHint().then(closeHintModal)}
+        buttonOnClick={purchaseHint}
       />
       <CustomNumberInputModal
         opened={openedPenaltyModal}
         onClose={closePenaltyModal}
         modalTitle="Kara"
         inputLabel="Kwota za kare"
-        inputValue={penaltyPrice}
-        inputOnChange={setPenaltyPrice}
-        buttonOnClick={() => deductAnsweringTeamAmount(penaltyPrice).then(closePenaltyModal)}
+        usesRadio
+        teams={teams}
+        radioButtonOnClick={deductTeamAmount}
       />
       <CustomNumberInputModal
         opened={openedBuybackPlayerModal}
-        onClose={closeBuybackPlayerModal}
+        onClose={closeBuybackPlayerModal} 
         modalTitle="Wykup ziomka"
         inputLabel="Kwota za wykupienie ziomka"
-        inputValue={buybackPlayerPrice}
-        inputOnChange={setBuybackPlayerPrice}
-        buttonOnClick={() => deductAnsweringTeamAmount(buybackPlayerPrice).then(closeBuybackPlayerModal)}
+        usesRadio
+        teams={teams}
+        radioButtonOnClick={deductTeamAmount}
       />
         <Stack>
           <Stepper active={game ? stepperIndexByGameStatus[game.status] : 0}>
@@ -312,6 +306,13 @@ function AdminPanel() {
                   }
                 }
               }} disabled={!selectedCategory || game?.status !== "losowanie_kategorii"}>{selectedCategory?.name === "1v1" ? "1 na 1!!!" : "Zatwierdź"}</Button>
+              <Divider />
+              <Button  onClick={openPenaltyModal}>
+                Kara 
+              </Button>
+              <Button onClick={openBuybackPlayerModal}>
+                Wykup ziomka
+              </Button>
             </Stack>
             <Divider orientation='vertical' />
 
@@ -508,12 +509,6 @@ function AdminPanel() {
               </Group>
               <Button disabled={game?.status !== "odpowiadanie" || game?.hint_purchased} onClick={openHintModal}>
                 Kup podpowiedz
-              </Button>
-              <Button disabled={game?.status !== "odpowiadanie"} onClick={openPenaltyModal}>
-                Kara 
-              </Button>
-              <Button disabled={game?.status !== "odpowiadanie"} onClick={openBuybackPlayerModal}>
-                Wykup ziomka
               </Button>
               </Stack>
             )}

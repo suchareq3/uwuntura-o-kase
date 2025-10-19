@@ -27,7 +27,7 @@ export type Question = {
   id: string;
   description: string;
   answer: string;
-  fake_answers: string;//json, actually...
+  fake_answers: string; // comma separated string
   category: Category;
   used: boolean;
 }
