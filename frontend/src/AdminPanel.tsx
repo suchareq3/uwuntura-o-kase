@@ -341,7 +341,21 @@ function AdminPanel() {
               <Stack>
               <Card>
                 <Group>
-                  <Button variant='filled' onClick={() => updateGameStatus("odpowiadanie")} disabled={game?.status !== "licytacja" || game?.jackpot <= 0}>Zakoncz licytacje</Button>
+                  <Button variant='filled' 
+                    onClick={() => 
+                      {
+                        if (game?.current_category?.name.toLowerCase() === "czarna skrzynka") {
+                          pb.send('/api/game/skip_round', { method: 'POST'});
+                        } else if (game?.current_category?.name.toLowerCase() === "podpowiedz") {
+                          pb.send('/api/game/skip_round', { method: 'POST'});
+                        } else {
+                          updateGameStatus("odpowiadanie")
+                        }
+                      }
+                    } 
+                    disabled={game?.status !== "licytacja" || game?.jackpot <= 0}>
+                      Zakoncz licytacje
+                  </Button>
                   <Text>Jackpot: {game?.jackpot}</Text>
                 </Group>
                 <Text>

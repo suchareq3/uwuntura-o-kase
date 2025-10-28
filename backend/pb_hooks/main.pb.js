@@ -223,3 +223,21 @@ routerAdd('POST', '/api/game/timer', (e) => {
   });
   return e.json(200, { success: true });
 });
+
+// Custom route to handle auctioning czarna skrzynka or odpowiedz:
+// 1. change game status back to 'losowanie_kategorii'
+// 2. amount_given is reset to 0 for all teams (without transferring to 'amount'/'jackpot'!)
+routerAdd('POST', '/api/game/skip_round', (e) => {
+  $app.runInTransaction((txApp) => {
+    const game = txApp.findRecordById('game', '1');
+    game.set("status", "losowanie_kategorii");
+    txApp.save(game);
+
+    const teams = txApp.findAllRecords("teams");
+    teams.forEach((team) => {
+        team.set("amount_given", 0);
+        txApp.save(team);
+    });
+  });
+  return e.json(200, { success: true });
+});
