@@ -10,7 +10,7 @@ export default function Licytacja({ kwotaZolci, kwotaZieloni, kwotaNiebiescy, kw
       <Group justify="center" w="100%" gap={0}>
         <div
           className="opis"
-          style={{ width: widthPercentage }}
+          style={{ width: widthPercentage, justifyContent: "center" }}
         >
           <Text lts={8}>LICYTACJA</Text>
         </div>

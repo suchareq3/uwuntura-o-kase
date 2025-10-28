@@ -394,7 +394,7 @@ function AdminPanel() {
 
             {game?.status === "1v1_odpowiadanie" ? (
               // 1v1 odpowiedz
-              <Stack>
+              <Stack maw={"500px"}>
                 <Card>
                   <Stack gap={"md"}>
                     <Text fw={700}>Wybierz druzyne</Text>
@@ -449,7 +449,7 @@ function AdminPanel() {
               </Stack>
             ) : (
               // Odpowiedz
-              <Stack><Group>
+              <Stack w={"500px"}><Group>
               <Button disabled={game?.status !== "odpowiadanie"} onClick={async () => {
                 try {
                   await pb.send('/api/game/timer', { method: 'POST' });
@@ -506,10 +506,12 @@ function AdminPanel() {
                     console.error('Failed to submit incorrect answer:', err);
                   }
                 }}>Zła</Button>
+                <Divider orientation="vertical" />
+                <Button disabled={game?.status !== "odpowiadanie" || game?.hint_purchased} onClick={openHintModal}>
+                  Kup podpowiedz
+                </Button>
               </Group>
-              <Button disabled={game?.status !== "odpowiadanie" || game?.hint_purchased} onClick={openHintModal}>
-                Kup podpowiedz
-              </Button>
+              
               </Stack>
             )}
           </Group>

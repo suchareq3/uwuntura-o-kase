@@ -7,6 +7,7 @@ import AdminPanel from './AdminPanel.tsx'
 import { BrowserRouter, Route, Routes } from 'react-router'
 import { MantineProvider } from '@mantine/core';
 import StreamOverlay from './StreamOverlay.tsx';
+import MobileUI from './MobileUI.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -16,6 +17,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/" element={<App />} />
           <Route path="/admin-panel" element={<AdminPanel />} />
           <Route path='/stream-overlay' element={<StreamOverlay />} />
+          <Route path='/mobile' element={<MobileUI/>} />
         </Routes>
       </BrowserRouter> 
     </MantineProvider>
