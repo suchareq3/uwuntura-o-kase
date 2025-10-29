@@ -16,6 +16,26 @@ onRecordUpdateExecute((e) => {
     e.next();
 }, "teams");
 
+
+// when "game" round increases:
+// 1. check each team's amount. 
+// 2. if team's amount is less than 300, set team's active to false
+onRecordAfterUpdateSuccess((e) => {
+    if (e.record.original().get("round") < e.record.get("round")) {
+        $app.runInTransaction(txApp => {
+            const teams = txApp.findAllRecords("teams");
+            teams.forEach((team) => {
+                if (team.get("amount") < 300) {
+                    team.set("active", false);
+                    txApp.save(team);
+                }
+            });
+        });
+    }
+    e.next();
+}, "game");
+
+
 // when "game" status is changed from "losowanie_kategorii" to "licytacja"
 // add 200 to each active team's "amount_given" (which, combined with other events, will reduce "amount" and add to "jackpot")
 onRecordAfterUpdateSuccess((e) => {
