@@ -16,8 +16,30 @@ onRecordUpdateExecute((e) => {
     e.next();
 }, "teams");
 
+// when "game" status is changed from "losowanie_kategorii" to "licytacja"
+// add 200 to each active team's "amount_given" (which, combined with other events, will reduce "amount" and add to "jackpot")
+onRecordAfterUpdateSuccess((e) => {
+    if (e.record.original().get("status") == "losowanie_kategorii" && e.record.get("status") == "licytacja") {
+        $app.runInTransaction(txApp => {
+            const teams = txApp.findRecordsByFilter(
+                "teams",
+                "active = true",
+                "",
+                0,
+                0
+            );
+            teams.forEach((team) => {
+                team.set("amount_given+", 200);
+                txApp.save(team);
+            });
+        });
+    }
 
-// when "game" status is set to "odpowiadanie":
+    e.next();
+}, "game");
+
+
+// when "game" status is changed from "licytacja" to "odpowiadanie":
 // 1. pick the team with the highest amount_given as the answering team
 // 2. amount_given is reset to 0 for all teams (without transferring to 'amount'/'jackpot'!)
 // 3. get random (unused) question and assign it to "current_question"
