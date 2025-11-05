@@ -374,7 +374,7 @@ function AdminPanel() {
                       </Stack>
                       <Stack align='end' gap="xs">
                         <CustomNumberInput
-                          disabled={game?.status !== "licytacja" || game?.has_vabanqued}
+                          disabled={game?.status !== "licytacja" || game?.has_vabanqued || !team.active}
                           value={inputValues[team.id] ?? (team.amount_given ?? 0)}
                           min={0}
                           step={100}
@@ -391,7 +391,7 @@ function AdminPanel() {
                         <Button 
                           variant='filled' 
                           onClick={() => vaBanque(team)} 
-                          disabled={game?.status !== "licytacja" || game?.has_vabanqued || (team.amount_given + team.amount ) === 0}
+                          disabled={game?.status !== "licytacja" || game?.has_vabanqued || (team.amount_given + team.amount ) === 0 || !team.active}
                           tabIndex={-1}
                         >
                           VA BANQUE!

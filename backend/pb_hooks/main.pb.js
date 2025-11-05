@@ -18,8 +18,12 @@ onRecordUpdateExecute((e) => {
 
 
 // when "game" round increases:
-// 1. check each team's amount. 
-// 2. if team's amount is less than 300, set team's active to false
+// 1. check each team's amount. if team's amount is less than 300, set team's active to false
+// 2. check game round. if it's 7, then:
+//      a) deactivate all teams except for the one with the highest amount (BESIDES mistrzowie)
+//      b) activate "mistrzowie"
+//      c) deactivate "podpowiedz" and "co to jest?", activate "1v1" and "czarna skrzynka" categories
+        
 onRecordAfterUpdateSuccess((e) => {
     if (e.record.original().get("round") < e.record.get("round")) {
         $app.runInTransaction(txApp => {
@@ -31,6 +35,46 @@ onRecordAfterUpdateSuccess((e) => {
                 }
             });
         });
+
+        $app.logger().info("round: ", e.record.get("round"));
+        if (e.record.original().get("round") == 6 && e.record.get("round") == 7) {
+            $app.runInTransaction(txApp => {
+                // find the 2 teams w/ lowest amount (out of 3, disregarding mistrzowie) then deactivate them
+                const lowestTeams = txApp.findRecordsByFilter(
+                    "teams",
+                    "active = true && name != 'mistrzowie'",
+                    "+amount",
+                    2,
+                    0
+                );
+                lowestTeams.forEach((team) => {
+                    team.set("active", false);
+                    txApp.save(team);
+                    $app.logger().info("lowest team ", team.get("name"), team.get("amount"));
+                });
+
+                // activate mistrzowie
+                const mistrzowie = txApp.findFirstRecordByData("teams", "name", "mistrzowie");
+                mistrzowie.set("active", true);
+                txApp.save(mistrzowie);
+                $app.logger().info("mistrzowie ", mistrzowie.get("name"), mistrzowie.get("amount"));
+
+                // deactivate "podpowiedz" and "co to jest?", activate "1v1" and "czarna skrzynka" categories
+                const categories = txApp.findAllRecords("categories");
+                categories.forEach((category) => {
+                    if (category.get("name").toLowerCase() == "podpowiedz" || category.get("name").toLowerCase() == "co to jest?") {
+                        category.set("active", false);
+                        txApp.save(category);
+                        $app.logger().info("podpowiedz/cotojest: ", category.get("name"))
+                    } else if (category.get("name").toLowerCase() == "1v1" || category.get("name").toLowerCase() == "czarna skrzynka") {
+                        category.set("active", true);
+                        txApp.save(category);
+                        $app.logger().info("1v1/czarnaskrzynka: ", category.get("name"))
+                    }
+                });
+                
+            });
+        }
     }
     e.next();
 }, "game");
