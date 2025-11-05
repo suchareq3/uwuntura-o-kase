@@ -42,7 +42,7 @@ onRecordAfterUpdateSuccess((e) => {
                 // find the 2 teams w/ lowest amount (out of 3, disregarding mistrzowie) then deactivate them
                 const lowestTeams = txApp.findRecordsByFilter(
                     "teams",
-                    "active = true && name != 'mistrzowie'",
+                    "name != 'mistrzowie'",
                     "+amount",
                     2,
                     0
