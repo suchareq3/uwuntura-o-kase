@@ -140,7 +140,7 @@ export default function MobileUI() {
             isMobile={true}
           />}
 
-          {game?.status === "odpowiadanie" || game?.status === "1v1_odpowiadanie" &&
+          {(game?.status === "odpowiadanie" || game?.status === "1v1_odpowiadanie") &&
           <Pytanie
             ktoOdpowiada={game?.answering_team?.name || ""}
             runda={game?.round || 0}
