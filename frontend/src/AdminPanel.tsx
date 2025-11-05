@@ -246,6 +246,10 @@ function AdminPanel() {
   const maxGiven = Math.max(0, ...teams.map(t => t.amount_given || 0));
   const highlightedId = maxGiven > 0 ? (teams.find(t => (t.amount_given || 0) === maxGiven)?.id ?? null) : null;
 
+  if (!game) {
+    return <Text>Woading... if stuck, twy wefweshing the page pwease UwU</Text>;
+  }
+
   return (
     <>
       <AppShell>
@@ -310,7 +314,7 @@ function AdminPanel() {
               <Button  onClick={openPenaltyModal}>
                 Kara 
               </Button>
-              <Button onClick={openBuybackPlayerModal}>
+              <Button onClick={openBuybackPlayerModal} disabled={game?.round <= 6}>
                 Wykup ziomka
               </Button>
             </Stack>
