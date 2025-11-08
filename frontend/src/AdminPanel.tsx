@@ -51,6 +51,7 @@ function AdminPanel() {
           current_category: item.expand?.current_category,
           current_question: item.expand?.current_question,
           hint_purchased: item.hint_purchased,
+          show_question: item.show_question,
           question_deadline: item.question_deadline,
           has_vabanqued: item.has_vabanqued,
           "1v1_available_categories": item.expand?.["1v1_available_categories"],
@@ -97,6 +98,7 @@ function AdminPanel() {
         current_category: e.record.expand?.current_category,
         current_question: e.record.expand?.current_question,
         hint_purchased: e.record.hint_purchased,
+        show_question: e.record.show_question,
         question_deadline: e.record.question_deadline,
         has_vabanqued: e.record.has_vabanqued,
         "1v1_available_categories": e.record.expand?.["1v1_available_categories"],
@@ -211,6 +213,14 @@ function AdminPanel() {
       });
     } catch (err) {
       console.error('Failed to perform va banque:', err);
+    }
+  }
+
+  const updateShowQuestion = async (showQuestion: boolean) => {
+    try {
+      await pb.collection('game').update("1", { show_question: showQuestion })
+    } catch (err) {
+      console.error('Failed to update show_question')
     }
   }
 
@@ -428,8 +438,10 @@ function AdminPanel() {
                     </Radio.Group>
                     <Button variant='filled' disabled={!selected1v1AnsweringTeam || game?.answering_team != undefined} 
                       onClick={() => {
-                        updateAnsweringTeam(selected1v1AnsweringTeam || "");
-                        setSelected1v1AnsweringTeam(null);
+                        updateAnsweringTeam(selected1v1AnsweringTeam || "").then(() => {
+                          setSelected1v1AnsweringTeam(null)
+                          updateShowQuestion(true);
+                        });
                       }}>
                       Wybierz
                     </Button>
@@ -467,7 +479,16 @@ function AdminPanel() {
               </Stack>
             ) : (
               // Odpowiedz
-              <Stack w={"500px"}><Group>
+              <Stack w={"500px"}>
+                <Group>
+                  <Button 
+                  disabled={game?.status !== "odpowiadanie" } 
+                  onClick={() => updateShowQuestion(true)}>
+                    Pokaz pytanie ({game?.show_question?.toString()})
+                  </Button>
+                </Group>
+
+                <Group>
               <Button disabled={game?.status !== "odpowiadanie"} onClick={async () => {
                 try {
                   await pb.send('/api/game/timer', { method: 'POST' });

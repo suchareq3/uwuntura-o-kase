@@ -16,6 +16,7 @@ export type Game = {
   hint_purchased?: boolean;
   question_deadline?: Date;
   has_vabanqued?: boolean;
+  show_question?: boolean;
   "1v1_available_categories"?: Category[];
   "1v1_selected_categories"?: Category[];
 };

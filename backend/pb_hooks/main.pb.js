@@ -291,6 +291,7 @@ routerAdd('POST', '/api/game/answer', (e) => {
     game.set('current_category', '');
     game.set('hint_purchased', false);
     game.set('question_deadline', null);
+    game.set('show_question', false);
     game.set('1v1_available_categories', []);
     game.set('1v1_selected_categories', []);
     txApp.save(game);

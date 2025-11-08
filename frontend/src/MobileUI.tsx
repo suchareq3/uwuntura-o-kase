@@ -53,6 +53,7 @@ export default function MobileUI() {
                 current_category: item.expand?.current_category,
                 current_question: item.expand?.current_question,
                 hint_purchased: item.hint_purchased,
+                show_question: item.show_question,
                 question_deadline: item.question_deadline,
                 "1v1_available_categories": item.expand?.["1v1_available_categories"],
                 "1v1_selected_categories": item.expand?.["1v1_selected_categories"]
@@ -88,6 +89,7 @@ export default function MobileUI() {
                 current_category: e.record.expand?.current_category,
                 current_question: e.record.expand?.current_question,
                 hint_purchased: e.record.hint_purchased,
+                show_question: e.record.show_question,
                 question_deadline: e.record.question_deadline,
                 "1v1_available_categories": e.record.expand?.["1v1_available_categories"],
                 "1v1_selected_categories": e.record.expand?.["1v1_selected_categories"]
@@ -141,6 +143,7 @@ export default function MobileUI() {
           />}
 
           {(game?.status === "odpowiadanie" || game?.status === "1v1_odpowiadanie") &&
+            game?.show_question &&
           <Pytanie
             ktoOdpowiada={game?.answering_team?.name || ""}
             runda={game?.round || 0}
