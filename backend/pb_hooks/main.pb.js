@@ -177,7 +177,6 @@ onRecordAfterUpdateSuccess((e) => {
 // 1. grab 200 from each active team's "amount" and add to jackpot
 // 2. randomly pick 7 categories, then assign them to "1v1_available_categories"
 // 3. set "1v1_selected_categories" to an empty array
-// 4. ???
 onRecordAfterUpdateSuccess((e) => {
     if (e.record.original().get("status") == "losowanie_kategorii" && e.record.get("status") == "1v1" 
     // this check prevents an infinite loop:
@@ -203,7 +202,7 @@ onRecordAfterUpdateSuccess((e) => {
             // 2. randomly pick 7 categories, then assign them to "1v1_available_categories"
             const categories = txApp.findRecordsByFilter(
                 "categories",
-                "name != '1v1'",
+                "name !~ '1v1' && name !~ 'czarna skrzynka' && name !~ 'podpowiedz' && name !~ 'co to jest'",
                 "@random",
                 7,
                 0
