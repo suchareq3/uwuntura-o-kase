@@ -8,8 +8,9 @@ export type Team = {
 export type Game = {
   id: string;
   round: number;
-  status: 'losowanie_kategorii' | 'licytacja' | 'odpowiadanie' | '1v1' | '1v1_odpowiadanie';
+  status: 'losowanie_kategorii' | 'licytacja' | 'odpowiadanie' | '1v1' | '1v1_odpowiadanie' | 'licytacja_special';
   jackpot: number;
+  special_jackpot: number;
   answering_team?: Team;
   current_category?: Category;
   current_question?: Question;

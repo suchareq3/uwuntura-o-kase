@@ -1,13 +1,15 @@
 /// <reference path="../pb_data/types.d.ts" />
 // while "game" status is "licytacja", any changes to 'amount_given' reduce 'amount' and add to 'jackpot'.
+// or if it's "licytacja_special", then add to 'special_jackpot'.
 onRecordUpdateExecute((e) => {
     $app.runInTransaction(txApp => {
         const game = txApp.findRecordById("game", "1");
-        if (game.get("status") == "licytacja") {
+        if (game.get("status") == "licytacja" || game.get("status") == "licytacja_special") {
+            const jackpotColumn = game.get("status") == "licytacja" ? "jackpot+" : "special_jackpot+";
             const oldGiven = Number(e.record.original().get("amount_given") || 0);
             const newGiven = Number(e.record.get("amount_given") || 0);
             const delta = newGiven - oldGiven;
-            game.set("jackpot+", delta);
+            game.set(jackpotColumn, delta);
             txApp.save(game);
 
             e.record.set("amount-", delta);
@@ -80,10 +82,10 @@ onRecordAfterUpdateSuccess((e) => {
 }, "game");
 
 
-// when "game" status is changed from "losowanie_kategorii" to "licytacja"
+// when "game" status is changed from "losowanie_kategorii" to "licytacja" or "licytacja_special"
 // add 200 to each active team's "amount_given" (which, combined with other events, will reduce "amount" and add to "jackpot")
 onRecordAfterUpdateSuccess((e) => {
-    if (e.record.original().get("status") == "losowanie_kategorii" && e.record.get("status") == "licytacja") {
+    if (e.record.original().get("status") == "losowanie_kategorii" && (e.record.get("status") == "licytacja" || e.record.get("status") == "licytacja_special")) {
         $app.runInTransaction(txApp => {
             const teams = txApp.findRecordsByFilter(
                 "teams",
@@ -231,7 +233,7 @@ onRecordAfterUpdateSuccess((e) => {
 // 4. find a random unused question from the missing category
 // 5. assign it to "current_question"
 onRecordAfterUpdateSuccess((e) => {
-    if (e.record.original().get("status") == "1v1" && e.record.get("status") == "odpowiadanie") {
+    if (e.record.original().get("status") == "1v1" && e.record.get("status") == "1v1_odpowiadanie") {
         $app.runInTransaction(txApp => {
             const availableCategories = e.record.get("1v1_available_categories");
             const selectedCategories = e.record.get("1v1_selected_categories");
@@ -286,6 +288,7 @@ routerAdd('POST', '/api/game/answer', (e) => {
     // Reset game state back to category draw
     game.set('status', 'losowanie_kategorii');
     game.set('round+', 1);
+    game.set('special_jackpot', 0);
     game.set('answering_team', '');
     game.set('current_question', '');
     game.set('current_category', '');
@@ -316,7 +319,9 @@ routerAdd('POST', '/api/game/timer', (e) => {
 routerAdd('POST', '/api/game/skip_round', (e) => {
   $app.runInTransaction((txApp) => {
     const game = txApp.findRecordById('game', '1');
-    game.set("status", "losowanie_kategorii");
+    game.set('status', 'losowanie_kategorii');
+    game.set('special_jackpot', 0);
+    game.set('current_category', '');
     txApp.save(game);
 
     const teams = txApp.findAllRecords("teams");

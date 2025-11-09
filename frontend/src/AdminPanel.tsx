@@ -47,6 +47,7 @@ function AdminPanel() {
           round: item.round,
           status: item.status,
           jackpot: item.jackpot,
+          special_jackpot: item.special_jackpot,
           answering_team: item.expand?.answering_team,
           current_category: item.expand?.current_category,
           current_question: item.expand?.current_question,
@@ -94,6 +95,7 @@ function AdminPanel() {
         round: e.record.round,
         status: e.record.status,
         jackpot: e.record.jackpot,
+        special_jackpot: e.record.special_jackpot,
         answering_team: e.record.expand?.answering_team,
         current_category: e.record.expand?.current_category,
         current_question: e.record.expand?.current_question,
@@ -127,7 +129,7 @@ function AdminPanel() {
 
   // Handle debounced input value updates
   useEffect(() => {
-    if (game?.status !== "licytacja") {
+    if (game?.status !== "licytacja" && game?.status !== "licytacja_special") {
       return;
     }
 
@@ -143,11 +145,11 @@ function AdminPanel() {
   const updateGameStatus = async (status: Game['status'], category?: string) => {
     try {
       // Clear local inputs immediately when moving away from 'licytacja'
-      if (status !== 'licytacja') {
+      if (status !== 'licytacja' && status !== 'licytacja_special') {
         setInputValues({});
       }
       await pb.collection('game').update("1", { status: status });
-      if (status === "licytacja" && category) {
+      if ((status === "licytacja" || status === "licytacja_special") && category) {
         await pb.collection('game').update("1", { current_category: category });
       }
     } catch (err) {
@@ -247,6 +249,7 @@ function AdminPanel() {
   const stepperIndexByGameStatus: Record<Game['status'], number> = {
     losowanie_kategorii: 0,
     licytacja: 1,
+    licytacja_special: 1,
     "1v1": 1,
     odpowiadanie: 2,
     "1v1_odpowiadanie": 2,
@@ -315,13 +318,18 @@ function AdminPanel() {
                 if (selectedCategory) {
                   if (selectedCategory.name === "1v1") {
                     updateGameStatus("1v1", selectedCategory.id);
+                  } else if (selectedCategory.name.toLowerCase() === "podpowiedz" || selectedCategory.name.toLowerCase() === "czarna skrzynka") {
+                    updateGameStatus("licytacja_special", selectedCategory.id);
                   } else {
                     updateGameStatus("licytacja", selectedCategory.id);
                   }
                 }
-              }} disabled={!selectedCategory || game?.status !== "losowanie_kategorii"}>{selectedCategory?.name === "1v1" ? "1 na 1!!!" : "Zatwierdź"}</Button>
+              }} disabled={!selectedCategory || game?.status !== "losowanie_kategorii"}>
+                {selectedCategory?.name.toLowerCase() === "1v1" ? "1 na 1!!!" : 
+                (selectedCategory?.name.toLowerCase() === "podpowiedz" || selectedCategory?.name.toLowerCase() === "czarna skrzynka") ? "Licytacja BEZ PULI!" : 
+                "Zatwierdź"}</Button>
               <Divider />
-              <Button  onClick={openPenaltyModal}>
+              <Button onClick={openPenaltyModal}>
                 Kara 
               </Button>
               <Button onClick={openBuybackPlayerModal} disabled={game?.round <= 6}>
@@ -350,7 +358,60 @@ function AdminPanel() {
                 disabled={game?.status !== "1v1" || (game?.['1v1_selected_categories']?.length ?? 0) < 6}
               >{`(${game?.['1v1_selected_categories']?.length ?? 0}/6) Zakoncz 1v1`}</Button>
             </Stack>
-            ) : (
+            ) : game?.status === "licytacja_special" ? 
+              // special licytacja (podpowiedz/czarna skrzynka)
+            <Stack>
+              <Card>
+                <Group>
+                  <Button variant='filled' 
+                    onClick={() => 
+                      {
+                        pb.send('/api/game/skip_round', { method: 'POST'}).then(() => setInputValues({}));
+                      }
+                    } 
+                    disabled={game?.special_jackpot <= 0}>
+                      Zakoncz special licytacje
+                  </Button>
+                </Group>
+                <Text>Jackpot: {game?.jackpot}</Text> 
+                <Text color='red'>Special Jackpot: {game?.special_jackpot}</Text>
+              </Card>
+              {teams.length === 0 ? (
+                <Text>Loading teams…</Text>
+              ) : (
+                teams.map((team) => (
+                  <Alert style={{ minWidth: '330px', boxShadow: (team.id === highlightedId || team.id === game?.answering_team?.id)  ? 'inset 0px 0px 0px 5px' : undefined }} key={team.id} variant='light' color={getTeamColor(team.name)} 
+                    title={<Group justify='space-between' align='baseline'>
+                      <Stack align='start'>
+                        <Text size='28px' fw={700}>{team.amount + " zł"}</Text>
+                        <Text>given: {team.amount_given + " zł"}</Text>
+                      </Stack>
+                      <Stack align='end' gap="xs">
+                        <CustomNumberInput
+                          disabled={!team.active}
+                          value={inputValues[team.id] ?? (team.amount_given ?? 0)}
+                          min={0}
+                          step={100}
+                          max={team.amount + team.amount_given}
+                          size='md'
+                          style={{ width: '100px' }}
+                          onChange={(value: number | string | null) => {
+                            const next = typeof value === 'number' ? value : value == null || value === '' ? 0 : Number(value);
+                            if (!Number.isNaN(next)) {
+                              setInputValues(prev => ({ ...prev, [team.id]: next }));
+                            }
+                          }}
+                        />
+                      </Stack>
+                    </Group>}
+                  >
+                  </Alert>
+                ))
+              )}
+            </Stack>
+              : (
+            
+            
               // Licytacja
               <Stack>
               <Card>
@@ -358,13 +419,7 @@ function AdminPanel() {
                   <Button variant='filled' 
                     onClick={() => 
                       {
-                        if (game?.current_category?.name.toLowerCase() === "czarna skrzynka") {
-                          pb.send('/api/game/skip_round', { method: 'POST'});
-                        } else if (game?.current_category?.name.toLowerCase() === "podpowiedz") {
-                          pb.send('/api/game/skip_round', { method: 'POST'});
-                        } else {
-                          updateGameStatus("odpowiadanie")
-                        }
+                        updateGameStatus("odpowiadanie")
                       }
                     } 
                     disabled={game?.status !== "licytacja" || game?.jackpot <= 0}>
