@@ -28,14 +28,14 @@ export const useAwanturaSfx = () => {
   const [playPodsumowanieGryShortSfx] = useSound(podsumowanieGryShortSfx, { interrupt: true });
   const [playWybranoKategorie1Sfx] = useSound(wybranoKategorie1Sfx, { interrupt: true });
   const [playWybranoKategorie2Sfx] = useSound(wybranoKategorie2Sfx, { interrupt: true });
-  const [playCzasNaOdpowiedzSfx] = useSound(czasNaOdpowiedzSfx, { interrupt: true });
+  const [playCzasNaOdpowiedzSfx, { stop: stopCzasNaOdpowiedzSfx }] = useSound(czasNaOdpowiedzSfx, { interrupt: true });
   const [playDobraOdpowiedzSfx] = useSound(dobraOdpowiedzSfx, { interrupt: true });
   const [playZlaOdpowiedzSfx] = useSound(zlaOdpowiedzSfx, { interrupt: true });
 
   return { playIntroSfx, playDingSfx, playDingDingDingSfx, playUsuniecieKategorii1na1Sfx, 
     playLosowanieKategoriiSfx, playPoczatkoweNadaniePieniedzySfx, playPodczasLicytacjiSfx, 
     playPodsumowanieGryFullSfx, playPodsumowanieGryShortSfx, playWybranoKategorie1Sfx, 
-    playWybranoKategorie2Sfx, playCzasNaOdpowiedzSfx, playDobraOdpowiedzSfx, playZlaOdpowiedzSfx };
+    playWybranoKategorie2Sfx, playCzasNaOdpowiedzSfx, stopCzasNaOdpowiedzSfx, playDobraOdpowiedzSfx, playZlaOdpowiedzSfx };
 }
 
 export const getTeamColor = (name: Team['name']) => {

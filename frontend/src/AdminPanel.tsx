@@ -28,7 +28,10 @@ function AdminPanel() {
 
   const theme = useMantineTheme();
 
-  const { playIntroSfx, playDingSfx, playDingDingDingSfx, playUsuniecieKategorii1na1Sfx, playLosowanieKategoriiSfx, playPoczatkoweNadaniePieniedzySfx, playPodczasLicytacjiSfx, playPodsumowanieGryFullSfx, playPodsumowanieGryShortSfx, playWybranoKategorie1Sfx, playWybranoKategorie2Sfx, playCzasNaOdpowiedzSfx, playDobraOdpowiedzSfx, playZlaOdpowiedzSfx } = useAwanturaSfx();
+  const { playIntroSfx, playDingSfx, playDingDingDingSfx, playUsuniecieKategorii1na1Sfx, playLosowanieKategoriiSfx, 
+    playPoczatkoweNadaniePieniedzySfx, playPodczasLicytacjiSfx, playPodsumowanieGryFullSfx, 
+    playPodsumowanieGryShortSfx, playWybranoKategorie1Sfx, playWybranoKategorie2Sfx, playCzasNaOdpowiedzSfx, 
+    playDobraOdpowiedzSfx, playZlaOdpowiedzSfx, stopCzasNaOdpowiedzSfx } = useAwanturaSfx();
 
   //initial first-time data load
   useEffect(() => {
@@ -350,7 +353,6 @@ function AdminPanel() {
                 <Button onClick={() => playPodsumowanieGryShortSfx()}>Podsumowanie gry short</Button>
                 <Button onClick={() => playWybranoKategorie1Sfx()}>Wybrano kategorie 1</Button>
                 <Button onClick={() => playWybranoKategorie2Sfx()}>Wybrano kategorie 2</Button>
-                <Button onClick={() => playCzasNaOdpowiedzSfx()}>Czas na odpowiedz</Button>
                 <Button onClick={() => playDobraOdpowiedzSfx()}>Dobra odpowiedz</Button>
                 <Button onClick={() => playZlaOdpowiedzSfx()}>Zla odpowiedz</Button>
               </SimpleGrid>
@@ -568,14 +570,14 @@ function AdminPanel() {
                 <Group>
               <Button disabled={game?.status !== "odpowiadanie"} onClick={async () => {
                 try {
-                  await pb.send('/api/game/timer', { method: 'POST' });
+                  await pb.send('/api/game/timer', { method: 'POST' }).then(() => playCzasNaOdpowiedzSfx());
                 } catch (err) {
                   console.error('Failed to start timer:', err);
                 }
               }}>Start timer</Button>
               <Button disabled={game?.status !== "odpowiadanie"} onClick={async () => {
                 try {
-                  await pb.collection('game').update("1", { question_deadline: null });
+                  await pb.collection('game').update("1", { question_deadline: null }).then(() => stopCzasNaOdpowiedzSfx());
                 } catch (err) {
                   console.error('Failed to stop timer:', err);
                 }
