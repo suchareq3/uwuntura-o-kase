@@ -353,8 +353,6 @@ function AdminPanel() {
                 <Button onClick={() => playPodsumowanieGryShortSfx()}>Podsumowanie gry short</Button>
                 <Button onClick={() => playWybranoKategorie1Sfx()}>Wybrano kategorie 1</Button>
                 <Button onClick={() => playWybranoKategorie2Sfx()}>Wybrano kategorie 2</Button>
-                <Button onClick={() => playDobraOdpowiedzSfx()}>Dobra odpowiedz</Button>
-                <Button onClick={() => playZlaOdpowiedzSfx()}>Zla odpowiedz</Button>
               </SimpleGrid>
             </Stack>
             <Divider orientation='vertical' />
@@ -542,14 +540,20 @@ function AdminPanel() {
                 <Group>
                   <Button disabled={!game?.answering_team} variant='filled' onClick={async () => {
                     try {
-                      await pb.send('/api/game/answer', { method: 'POST', body: { correct: true } });
+                      await pb.send('/api/game/answer', { method: 'POST', body: { correct: true } }).then(() => {
+                        playDobraOdpowiedzSfx();
+                        stopCzasNaOdpowiedzSfx();
+                      });
                     } catch (err) {
                       console.error('Failed to submit correct answer:', err);
                     }
                   }}>Poprawna</Button>
                   <Button disabled={!game?.answering_team} variant='filled' onClick={async () => {
                     try {
-                      await pb.send('/api/game/answer', { method: 'POST', body: { correct: false } });
+                      await pb.send('/api/game/answer', { method: 'POST', body: { correct: false } }).then(() => {
+                        playZlaOdpowiedzSfx();
+                        stopCzasNaOdpowiedzSfx();
+});
                     } catch (err) {
                       console.error('Failed to submit incorrect answer:', err);
                     }
@@ -612,14 +616,20 @@ function AdminPanel() {
               <Group>
                 <Button disabled={game?.status !== "odpowiadanie"} variant='filled' onClick={async () => {
                   try {
-                    await pb.send('/api/game/answer', { method: 'POST', body: { correct: true } });
+                    await pb.send('/api/game/answer', { method: 'POST', body: { correct: true } }).then(() => {
+                      playDobraOdpowiedzSfx();
+                      stopCzasNaOdpowiedzSfx();
+                    });
                   } catch (err) {
                     console.error('Failed to submit correct answer:', err);
                   }
                 }}>Poprawna</Button>
                 <Button disabled={game?.status !== "odpowiadanie"} variant='filled' onClick={async () => {
                   try {
-                    await pb.send('/api/game/answer', { method: 'POST', body: { correct: false } });
+                    await pb.send('/api/game/answer', { method: 'POST', body: { correct: false } }).then(() => {
+                      playZlaOdpowiedzSfx();
+                      stopCzasNaOdpowiedzSfx();
+                    });
                   } catch (err) {
                     console.error('Failed to submit incorrect answer:', err);
                   }
