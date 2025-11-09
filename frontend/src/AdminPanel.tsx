@@ -259,6 +259,13 @@ function AdminPanel() {
     }
   }, [game?.jackpot]);
 
+  const previousSelected1v1Categories = usePrevious(game?.['1v1_selected_categories']);
+  useDidUpdate(() => {
+    if (previousSelected1v1Categories && game?.['1v1_selected_categories'] && game?.['1v1_selected_categories'].length > previousSelected1v1Categories.length) {
+      playUsuniecieKategorii1na1Sfx();
+    }
+  }, [game?.['1v1_selected_categories']]);
+
   const stepperIndexByGameStatus: Record<Game['status'], number> = {
     losowanie_kategorii: 0,
     licytacja: 1,
@@ -352,8 +359,7 @@ function AdminPanel() {
               <Text fw='bold'>Soundboard 🔊</Text>
               <SimpleGrid cols={2}>
                 <Button onClick={() => playIntroSfx()}>Intro✅</Button>
-                <Button onClick={() => playUsuniecieKategorii1na1Sfx()}>Usuniecie kategorii 1 na 1</Button>
-                <Button onClick={() => playLosowanieKategoriiSfx()}>Losowanie kategorii</Button>
+                <Button onClick={() => playLosowanieKategoriiSfx()}>Losowanie kategorii✅</Button>
                 <Button onClick={() => playPoczatkoweNadaniePieniedzySfx()}>Poczatkowe nadanie pieniedzy</Button>
                 <Button onClick={() => playPodczasLicytacjiSfx()}>Podczas licytacji</Button>
                 <Button onClick={() => playPodsumowanieGryFullSfx()}>Podsumowanie gry full</Button>

@@ -20,7 +20,7 @@ export const useAwanturaSfx = () => {
   const [playIntroSfx] = useSound(introSfx, { interrupt: true });
   const [playDingSfx] = useSound(dingSfx, { interrupt: true });
   const [playDingDingDingSfx] = useSound(dingDingDingSfx, { interrupt: true });
-  const [playUsuniecieKategorii1na1Sfx] = useSound(usuniecieKategorii1na1Sfx, { interrupt: true });
+  const [playUsuniecieKategorii1na1Sfx] = useSound(usuniecieKategorii1na1Sfx, { interrupt: false });
   const [playLosowanieKategoriiSfx] = useSound(losowanieKategoriiSfx, { interrupt: true });
   const [playPoczatkoweNadaniePieniedzySfx] = useSound(poczatkoweNadaniePieniedzySfx, { interrupt: true });
   const [playPodczasLicytacjiSfx] = useSound(podczasLicytacjiSfx, { interrupt: true });
