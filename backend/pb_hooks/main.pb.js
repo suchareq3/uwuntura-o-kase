@@ -19,7 +19,7 @@ onRecordUpdateExecute((e) => {
 }, "teams");
 
 
-// when "game" round increases:
+// when "game" round increases OR when "game" status changes from licytacja_special to losowanie_kategorii:
 // 1. check each team's amount. if team's amount is less than 300, set team's active to false
 // 2. check game round. if it's 7, then:
 //      a) deactivate all teams except for the one with the highest amount (BESIDES mistrzowie)
@@ -27,7 +27,8 @@ onRecordUpdateExecute((e) => {
 //      c) deactivate "podpowiedz" and "co to jest?", activate "1v1" and "czarna skrzynka" categories
         
 onRecordAfterUpdateSuccess((e) => {
-    if (e.record.original().get("round") < e.record.get("round")) {
+    if (e.record.original().get("round") < e.record.get("round") || 
+    (e.record.original().get("status") == "licytacja_special" && e.record.get("status") == "losowanie_kategorii")) {
         $app.runInTransaction(txApp => {
             const teams = txApp.findAllRecords("teams");
             teams.forEach((team) => {
