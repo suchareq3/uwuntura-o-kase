@@ -342,7 +342,6 @@ function AdminPanel() {
               <SimpleGrid cols={2}>
                 <Button onClick={() => playIntroSfx()}>Intro</Button>
                 <Button onClick={() => playDingSfx()}>Ding</Button>
-                <Button onClick={() => playDingDingDingSfx()}>Ding ding ding</Button>
                 <Button onClick={() => playUsuniecieKategorii1na1Sfx()}>Usuniecie kategorii 1 na 1</Button>
                 <Button onClick={() => playLosowanieKategoriiSfx()}>Losowanie kategorii</Button>
                 <Button onClick={() => playPoczatkoweNadaniePieniedzySfx()}>Poczatkowe nadanie pieniedzy</Button>
@@ -386,7 +385,10 @@ function AdminPanel() {
                   <Button variant='filled' 
                     onClick={() => 
                       {
-                        pb.send('/api/game/skip_round', { method: 'POST'}).then(() => setInputValues({}));
+                        pb.send('/api/game/skip_round', { method: 'POST'}).then(() => {
+                          playDingDingDingSfx();
+                          setInputValues({});
+                        });
                       }
                     } 
                     disabled={game?.special_jackpot <= 0}>
@@ -439,7 +441,7 @@ function AdminPanel() {
                   <Button variant='filled' 
                     onClick={() => 
                       {
-                        updateGameStatus("odpowiadanie")
+                        updateGameStatus("odpowiadanie").then(() => playDingDingDingSfx());
                       }
                     } 
                     disabled={game?.status !== "licytacja" || game?.jackpot <= 0}>
