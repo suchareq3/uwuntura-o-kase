@@ -1,4 +1,4 @@
-import { Alert, AppShell, Card, Divider, Radio, Select, Stack, Stepper, useMantineTheme } from '@mantine/core';
+import { Alert, AppShell, Card, Divider, Radio, Select, SimpleGrid, Stack, Stepper, useMantineTheme } from '@mantine/core';
 import './css/AdminPanel.css'
 import { useEffect, useState } from 'react';
 import { Button, Group, Text } from '@mantine/core';
@@ -9,7 +9,7 @@ import Countdown, { zeroPad, type CountdownApi } from 'react-countdown';
 import CustomNumberInputModal from './components/CustomNumberInputModal';
 import CustomNumberInput from './components/CustomNumberInput';
 import CustomCombobox from './components/CustomCombobox';
-import { getTeamColor } from './lib/functions';
+import { getTeamColor, useAwanturaSfx } from './lib/functions';
 
 function AdminPanel() {
   const debounceMs = 500;
@@ -27,6 +27,8 @@ function AdminPanel() {
   let countdownApi: CountdownApi | null = null;
 
   const theme = useMantineTheme();
+
+  const { playIntroSfx, playDingSfx, playDingDingDingSfx, playUsuniecieKategorii1na1Sfx, playLosowanieKategoriiSfx, playPoczatkoweNadaniePieniedzySfx, playPodczasLicytacjiSfx, playPodsumowanieGryFullSfx, playPodsumowanieGryShortSfx, playWybranoKategorie1Sfx, playWybranoKategorie2Sfx, playCzasNaOdpowiedzSfx, playDobraOdpowiedzSfx, playZlaOdpowiedzSfx } = useAwanturaSfx();
 
   //initial first-time data load
   useEffect(() => {
@@ -335,6 +337,24 @@ function AdminPanel() {
               <Button onClick={openBuybackPlayerModal} disabled={game?.round <= 6}>
                 Wykup ziomka
               </Button>
+              <Divider />
+              <Text fw='bold'>Soundboard 🔊</Text>
+              <SimpleGrid cols={2}>
+                <Button onClick={() => playIntroSfx()}>Intro</Button>
+                <Button onClick={() => playDingSfx()}>Ding</Button>
+                <Button onClick={() => playDingDingDingSfx()}>Ding ding ding</Button>
+                <Button onClick={() => playUsuniecieKategorii1na1Sfx()}>Usuniecie kategorii 1 na 1</Button>
+                <Button onClick={() => playLosowanieKategoriiSfx()}>Losowanie kategorii</Button>
+                <Button onClick={() => playPoczatkoweNadaniePieniedzySfx()}>Poczatkowe nadanie pieniedzy</Button>
+                <Button onClick={() => playPodczasLicytacjiSfx()}>Podczas licytacji</Button>
+                <Button onClick={() => playPodsumowanieGryFullSfx()}>Podsumowanie gry full</Button>
+                <Button onClick={() => playPodsumowanieGryShortSfx()}>Podsumowanie gry short</Button>
+                <Button onClick={() => playWybranoKategorie1Sfx()}>Wybrano kategorie 1</Button>
+                <Button onClick={() => playWybranoKategorie2Sfx()}>Wybrano kategorie 2</Button>
+                <Button onClick={() => playCzasNaOdpowiedzSfx()}>Czas na odpowiedz</Button>
+                <Button onClick={() => playDobraOdpowiedzSfx()}>Dobra odpowiedz</Button>
+                <Button onClick={() => playZlaOdpowiedzSfx()}>Zla odpowiedz</Button>
+              </SimpleGrid>
             </Stack>
             <Divider orientation='vertical' />
 
