@@ -251,6 +251,14 @@ function AdminPanel() {
     }
   }, [game?.question_deadline])
 
+  // play 'ding' sound when jackpot increases
+  const previousJackpot = usePrevious(game?.jackpot);
+  useDidUpdate(() => {
+    if (previousJackpot && game?.jackpot && game?.jackpot > previousJackpot) {
+      playDingSfx();
+    }
+  }, [game?.jackpot]);
+
   const stepperIndexByGameStatus: Record<Game['status'], number> = {
     losowanie_kategorii: 0,
     licytacja: 1,
@@ -343,8 +351,7 @@ function AdminPanel() {
               <Divider />
               <Text fw='bold'>Soundboard 🔊</Text>
               <SimpleGrid cols={2}>
-                <Button onClick={() => playIntroSfx()}>Intro</Button>
-                <Button onClick={() => playDingSfx()}>Ding</Button>
+                <Button onClick={() => playIntroSfx()}>Intro✅</Button>
                 <Button onClick={() => playUsuniecieKategorii1na1Sfx()}>Usuniecie kategorii 1 na 1</Button>
                 <Button onClick={() => playLosowanieKategoriiSfx()}>Losowanie kategorii</Button>
                 <Button onClick={() => playPoczatkoweNadaniePieniedzySfx()}>Poczatkowe nadanie pieniedzy</Button>
