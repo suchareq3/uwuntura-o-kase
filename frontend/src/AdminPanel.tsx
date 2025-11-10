@@ -533,12 +533,10 @@ function AdminPanel() {
               <Stack maw={"500px"}>
                 <Card>
                   <Stack gap={"md"}>
+                    <Button onClick={() => updateShowQuestion(true)}>Pokaz pytanie ({game?.show_question?.toString()})</Button>
                     <Text fw={700}>Wybierz druzyne</Text>
                     <Radio.Group value={game?.answering_team?.id} onChange={setSelected1v1AnsweringTeam}>
-                      <Text>Wybrana druzyna local: {selected1v1AnsweringTeam}</Text>
-                        <Text>Wybrana druzyne: {game?.answering_team?.name}</Text>
                       <Group>
-                        
                       {teams.filter((team) => team.active).map((team) => (
                         <Radio disabled={game?.answering_team != undefined} key={team.id} value={team.id} label={team.name} />
                       ))}
