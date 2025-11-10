@@ -177,7 +177,7 @@ onRecordAfterUpdateSuccess((e) => {
 
 // TODO: add extra check for round>6 (mistrzowie become active)
 // when "game" status is set to "1v1" :
-// 1. grab 200 from each active team's "amount" and add to jackpot
+// 1. grab 500 from each active team's "amount" and add to jackpot
 // 2. randomly pick 7 categories, then assign them to "1v1_available_categories"
 // 3. set "1v1_selected_categories" to an empty array
 onRecordAfterUpdateSuccess((e) => {
@@ -186,7 +186,7 @@ onRecordAfterUpdateSuccess((e) => {
     && e.record.get("1v1_available_categories").length == 0) {
         $app.logger().info("1v1 started");
         $app.runInTransaction(txApp => {
-            // 1. grab 200 from each active team's "amount" and add to jackpot
+            // 1. grab 500 from each active team's "amount" and add to jackpot
             const teams = txApp.findRecordsByFilter(
                 "teams",
                 "active = true",
@@ -195,10 +195,10 @@ onRecordAfterUpdateSuccess((e) => {
                 0
             );
             teams.forEach((team) => {
-                team.set("amount-", 200);
+                team.set("amount-", 500);
                 txApp.save(team);
             });
-            e.record.set("jackpot+", 200 * teams.length);
+            e.record.set("jackpot+", 500 * teams.length);
             $app.logger().info("1v1 jackpot: " + e.record.get("jackpot"));
             //txApp.save(e.record);
 
