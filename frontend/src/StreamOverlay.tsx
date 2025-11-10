@@ -57,6 +57,8 @@ export default function StreamOverlay() {
                 current_question: item.expand?.current_question,
                 hint_purchased: item.hint_purchased,
                 show_question: item.show_question,
+                show_1v1_categories: item.show_1v1_categories,
+                special_jackpot: item.special_jackpot,
                 question_deadline: item.question_deadline,
                 "1v1_available_categories": item.expand?.["1v1_available_categories"],
                 "1v1_selected_categories": item.expand?.["1v1_selected_categories"]
@@ -103,6 +105,8 @@ export default function StreamOverlay() {
                 current_question: e.record.expand?.current_question,
                 hint_purchased: e.record.hint_purchased,
                 show_question: e.record.show_question,
+                show_1v1_categories: e.record.show_1v1_categories,
+                special_jackpot: e.record.special_jackpot,
                 question_deadline: e.record.question_deadline,
                 "1v1_available_categories": e.record.expand?.["1v1_available_categories"],
                 "1v1_selected_categories": e.record.expand?.["1v1_selected_categories"]
@@ -127,7 +131,7 @@ export default function StreamOverlay() {
     return (
         <>
         <Group w={"100%"} h={"100%"} align="center" justify="center" gap={0}>
-            {game?.status === "1v1" ?
+            {(game?.status === "1v1" && game?.show_1v1_categories) ?
                 <>
                     <JedenNaJedenOverlay 
                         wszystkieKategorie={game?.["1v1_available_categories"] || []}

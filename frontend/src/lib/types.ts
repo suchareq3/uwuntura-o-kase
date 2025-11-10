@@ -18,6 +18,7 @@ export type Game = {
   question_deadline?: Date;
   has_vabanqued?: boolean;
   show_question?: boolean;
+  show_1v1_categories: boolean;
   "1v1_available_categories"?: Category[];
   "1v1_selected_categories"?: Category[];
 };

@@ -13,6 +13,7 @@ import wybranoKategorie2Sfx from "../sounds/awantura_wybrano_kategorie_2.mp3";
 import czasNaOdpowiedzSfx from "../sounds/czas_na_odpowiedz.mp3";
 import dobraOdpowiedzSfx from "../sounds/dobra_odpowiedz.mp3";
 import zlaOdpowiedzSfx from "../sounds/zla_odpowiedz.mp3";
+import podczas1na1Sfx from "../sounds/awantura_1na1_podczas_usuwania_kategorii.mp3";
 import useSound from "use-sound";
 
 
@@ -31,12 +32,13 @@ export const useAwanturaSfx = () => {
   const [playCzasNaOdpowiedzSfx, { stop: stopCzasNaOdpowiedzSfx }] = useSound(czasNaOdpowiedzSfx, { interrupt: true });
   const [playDobraOdpowiedzSfx] = useSound(dobraOdpowiedzSfx, { interrupt: true });
   const [playZlaOdpowiedzSfx] = useSound(zlaOdpowiedzSfx, { interrupt: true });
+  const [playPodczas1na1Sfx, { stop: stopPodczas1na1Sfx }] = useSound(podczas1na1Sfx, { interrupt: true });
 
   return { playIntroSfx, playDingSfx, playDingDingDingSfx, playUsuniecieKategorii1na1Sfx, 
     playLosowanieKategoriiSfx, playPoczatkoweNadaniePieniedzySfx, playPodczasLicytacjiSfx, 
     playPodsumowanieGryFullSfx, playPodsumowanieGryShortSfx, playWybranoKategorie1Sfx, 
     playWybranoKategorie2Sfx, playCzasNaOdpowiedzSfx, stopCzasNaOdpowiedzSfx, playDobraOdpowiedzSfx,
-    playZlaOdpowiedzSfx, stopPodczasLicytacjiSfx };
+    playZlaOdpowiedzSfx, stopPodczasLicytacjiSfx, playPodczas1na1Sfx, stopPodczas1na1Sfx };
 }
 
 export const getTeamColor = (name: Team['name']) => {

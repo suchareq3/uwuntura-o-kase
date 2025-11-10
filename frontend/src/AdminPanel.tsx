@@ -31,7 +31,7 @@ function AdminPanel() {
   const { playIntroSfx, playDingSfx, playDingDingDingSfx, playUsuniecieKategorii1na1Sfx, playLosowanieKategoriiSfx, 
     playPoczatkoweNadaniePieniedzySfx, playPodczasLicytacjiSfx, 
     playPodsumowanieGryShortSfx, playWybranoKategorie1Sfx, playCzasNaOdpowiedzSfx, 
-    playDobraOdpowiedzSfx, playZlaOdpowiedzSfx, stopCzasNaOdpowiedzSfx, stopPodczasLicytacjiSfx } = useAwanturaSfx();
+    playDobraOdpowiedzSfx, playZlaOdpowiedzSfx, stopCzasNaOdpowiedzSfx, stopPodczasLicytacjiSfx, playPodczas1na1Sfx, stopPodczas1na1Sfx } = useAwanturaSfx();
 
   //initial first-time data load
   useEffect(() => {
@@ -58,6 +58,7 @@ function AdminPanel() {
           current_question: item.expand?.current_question,
           hint_purchased: item.hint_purchased,
           show_question: item.show_question,
+          show_1v1_categories: item.show_1v1_categories,
           question_deadline: item.question_deadline,
           has_vabanqued: item.has_vabanqued,
           "1v1_available_categories": item.expand?.["1v1_available_categories"],
@@ -106,6 +107,7 @@ function AdminPanel() {
         current_question: e.record.expand?.current_question,
         hint_purchased: e.record.hint_purchased,
         show_question: e.record.show_question,
+        show_1v1_categories: e.record.show_1v1_categories,
         question_deadline: e.record.question_deadline,
         has_vabanqued: e.record.has_vabanqued,
         "1v1_available_categories": e.record.expand?.["1v1_available_categories"],
@@ -228,6 +230,14 @@ function AdminPanel() {
       await pb.collection('game').update("1", { show_question: showQuestion })
     } catch (err) {
       console.error('Failed to update show_question')
+    }
+  }
+
+  const updateShow1v1Categories = async (show1v1Categories: boolean) => {
+    try {
+      await pb.collection('game').update("1", { show_1v1_categories: show1v1Categories})
+    } catch (err) {
+      console.error("Failed to update show_1v1_cateogries")
     }
   }
 
@@ -367,6 +377,7 @@ function AdminPanel() {
             {game?.status === "1v1" ? (
               // 1v1 kategorie
               <Stack>
+                <Button onClick={() => updateShow1v1Categories(true).then(() => playPodczas1na1Sfx())}>Pokaz kategorie ({game?.show_1v1_categories?.toString()})</Button>
               <Text>1v1</Text>
               <CustomCombobox 
                 available_categories={game?.['1v1_available_categories'] || []} 
@@ -380,9 +391,12 @@ function AdminPanel() {
                   update1v1SelectedCategories(next);
                 }}
               />
-              <Button onClick={() => updateGameStatus("1v1_odpowiadanie")}
+              <Button 
+                onClick={() => updateGameStatus("1v1_odpowiadanie").then(() => stopPodczas1na1Sfx())}
                 disabled={game?.status !== "1v1" || (game?.['1v1_selected_categories']?.length ?? 0) < 6}
-              >{`(${game?.['1v1_selected_categories']?.length ?? 0}/6) Zakoncz 1v1`}</Button>
+              >
+                {`(${game?.['1v1_selected_categories']?.length ?? 0}/6) Zakoncz 1v1`}
+              </Button>
             </Stack>
             ) : game?.status === "licytacja_special" ? 
               // special licytacja (podpowiedz/czarna skrzynka)
