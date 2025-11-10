@@ -23,10 +23,10 @@ export const useAwanturaSfx = () => {
   const [playUsuniecieKategorii1na1Sfx] = useSound(usuniecieKategorii1na1Sfx, { interrupt: false });
   const [playLosowanieKategoriiSfx] = useSound(losowanieKategoriiSfx, { interrupt: true });
   const [playPoczatkoweNadaniePieniedzySfx] = useSound(poczatkoweNadaniePieniedzySfx, { interrupt: true });
-  const [playPodczasLicytacjiSfx] = useSound(podczasLicytacjiSfx, { interrupt: true });
+  const [playPodczasLicytacjiSfx, { stop: stopPodczasLicytacjiSfx }] = useSound(podczasLicytacjiSfx, { interrupt: false });
   const [playPodsumowanieGryFullSfx] = useSound(podsumowanieGryFullSfx, { interrupt: true });
   const [playPodsumowanieGryShortSfx] = useSound(podsumowanieGryShortSfx, { interrupt: true });
-  const [playWybranoKategorie1Sfx] = useSound(wybranoKategorie1Sfx, { interrupt: true });
+  const [playWybranoKategorie1Sfx, { sound: wybranoKategorie1Howl }] = useSound(wybranoKategorie1Sfx, { interrupt: true });
   const [playWybranoKategorie2Sfx] = useSound(wybranoKategorie2Sfx, { interrupt: true });
   const [playCzasNaOdpowiedzSfx, { stop: stopCzasNaOdpowiedzSfx }] = useSound(czasNaOdpowiedzSfx, { interrupt: true });
   const [playDobraOdpowiedzSfx] = useSound(dobraOdpowiedzSfx, { interrupt: true });
@@ -35,7 +35,8 @@ export const useAwanturaSfx = () => {
   return { playIntroSfx, playDingSfx, playDingDingDingSfx, playUsuniecieKategorii1na1Sfx, 
     playLosowanieKategoriiSfx, playPoczatkoweNadaniePieniedzySfx, playPodczasLicytacjiSfx, 
     playPodsumowanieGryFullSfx, playPodsumowanieGryShortSfx, playWybranoKategorie1Sfx, 
-    playWybranoKategorie2Sfx, playCzasNaOdpowiedzSfx, stopCzasNaOdpowiedzSfx, playDobraOdpowiedzSfx, playZlaOdpowiedzSfx };
+    playWybranoKategorie2Sfx, playCzasNaOdpowiedzSfx, stopCzasNaOdpowiedzSfx, playDobraOdpowiedzSfx,
+    playZlaOdpowiedzSfx, stopPodczasLicytacjiSfx, wybranoKategorie1Howl };
 }
 
 export const getTeamColor = (name: Team['name']) => {

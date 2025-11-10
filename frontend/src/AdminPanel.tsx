@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Button, Group, Text } from '@mantine/core';
 import pb from './lib/pb';
 import type { Category, Game, Team } from './lib/types';
-import { useDebouncedValue, useDisclosure } from '@mantine/hooks';
+import { useDebouncedValue, useDisclosure, usePrevious, useDidUpdate } from '@mantine/hooks';
 import Countdown, { zeroPad, type CountdownApi } from 'react-countdown';
 import CustomNumberInputModal from './components/CustomNumberInputModal';
 import CustomNumberInput from './components/CustomNumberInput';
@@ -30,8 +30,16 @@ function AdminPanel() {
 
   const { playIntroSfx, playDingSfx, playDingDingDingSfx, playUsuniecieKategorii1na1Sfx, playLosowanieKategoriiSfx, 
     playPoczatkoweNadaniePieniedzySfx, playPodczasLicytacjiSfx, playPodsumowanieGryFullSfx, 
-    playPodsumowanieGryShortSfx, playWybranoKategorie1Sfx, playWybranoKategorie2Sfx, playCzasNaOdpowiedzSfx, 
-    playDobraOdpowiedzSfx, playZlaOdpowiedzSfx, stopCzasNaOdpowiedzSfx } = useAwanturaSfx();
+    playPodsumowanieGryShortSfx, playWybranoKategorie1Sfx, playCzasNaOdpowiedzSfx, 
+    playDobraOdpowiedzSfx, playZlaOdpowiedzSfx, stopCzasNaOdpowiedzSfx, stopPodczasLicytacjiSfx,
+    wybranoKategorie1Howl } = useAwanturaSfx();
+
+  const playWybranoKategorieSfxThenLicytacjaSfx = () => {
+    wybranoKategorie1Howl?.once('end', () => {
+      playPodczasLicytacjiSfx();
+    });
+    playWybranoKategorie1Sfx();
+  };
 
   //initial first-time data load
   useEffect(() => {
@@ -338,10 +346,13 @@ function AdminPanel() {
                 if (selectedCategory) {
                   if (selectedCategory.name === "1v1") {
                     updateGameStatus("1v1", selectedCategory.id);
+                    playWybranoKategorie1Sfx();
                   } else if (selectedCategory.name.toLowerCase() === "podpowiedz" || selectedCategory.name.toLowerCase() === "czarna skrzynka") {
                     updateGameStatus("licytacja_special", selectedCategory.id);
+                    playWybranoKategorieSfxThenLicytacjaSfx();
                   } else {
                     updateGameStatus("licytacja", selectedCategory.id);
+                    playWybranoKategorieSfxThenLicytacjaSfx();
                   }
                 }
               }} disabled={!selectedCategory || game?.status !== "losowanie_kategorii"}>
@@ -361,11 +372,8 @@ function AdminPanel() {
                 <Button onClick={() => playIntroSfx()}>Intro✅</Button>
                 <Button onClick={() => playLosowanieKategoriiSfx()}>Losowanie kategorii✅</Button>
                 <Button onClick={() => playPoczatkoweNadaniePieniedzySfx()}>Poczatkowe nadanie pieniedzy</Button>
-                <Button onClick={() => playPodczasLicytacjiSfx()}>Podczas licytacji</Button>
-                <Button onClick={() => playPodsumowanieGryFullSfx()}>Podsumowanie gry full</Button>
-                <Button onClick={() => playPodsumowanieGryShortSfx()}>Podsumowanie gry short</Button>
-                <Button onClick={() => playWybranoKategorie1Sfx()}>Wybrano kategorie 1</Button>
-                <Button onClick={() => playWybranoKategorie2Sfx()}>Wybrano kategorie 2</Button>
+                <Button onClick={() => playPodsumowanieGryFullSfx()}>Podsumowanie gry full✅</Button>
+                <Button onClick={() => playPodsumowanieGryShortSfx()}>Podsumowanie gry short✅</Button>
               </SimpleGrid>
             </Stack>
             <Divider orientation='vertical' />
@@ -400,6 +408,8 @@ function AdminPanel() {
                       {
                         pb.send('/api/game/skip_round', { method: 'POST'}).then(() => {
                           playDingDingDingSfx();
+                          playDobraOdpowiedzSfx();
+                          stopPodczasLicytacjiSfx();
                           setInputValues({});
                         });
                       }
@@ -454,7 +464,11 @@ function AdminPanel() {
                   <Button variant='filled' 
                     onClick={() => 
                       {
-                        updateGameStatus("odpowiadanie").then(() => playDingDingDingSfx());
+                        updateGameStatus("odpowiadanie").then(() => {
+                          playDingDingDingSfx(); 
+                          playDobraOdpowiedzSfx();
+                          stopPodczasLicytacjiSfx();
+                        });
                       }
                     } 
                     disabled={game?.status !== "licytacja" || game?.jackpot <= 0}>
@@ -566,7 +580,7 @@ function AdminPanel() {
                       await pb.send('/api/game/answer', { method: 'POST', body: { correct: false } }).then(() => {
                         playZlaOdpowiedzSfx();
                         stopCzasNaOdpowiedzSfx();
-});
+                      });
                     } catch (err) {
                       console.error('Failed to submit incorrect answer:', err);
                     }
