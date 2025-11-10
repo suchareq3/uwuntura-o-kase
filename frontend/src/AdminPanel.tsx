@@ -261,9 +261,9 @@ function AdminPanel() {
 
   const previousSelected1v1Categories = usePrevious(game?.['1v1_selected_categories']);
   useDidUpdate(() => {
-    if (previousSelected1v1Categories && game?.['1v1_selected_categories'] && game?.['1v1_selected_categories'].length > previousSelected1v1Categories.length) {
+    if (game?.status === "1v1" && (previousSelected1v1Categories?.length || 0) < (game?.['1v1_selected_categories']?.length || 0)) {
       playUsuniecieKategorii1na1Sfx();
-    }
+    }    
   }, [game?.['1v1_selected_categories']]);
 
   const stepperIndexByGameStatus: Record<Game['status'], number> = {
