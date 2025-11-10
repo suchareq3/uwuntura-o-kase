@@ -29,17 +29,9 @@ function AdminPanel() {
   const theme = useMantineTheme();
 
   const { playIntroSfx, playDingSfx, playDingDingDingSfx, playUsuniecieKategorii1na1Sfx, playLosowanieKategoriiSfx, 
-    playPoczatkoweNadaniePieniedzySfx, playPodczasLicytacjiSfx, playPodsumowanieGryFullSfx, 
+    playPoczatkoweNadaniePieniedzySfx, playPodczasLicytacjiSfx, 
     playPodsumowanieGryShortSfx, playWybranoKategorie1Sfx, playCzasNaOdpowiedzSfx, 
-    playDobraOdpowiedzSfx, playZlaOdpowiedzSfx, stopCzasNaOdpowiedzSfx, stopPodczasLicytacjiSfx,
-    wybranoKategorie1Howl } = useAwanturaSfx();
-
-  const playWybranoKategorieSfxThenLicytacjaSfx = () => {
-    wybranoKategorie1Howl?.once('end', () => {
-      playPodczasLicytacjiSfx();
-    });
-    playWybranoKategorie1Sfx();
-  };
+    playDobraOdpowiedzSfx, playZlaOdpowiedzSfx, stopCzasNaOdpowiedzSfx, stopPodczasLicytacjiSfx } = useAwanturaSfx();
 
   //initial first-time data load
   useEffect(() => {
@@ -262,7 +254,7 @@ function AdminPanel() {
   // play 'ding' sound when jackpot increases
   const previousJackpot = usePrevious(game?.jackpot);
   useDidUpdate(() => {
-    if (previousJackpot && game?.jackpot && game?.jackpot > previousJackpot) {
+    if (previousJackpot && game?.jackpot && game?.jackpot > previousJackpot && (game?.status === "licytacja" || game?.status === "licytacja_special")) {
       playDingSfx();
     }
   }, [game?.jackpot]);
@@ -346,14 +338,12 @@ function AdminPanel() {
                 if (selectedCategory) {
                   if (selectedCategory.name === "1v1") {
                     updateGameStatus("1v1", selectedCategory.id);
-                    playWybranoKategorie1Sfx();
                   } else if (selectedCategory.name.toLowerCase() === "podpowiedz" || selectedCategory.name.toLowerCase() === "czarna skrzynka") {
                     updateGameStatus("licytacja_special", selectedCategory.id);
-                    playWybranoKategorieSfxThenLicytacjaSfx();
                   } else {
                     updateGameStatus("licytacja", selectedCategory.id);
-                    playWybranoKategorieSfxThenLicytacjaSfx();
                   }
+                  playWybranoKategorie1Sfx();
                 }
               }} disabled={!selectedCategory || game?.status !== "losowanie_kategorii"}>
                 {selectedCategory?.name.toLowerCase() === "1v1" ? "1 na 1!!!" : 
@@ -366,15 +356,11 @@ function AdminPanel() {
               <Button onClick={openBuybackPlayerModal} disabled={game?.round <= 6}>
                 Wykup ziomka
               </Button>
-              <Divider />
-              <Text fw='bold'>Soundboard 🔊</Text>
-              <SimpleGrid cols={2}>
-                <Button onClick={() => playIntroSfx()}>Intro✅</Button>
-                <Button onClick={() => playLosowanieKategoriiSfx()}>Losowanie kategorii✅</Button>
-                <Button onClick={() => playPoczatkoweNadaniePieniedzySfx()}>Poczatkowe nadanie pieniedzy</Button>
-                <Button onClick={() => playPodsumowanieGryFullSfx()}>Podsumowanie gry full✅</Button>
-                <Button onClick={() => playPodsumowanieGryShortSfx()}>Podsumowanie gry short✅</Button>
-              </SimpleGrid>
+              <Divider />              
+              <Button onClick={() => playIntroSfx()}>🔊Intro🔊</Button>
+              <Button onClick={() => playLosowanieKategoriiSfx()}>🔊Losowanie kategorii🔊</Button>
+              <Button onClick={() => playPoczatkoweNadaniePieniedzySfx()}>🔊Poczatkowe nadanie pieniedzy🔊</Button>
+              <Button onClick={() => playPodsumowanieGryShortSfx()}>🔊Koniec awantury, do domu🔊</Button>
             </Stack>
             <Divider orientation='vertical' />
 
@@ -403,6 +389,7 @@ function AdminPanel() {
             <Stack>
               <Card>
                 <Group>
+                  <Button variant='filled' onClick={() => playPodczasLicytacjiSfx()}>🔊Start licytacji🔊</Button>
                   <Button variant='filled' 
                     onClick={() => 
                       {
@@ -461,6 +448,9 @@ function AdminPanel() {
               <Stack>
               <Card>
                 <Group>
+                  <Button variant='filled' 
+                    onClick={() => playPodczasLicytacjiSfx()}
+                    disabled={game?.status !== "licytacja"}>🔊Start licytacji🔊</Button>
                   <Button variant='filled' 
                     onClick={() => 
                       {

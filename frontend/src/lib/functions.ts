@@ -26,7 +26,7 @@ export const useAwanturaSfx = () => {
   const [playPodczasLicytacjiSfx, { stop: stopPodczasLicytacjiSfx }] = useSound(podczasLicytacjiSfx, { interrupt: false });
   const [playPodsumowanieGryFullSfx] = useSound(podsumowanieGryFullSfx, { interrupt: true });
   const [playPodsumowanieGryShortSfx] = useSound(podsumowanieGryShortSfx, { interrupt: true });
-  const [playWybranoKategorie1Sfx, { sound: wybranoKategorie1Howl }] = useSound(wybranoKategorie1Sfx, { interrupt: true });
+  const [playWybranoKategorie1Sfx] = useSound(wybranoKategorie1Sfx, { interrupt: true });
   const [playWybranoKategorie2Sfx] = useSound(wybranoKategorie2Sfx, { interrupt: true });
   const [playCzasNaOdpowiedzSfx, { stop: stopCzasNaOdpowiedzSfx }] = useSound(czasNaOdpowiedzSfx, { interrupt: true });
   const [playDobraOdpowiedzSfx] = useSound(dobraOdpowiedzSfx, { interrupt: true });
@@ -36,7 +36,7 @@ export const useAwanturaSfx = () => {
     playLosowanieKategoriiSfx, playPoczatkoweNadaniePieniedzySfx, playPodczasLicytacjiSfx, 
     playPodsumowanieGryFullSfx, playPodsumowanieGryShortSfx, playWybranoKategorie1Sfx, 
     playWybranoKategorie2Sfx, playCzasNaOdpowiedzSfx, stopCzasNaOdpowiedzSfx, playDobraOdpowiedzSfx,
-    playZlaOdpowiedzSfx, stopPodczasLicytacjiSfx, wybranoKategorie1Howl };
+    playZlaOdpowiedzSfx, stopPodczasLicytacjiSfx };
 }
 
 export const getTeamColor = (name: Team['name']) => {
