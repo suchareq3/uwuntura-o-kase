@@ -912,9 +912,10 @@ migrate((app) => {
           "values": [
             "losowanie_kategorii",
             "licytacja",
-            "1v1",
             "odpowiadanie",
-            "1v1_odpowiadanie"
+            "1v1",
+            "1v1_odpowiadanie",
+            "licytacja_special"
           ]
         },
         {
@@ -936,6 +937,18 @@ migrate((app) => {
           "max": null,
           "min": null,
           "name": "jackpot",
+          "onlyInt": false,
+          "presentable": false,
+          "required": false,
+          "system": false,
+          "type": "number"
+        },
+        {
+          "hidden": false,
+          "id": "number2051513149",
+          "max": null,
+          "min": null,
+          "name": "special_jackpot",
           "onlyInt": false,
           "presentable": false,
           "required": false,
@@ -1031,6 +1044,24 @@ migrate((app) => {
           "required": false,
           "system": false,
           "type": "relation"
+        },
+        {
+          "hidden": false,
+          "id": "bool2408818849",
+          "name": "show_question",
+          "presentable": false,
+          "required": false,
+          "system": false,
+          "type": "bool"
+        },
+        {
+          "hidden": false,
+          "id": "bool765000632",
+          "name": "show_1v1_categories",
+          "presentable": false,
+          "required": false,
+          "system": false,
+          "type": "bool"
         },
         {
           "hidden": false,
@@ -1192,6 +1223,34 @@ migrate((app) => {
           "required": false,
           "system": false,
           "type": "relation"
+        },
+        {
+          "hidden": false,
+          "id": "select1542800728",
+          "maxSelect": 1,
+          "name": "type",
+          "presentable": false,
+          "required": false,
+          "system": false,
+          "type": "select",
+          "values": [
+            "text",
+            "video",
+            "audio",
+            "image",
+            "item"
+          ]
+        },
+        {
+          "exceptDomains": null,
+          "hidden": false,
+          "id": "url917281265",
+          "name": "link",
+          "onlyDomains": null,
+          "presentable": false,
+          "required": false,
+          "system": false,
+          "type": "url"
         },
         {
           "hidden": false,
