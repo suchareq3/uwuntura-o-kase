@@ -129,7 +129,7 @@ export default function StreamOverlay() {
                     {/* {game?.status === "losowanie_kategorii" && <h1>Losowanie kategorii</h1>} */}
                 {game?.question_deadline && <Czas date={game?.question_deadline} />}
                     
-                {game?.status === "licytacja" && 
+                {game?.status === "licytacja" || game?.status === "licytacja_special" && 
                 <>
                     <Licytacja
                         kwotaZolci={teams.find(team => team.name === "zolci")?.amount_given ?? 0}
