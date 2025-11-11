@@ -420,7 +420,7 @@ function AdminPanel() {
                 <Text>Loading teams…</Text>
               ) : (
                 teams.map((team) => (
-                  <Alert style={{ minWidth: '330px', boxShadow: (team.id === highlightedId || team.id === game?.answering_team?.id)  ? 'inset 0px 0px 0px 5px' : undefined }} key={team.id} variant='light' color={getTeamColor(team.name)} 
+                  <Alert opacity={team.active ? 1: 0.3} style={{ minWidth: '330px', boxShadow: (team.id === highlightedId || team.id === game?.answering_team?.id)  ? 'inset 0px 0px 0px 5px' : undefined }} key={team.id} variant='light' color={getTeamColor(team.name)} 
                     title={<Group justify='space-between' align='baseline'>
                       <Stack align='start'>
                         <Text size='28px' fw={700}>{team.amount + " zł"}</Text>
@@ -490,7 +490,7 @@ function AdminPanel() {
                 <Text>Loading teams…</Text>
               ) : (
                 teams.map((team) => (
-                  <Alert style={{ minWidth: '330px', boxShadow: (team.id === highlightedId || team.id === game?.answering_team?.id)  ? 'inset 0px 0px 0px 5px' : undefined }} key={team.id} variant='light' color={getTeamColor(team.name)} 
+                  <Alert opacity={team.active ? 1 : 0.3} style={{ minWidth: '330px', boxShadow: (team.id === highlightedId || team.id === game?.answering_team?.id)  ? 'inset 0px 0px 0px 5px' : undefined }} key={team.id} variant='light' color={getTeamColor(team.name)} 
                     title={<Group justify='space-between' align='baseline'>
                       <Stack align='start'>
                         <Text size='28px' fw={700}>{team.amount + " zł"}</Text>
