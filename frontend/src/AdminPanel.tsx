@@ -1,4 +1,4 @@
-import { Alert, AppShell, Card, Divider, Radio, Select, SimpleGrid, Stack, Stepper, useMantineTheme } from '@mantine/core';
+import { Alert, AppShell, Card, Divider, Radio, Select, Stack, Stepper } from '@mantine/core';
 import './css/AdminPanel.css'
 import { useEffect, useState } from 'react';
 import { Button, Group, Text } from '@mantine/core';
@@ -25,8 +25,6 @@ function AdminPanel() {
   const [selected1v1AnsweringTeam, setSelected1v1AnsweringTeam] = useState<string | null>(null);
 
   let countdownApi: CountdownApi | null = null;
-
-  const theme = useMantineTheme();
 
   const { playIntroSfx, playDingSfx, playDingDingDingSfx, playUsuniecieKategorii1na1Sfx, playLosowanieKategoriiSfx, 
     playPoczatkoweNadaniePieniedzySfx, playPodczasLicytacjiSfx, 

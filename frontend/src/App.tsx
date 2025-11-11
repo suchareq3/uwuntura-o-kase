@@ -4,7 +4,7 @@ import './App.css'
 import { ClientResponseError } from 'pocketbase';
 import { useDisclosure } from '@mantine/hooks';
 import pb from './lib/pb';
-import { LoadingOverlay, Button, Box, MantineProvider } from '@mantine/core';
+import { LoadingOverlay, Button, Box } from '@mantine/core';
 import { useNavigate } from 'react-router';
 
 

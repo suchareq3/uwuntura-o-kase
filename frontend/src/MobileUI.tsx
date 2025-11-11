@@ -1,4 +1,4 @@
-import PocketBase, { ClientResponseError } from 'pocketbase';
+import { ClientResponseError } from 'pocketbase';
 import { useEffect, useState } from 'react';
 import type { Game, Team } from './lib/types';
 import './css/_variables.css';
@@ -10,10 +10,7 @@ import { SimpleGrid, Stack } from '@mantine/core';
 import Pytanie from './components/Pytanie';
 import PulaTile from './components/PulaTile';
 import JedenNaJedenOverlay from './components/JedenNaJedenOverlay';
-
-
-const pb = new PocketBase('http://127.0.0.1:8090');
-await pb.collection("_superusers").authWithPassword(import.meta.env.VITE_BACKEND_ADMIN_EMAIL, import.meta.env.VITE_BACKEND_ADMIN_PASSWORD)
+import pb from './lib/pb';
 
 export default function MobileUI() {
     const [error, setError] = useState<Error | null>(null);

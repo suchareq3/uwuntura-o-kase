@@ -1,4 +1,4 @@
-import PocketBase, { ClientResponseError } from 'pocketbase';
+import { ClientResponseError } from 'pocketbase';
 import { useEffect, useState } from 'react';
 import Licytacja from './components/Licytacja';
 import type { Game, Team } from './lib/types';
@@ -8,20 +8,16 @@ import './css/PulaTile.css';
 import './css/Pytanie.css';
 import 'unfonts.css'
 import StanyKont from './components/StanyKont';
-import { Center, Group, Stack, Text } from '@mantine/core';
+import { Group, Stack } from '@mantine/core';
 import Pytanie from './components/Pytanie';
 import Czas from './components/Czas';
 import JedenNaJedenOverlay from './components/JedenNaJedenOverlay';
-
-
-const pb = new PocketBase('http://127.0.0.1:8090');
-await pb.collection("_superusers").authWithPassword(import.meta.env.VITE_BACKEND_ADMIN_EMAIL, import.meta.env.VITE_BACKEND_ADMIN_PASSWORD)
+import pb from './lib/pb';
 
 export default function StreamOverlay() {
     const [error, setError] = useState<Error | null>(null);
     const [teams, setTeams] = useState<Team[]>([]);
     const [game, setGame] = useState<Game | null>(null);
-    const [categories, setCategories] = useState<{ value: string; label: string }[]>([]);
     
     //initial first-time data load
     useEffect(() => {
@@ -68,18 +64,8 @@ export default function StreamOverlay() {
             }
         };
       
-        const getCategories = async () => {
-            try {
-              const coll = await pb.collection("categories").getFullList();
-              setCategories(coll.map((c: any) => ({ value: c.id, label: c.name })));
-            } catch (err) {
-              console.error('Failed to initialize categories:', err);
-            }
-        };
-      
         getTeams();
         getGame();
-        getCategories();
         authenticate();
     }, []);
 

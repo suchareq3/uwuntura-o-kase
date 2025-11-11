@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { CheckIcon, Combobox, TextInput } from '@mantine/core';
+import { CheckIcon, Combobox } from '@mantine/core';
 import type { Category } from '../lib/types';
 
 function CustomCombobox({ available_categories, selected_categories, onOptionSubmit }: { available_categories: Category[]; selected_categories: Category[]; onOptionSubmit: (id: string) => void }) {
