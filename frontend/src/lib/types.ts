@@ -32,5 +32,7 @@ export type Question = {
   answer: string;
   fake_answers: string; // comma separated string
   category: Category;
+  type: 'text' | 'image' | 'audio' | 'video' | 'item';
+  link: string;
   used: boolean;
 }
