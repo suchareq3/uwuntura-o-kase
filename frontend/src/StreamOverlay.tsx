@@ -139,7 +139,7 @@ export default function StreamOverlay() {
                         czyActiveNiebiescy={teams.find(team => team.name === "niebiescy")?.active}
                         czyActiveZieloni={teams.find(team => team.name === "zieloni")?.active}
                         czyActiveZolci={teams.find(team => team.name === "zolci")?.active}
-                        czyActiveMistrzowie={teams.find(team => team.name === "mistrzowie")?.active == false}
+                        czyActiveMistrzowie={teams.find(team => team.name === "mistrzowie")?.active}
                     />
                     <StanyKont
                         kwotaZolci={teams.find(team => team.name === "zolci")?.amount ?? 0}
@@ -150,7 +150,7 @@ export default function StreamOverlay() {
                         czyActiveNiebiescy={teams.find(team => team.name === "niebiescy")?.active}
                         czyActiveZieloni={teams.find(team => team.name === "zieloni")?.active}
                         czyActiveZolci={teams.find(team => team.name === "zolci")?.active}
-                        czyActiveMistrzowie={teams.find(team => team.name === "mistrzowie")?.active == false}
+                        czyActiveMistrzowie={teams.find(team => team.name === "mistrzowie")?.active}
                     />
                 </>
                 }
