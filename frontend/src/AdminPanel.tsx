@@ -1,6 +1,6 @@
 import { Alert, AppShell, Card, Divider, Radio, Select, Stack, Stepper } from '@mantine/core';
 import './css/AdminPanel.css'
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button, Group, Text } from '@mantine/core';
 import pb from './lib/pb';
 import type { Category, Game, Team } from './lib/types';
@@ -24,7 +24,7 @@ function AdminPanel() {
   const [openedBuybackPlayerModal, { open: openBuybackPlayerModal, close: closeBuybackPlayerModal }] = useDisclosure(false);
   const [selected1v1AnsweringTeam, setSelected1v1AnsweringTeam] = useState<string | null>(null);
 
-  let countdownApi: CountdownApi | null = null;
+  const countdownApiRef = useRef<CountdownApi | null>(null);
 
   const { playIntroSfx, playDingSfx, playDingDingDingSfx, playUsuniecieKategorii1na1Sfx, playLosowanieKategoriiSfx, 
     playPoczatkoweNadaniePieniedzySfx, playPodczasLicytacjiSfx, 
@@ -245,17 +245,13 @@ function AdminPanel() {
 
   const setRef = (countdown: Countdown | null): void => {
     if (countdown) {
-      countdownApi = countdown.getApi();
+      countdownApiRef.current = countdown.getApi();
     }
   };  
 
   useEffect(() => {
-    const handlePauseClick = (): void => {
-      countdownApi && countdownApi.pause();
-    };
-    
     if (game?.question_deadline) {
-      handlePauseClick();
+      countdownApiRef.current?.start();
     }
   }, [game?.question_deadline])
 
