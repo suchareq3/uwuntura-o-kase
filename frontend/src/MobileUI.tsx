@@ -116,14 +116,26 @@ export default function MobileUI() {
         <>
         <Stack w={"100%"} h={"100%"} py={"md"}>
           <SimpleGrid cols={2} spacing={0}>
-            {teams.map(team => (
-              <PulaTile
-                nazwaDruzyny={team.name}
-                pula={team.amount}
-                customWidth="100%"
-                pulaHeight='80px'
-                // todo: add gray if team is not active
-              />
+            {teams.map(team => ( 
+              <Stack key={team.id} gap={"0px"}>
+                <PulaTile
+                  nazwaDruzyny={team.name}
+                  pula={team.amount}
+                  customWidth="100%"
+                  pulaHeight='80px'
+                  customOpacity={team.active ? 1 : 0.3}
+                />
+                {(team.active && (game?.status === "licytacja" || game?.status === "licytacja_special")) && (
+                  <PulaTile
+                    nazwaDruzyny={team.name}
+                    pula={team.amount_given}
+                    customWidth="100%"
+                    pulaHeight='50px'
+                    customOpacity={team.active ? 0.7 : 0.3}
+                    customKwotaFontSize='2.25rem'
+                  />
+                )}
+              </Stack>
             ))}
           </SimpleGrid>
 

@@ -1,6 +1,6 @@
 import { Group, Stack, Text } from "@mantine/core";
 
-export default function PulaTile({ nazwaDruzyny = "", pula, opis, customWidth, customOpisHeight, pulaHeight = "100%", customOpisClasses, customKwotaFontSize, customClasses }: { nazwaDruzyny: string, pula: number, opis?: string, customWidth?: string, customOpisHeight?: string, pulaHeight?: string, customOpisClasses?: string, customKwotaFontSize?: string, customClasses?: string }) {
+export default function PulaTile({ nazwaDruzyny = "", pula, opis, customWidth, customOpisHeight, pulaHeight = "100%", customOpisClasses, customKwotaFontSize, customClasses, customOpacity }: { nazwaDruzyny: string, pula: number, opis?: string, customWidth?: string, customOpisHeight?: string, pulaHeight?: string, customOpisClasses?: string, customKwotaFontSize?: string, customClasses?: string, customOpacity?: number }) {
   if (nazwaDruzyny == "space-waster") {
     return <div className="space-waster"></div>;
   }
@@ -8,7 +8,7 @@ export default function PulaTile({ nazwaDruzyny = "", pula, opis, customWidth, c
   const pulaWidth = customWidth ? customWidth : nazwaDruzyny === "ogolna" ? "28%" : "24%";
 
   return (
-    <Stack classNames={{ root: [nazwaDruzyny, customClasses].join(" ") }} w={pulaWidth} h={pulaHeight} gap={0}>
+    <Stack opacity={customOpacity ? customOpacity : 1} classNames={{ root: [nazwaDruzyny, customClasses].join(" ") }} w={pulaWidth} h={pulaHeight} gap={0}>
       {opis && (
         <div
           className={"opis eurostile-font " + customOpisClasses}
