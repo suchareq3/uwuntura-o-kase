@@ -4,6 +4,9 @@ import unfonts from 'unplugin-fonts/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
+  server: {
+    host: true
+  },
   plugins: [react(),
     unfonts({
       custom: {

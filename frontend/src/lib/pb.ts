@@ -1,5 +1,7 @@
 import PocketBase from 'pocketbase';
 
-const baseUrl = import.meta.env.VITE_PB_URL || 'http://127.0.0.1:8090';
-const pb = new PocketBase(baseUrl);
-export default pb;
+const url = new URLSearchParams(location.search).get('pb')
+  || (import.meta as any).env?.VITE_PB_URL
+  || `${location.protocol}//${location.hostname}:8090`;
+
+export default new PocketBase(url);
