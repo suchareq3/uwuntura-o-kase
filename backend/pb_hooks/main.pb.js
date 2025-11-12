@@ -117,7 +117,13 @@ onRecordAfterUpdateSuccess((e) => {
     
         
         $app.runInTransaction(txApp => {
-            const teams = txApp.findAllRecords("teams");
+            const teams = txApp.findRecordsByFilter(
+                "teams",
+                "active = true",
+                "",
+                0,
+                0
+            );;
 
             if (e.record.get("answering_team") == "") {
                 let winnerId = "";
