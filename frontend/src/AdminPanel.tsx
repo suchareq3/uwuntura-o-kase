@@ -258,10 +258,18 @@ function AdminPanel() {
   // play 'ding' sound when jackpot increases
   const previousJackpot = usePrevious(game?.jackpot);
   useDidUpdate(() => {
-    if (previousJackpot && game?.jackpot && game?.jackpot > previousJackpot && (game?.status === "licytacja" || game?.status === "licytacja_special")) {
+    if (previousJackpot && game?.jackpot && game?.jackpot > previousJackpot && game?.status === "licytacja") {
       playDingSfx();
     }
   }, [game?.jackpot]);
+
+  //play 'ding' sound when special_jackpot increases
+  const previousSpecialJackpot = usePrevious(game?.special_jackpot);
+  useDidUpdate(() => {
+    if (previousSpecialJackpot && game?.special_jackpot && game?.special_jackpot > previousSpecialJackpot && game?.status === "licytacja_special") {
+      playDingSfx(); 
+    }
+  }, [game?.special_jackpot])
 
   const previousSelected1v1Categories = usePrevious(game?.['1v1_selected_categories']);
   useDidUpdate(() => {
