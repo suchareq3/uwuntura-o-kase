@@ -116,7 +116,7 @@ export default function StreamOverlay() {
 
     return (
         <>
-        <Group w={"100%"} h={"100%"} align="center" justify="center" gap={0}>
+        <Group className='StreamOverlay' w={"100%"} h={"100%"} align="center" justify="center" gap={0}>
             {(game?.status === "1v1" && game?.show_1v1_categories) ?
                 <>
                     <JedenNaJedenOverlay 
