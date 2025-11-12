@@ -1,4 +1,4 @@
-import { Alert, AppShell, Card, Divider, Radio, Select, Stack, Stepper } from '@mantine/core';
+import { Alert, Anchor, AppShell, Card, Divider, Radio, Select, Stack, Stepper } from '@mantine/core';
 import './css/AdminPanel.css'
 import { useEffect, useRef, useState } from 'react';
 import { Button, Group, Text } from '@mantine/core';
@@ -568,7 +568,10 @@ function AdminPanel() {
                   <Text>Kategoria: {game?.current_category?.name}</Text>
                 </Card>
                 <Card>
-                  <Text>Pytanie: {game?.current_question?.description}</Text>
+                  <Stack>
+                    <Text>Pytanie ({game?.current_question?.type}): {game?.current_question?.description} </Text>
+                    {game?.current_question?.link && <Text>Url: <Anchor href={game?.current_question?.link}>{game?.current_question.link}</Anchor></Text>}
+                  </Stack>
                 </Card>
                 <Card>
                   <Text>Odpowiedz: {game?.current_question?.answer}</Text>
@@ -644,7 +647,10 @@ function AdminPanel() {
                 <Text>Kategoria: {game?.current_category?.name}</Text>
               </Card>
               <Card>
-                <Text>Pytanie: {game?.current_question?.description}</Text>
+                <Stack>
+                  <Text>Pytanie ({game?.current_question?.type}): {game?.current_question?.description} </Text>
+                  {game?.current_question?.link && <Text>Url: <Anchor href={game?.current_question?.link}>{game?.current_question.link}</Anchor></Text>}
+                </Stack>
               </Card>
               <Card>
                 <Text>Odpowiedz: {game?.current_question?.answer}</Text>
