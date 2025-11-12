@@ -330,6 +330,7 @@ routerAdd('POST', '/api/game/skip_round', (e) => {
     game.set('status', 'losowanie_kategorii');
     game.set('special_jackpot', 0);
     game.set('current_category', '');
+    game.set('has_vabanqued', false)
     txApp.save(game);
 
     const teams = txApp.findAllRecords("teams");
