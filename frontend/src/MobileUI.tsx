@@ -148,7 +148,7 @@ export default function MobileUI() {
             // todo: add gray if team is not active
           />
 
-          {game?.status === "1v1" &&
+          {(game?.status === "1v1" && game?.show_1v1_categories)&&
           <JedenNaJedenOverlay 
             wszystkieKategorie={game?.['1v1_available_categories'] || []}
             wybraneKategorie={game?.['1v1_selected_categories'] || []}
