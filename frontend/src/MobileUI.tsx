@@ -125,13 +125,13 @@ export default function MobileUI() {
                   pulaHeight='80px'
                   customOpacity={team.active ? 1 : 0.3}
                 />
-                {(team.active && (game?.status === "licytacja" || game?.status === "licytacja_special")) && (
+                {(game?.status === "licytacja" || game?.status === "licytacja_special") && (
                   <PulaTile
                     nazwaDruzyny={team.name}
-                    pula={team.amount_given}
+                    pula={team.active ? team.amount_given : undefined}
                     customWidth="100%"
                     pulaHeight='50px'
-                    customOpacity={team.active ? 0.7 : 0.3}
+                    customOpacity={team.active ? 0.7 : 0.2}
                     customKwotaFontSize='2.25rem'
                   />
                 )}

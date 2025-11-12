@@ -1,6 +1,6 @@
 import { Group, Stack, Text } from "@mantine/core";
 
-export default function PulaTile({ nazwaDruzyny = "", pula, opis, customWidth, customOpisHeight, pulaHeight = "100%", customOpisClasses, customKwotaFontSize, customClasses, customOpacity }: { nazwaDruzyny: string, pula: number, opis?: string, customWidth?: string, customOpisHeight?: string, pulaHeight?: string, customOpisClasses?: string, customKwotaFontSize?: string, customClasses?: string, customOpacity?: number }) {
+export default function PulaTile({ nazwaDruzyny = "", pula, opis, customWidth, customOpisHeight, pulaHeight = "100%", customOpisClasses, customKwotaFontSize, customClasses, customOpacity }: { nazwaDruzyny: string, pula?: number, opis?: string, customWidth?: string, customOpisHeight?: string, pulaHeight?: string, customOpisClasses?: string, customKwotaFontSize?: string, customClasses?: string, customOpacity?: number }) {
   if (nazwaDruzyny == "space-waster") {
     return <div className="space-waster"></div>;
   }
