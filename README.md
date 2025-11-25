@@ -9,4 +9,4 @@ Aplikacja ma 3 części - panel admina, stream overlay, oraz panel mobilny dla u
 - Cała aplikacja jest *asynchroniczna* - zmiany dokonane w panelu admina są automatycznie odzwierciedlane we wszystkich częściach aplikacji
 - Panel admina pozwala na manualny wybór kategorii, edycję kwot podczas licytacji, edycję kategorii podczas 'jeden na jednego' itp. Niektóre rzeczy są wykonywanie automatycznie, np. puszczanie muzyki.
 - "Stream overlay" w formacie 16:9 z przezroczystym tłem, którego URL możemy wykorzystać w programie do streamowania, np. [OBS](https://obsproject.com/).
-- Panel mobilny dla uczestników ze stałymi informacjami o kwotach, puli, treści pytania/podpowiedzi, oraz obsługi pokazywania kategorii podczas "jeden na jednego"
+- Panel mobilny dla uczestników ze stałymi informacjami o kwotach, puli, treści pytania/podpowiedzi, oraz kategoriami podczas "jeden na jednego"
